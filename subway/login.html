@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../font/css/notosanskrvariable.css">
+    <link rel="stylesheet" href="../css/default.css">
+    <link rel="stylesheet" href="login.css">
+    <title>SUBWAY 로그인</title>
+</head>
+<body>
+    <div id="wrap">
+        <header>
+            <button type="button" class="back_btn">
+                <span class="sr-only">이전 화면으로 이동</span>
+            </button>
+
+            <h1>로그인</h1>
+
+            <a href="#" class="shopping_link">
+                <img src="img/shopping.svg" alt="">
+                <span class="sr-only">장바구니</span>
+            </a>
+        </header>
+
+        <main>
+            <p class="login_title" aria-hidden="true">LOGIN</p>
+
+            <form action="">
+                <fieldset>
+                    <legend class="sr-only">서브웨이 로그인</legend>
+
+                    <div class="input_box">
+                        <label for="email">이메일 아이디</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="이메일 입력"
+                            autocomplete="username"
+                        >
+                    </div>
+
+                    <div class="input_box">
+                        <label for="password">비밀번호</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="비밀번호 입력"
+                            autocomplete="current-password"
+                        >
+                    </div>
+
+                    <label class="save_id">
+                        <input type="checkbox" class="check sr-only" checked>
+                        <span>아이디 저장</span>
+                    </label>
+
+                    <button type="submit" class="login_btn">로그인</button>
+                </fieldset>
+            </form>
+
+            <ul class="login_links">
+                <li><a href="#">아이디 찾기</a></li>
+                <li><a href="#">비밀번호찾기</a></li>
+                <li><a href="#">회원가입</a></li>
+            </ul>
+        </main>
+
+        <nav class="bottom_nav">
+            <h2 class="sr-only">서브웨이 주요 메뉴</h2>
+
+            <ul>
+                <li>
+                    <a href="#" aria-current="page">
+                        <img src="img/home-on.svg" alt="">
+                        <span class="sr-only">홈</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="img/menu-off.svg" alt="">
+                        <span class="sr-only">더보기</span>
+                    </a>
+                </li>
+                <li class="order_space" aria-hidden="true"></li>
+                <li>
+                    <a href="#">
+                        <img src="img/store-off.svg" alt="">
+                        <span class="sr-only">매장찾기</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="img/my-off.svg" alt="">
+                        <span class="sr-only">MY-SUB</span>
+                    </a>
+                </li>
+            </ul>
+
+            <a href="#" class="order_link">
+                <span>주문하기</span>
+            </a>
+        </nav>
+    </div>
+</body>
+</html>

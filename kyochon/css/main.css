@@ -88,7 +88,8 @@ body {
     display: block;
     width: 2px;
     height: 12px;
-    background: #020000;
+    flex: 0 0 2px;
+    background: url("../img/line.svg") center / 2px 12px no-repeat;
 }
 .hero-sec .hero-navigation {
     display: flex;
@@ -113,14 +114,18 @@ body {
 .hero-sec .hero-navigation .swiper-button-prev::after,
 .hero-sec .hero-navigation .swiper-button-next::after {
     content: "";
+    display: block;
     width: 7px;
-    height: 7px;
-    border-top: 1.8px solid currentColor;
-    border-right: 1.8px solid currentColor;
-    transform: rotate(45deg);
+    height: 12px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
 }
 .hero-sec .hero-navigation .swiper-button-prev::after {
-    transform: rotate(-135deg);
+    background-image: url("../img/swiper_prev.png");
+}
+.hero-sec .hero-navigation .swiper-button-next::after {
+    background-image: url("../img/swiper_next.png");
 }
 .hero-sec .hero-navigation button:focus-visible {
     outline: 2px solid #020000;

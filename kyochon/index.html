@@ -49,9 +49,16 @@
             direction: 'horizontal',
             loop: true,
 
-            // If we need pagination
+            // Current slide / total slide, matching the Figma counter
             pagination: {
                 el: '.visual .swiper-pagination',
+                type: 'fraction',
+                formatFractionCurrent: number => String(number).padStart(2, '0'),
+                formatFractionTotal: number => String(number).padStart(2, '0'),
+                renderFraction: (currentClass, totalClass) =>
+                    '<span class="' + currentClass + '"></span>' +
+                    '<span class="hero-pagination-divider" aria-hidden="true"></span>' +
+                    '<span class="' + totalClass + '"></span>',
             },
 
             // Navigation arrows
@@ -60,9 +67,12 @@
                 prevEl: '.visual .swiper-button-prev',
             },
 
-            // And if we need scrollbar
+            // Thin draggable progress track
             scrollbar: {
                 el: '.visual .swiper-scrollbar',
+                draggable: true,
+                hide: false,
+                snapOnRelease: true,
             },
         });
     </script>

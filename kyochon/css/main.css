@@ -44,7 +44,7 @@ body {
     position: absolute;
     z-index: 5;
     left: 50%;
-    bottom: 44px;
+    bottom: 15px;
     transform: translateX(-50%);
     width: calc(100% - 200px);
     max-width: 1720px;

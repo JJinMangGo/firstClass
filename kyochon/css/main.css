@@ -35,3 +35,106 @@ body {
         height: 100dvh;
     }
 }
+
+/* Figma Hero (20:20): 1920 × 720 / controls at y=664 */
+.hero-sec .visual {
+    position: relative;
+}
+.hero-sec .hero-controls {
+    position: absolute;
+    z-index: 5;
+    left: 50%;
+    bottom: 44px;
+    transform: translateX(-50%);
+    width: calc(100% - 200px);
+    max-width: 1720px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: #020000;
+}
+.hero-sec .hero-controls .swiper-scrollbar {
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    bottom: auto;
+    width: auto;
+    height: 2px;
+    flex: 1 1 auto;
+    min-width: 30px;
+    border-radius: 0;
+    background: rgba(2, 0, 0, .2);
+}
+.hero-sec .hero-controls .swiper-scrollbar-drag {
+    height: 2px;
+    border-radius: 0;
+    background: #020000;
+}
+.hero-sec .hero-controls .swiper-pagination {
+    position: static;
+    width: auto;
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #020000;
+    font-family: "Pretendard Variable", sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1;
+}
+.hero-sec .hero-pagination-divider {
+    display: block;
+    width: 2px;
+    height: 12px;
+    background: #020000;
+}
+.hero-sec .hero-navigation {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.hero-sec .hero-navigation .swiper-button-prev,
+.hero-sec .hero-navigation .swiper-button-next {
+    position: static;
+    display: flex;
+    width: 24px;
+    height: 32px;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    background: transparent;
+    color: #020000;
+    cursor: pointer;
+}
+.hero-sec .hero-navigation .swiper-button-prev::after,
+.hero-sec .hero-navigation .swiper-button-next::after {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-top: 1.8px solid currentColor;
+    border-right: 1.8px solid currentColor;
+    transform: rotate(45deg);
+}
+.hero-sec .hero-navigation .swiper-button-prev::after {
+    transform: rotate(-135deg);
+}
+.hero-sec .hero-navigation button:focus-visible {
+    outline: 2px solid #020000;
+    outline-offset: 3px;
+}
+@media (max-width: 1024px) {
+    .hero-sec .hero-controls {
+        bottom: 30px;
+        width: calc(100% - 40px);
+        gap: 14px;
+    }
+    .hero-sec .hero-controls .swiper-pagination {
+        font-size: 13px;
+        gap: 8px;
+    }
+    .hero-sec .hero-navigation { gap: 8px; }
+}

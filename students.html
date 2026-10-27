@@ -1,130 +1,983 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>학생 GitHub / 배포 링크</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Pretendard, "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f7f7f8;
-      color: #1f2328;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="2026 채용연계 웹 콘텐츠 교육, 26명의 학생 프로젝트와 강사 예시를 한곳에서 만나보세요.">
+    <title>우리의 첫 번째 웹 · 학생 프로젝트</title>
+    <link rel="stylesheet" href="font/css/pretendardvariable.css">
+    <link rel="stylesheet" href="css/default.css">
+    <!-- UI conventions: https://github.com/hslcrb/limsflex
+         Only students.html is changed. The original emblem is embedded without altering its artwork.
+         Student cards below remain the source of truth and work without JavaScript.
+         Visual reference: https://korean.visitkorea.or.kr/main/main.do (layered card carousel).
+         GitHub OG images are repository previews, not deployment screenshots. -->
+    <style>
+
+:root {
+    --ink: #172540;
+    --muted: #526079;
+    --blue: #0754d6;
+    --line: #dce3ed;
+    --paper: #f6f8fc;
+}
+html, body {
+    overflow-x: visible;
+}
+body {
+    font-family: "Pretendard Variable", system-ui, sans-serif;
+    color: var(--ink);
+    background: #fff;
+}
+button, a, input {
+    touch-action: manipulation;
+}
+a:hover {
+    text-decoration: underline;
+}
+:focus-visible {
+    outline: 3px solid var(--blue);
+    outline-offset: 5px;
+}
+.wrap {
+    width: min(1280px, calc(100% - 48px));
+    margin-inline: auto;
+}
+.skip-link {
+    position: absolute;
+    top: -100px;
+    left: 20px;
+    z-index: 100;
+    padding: 12px;
+    background: #fff;
+}
+.skip-link:focus {
+    top: 12px;
+}
+.site-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-block: 24px;
+    border-bottom: 1px solid var(--line);
+}
+.brand {
+    font-size: 22px;
+    font-weight: 850;
+    letter-spacing: -1px;
+}
+.brand span, .eyebrow {
+    color: var(--blue);
+}
+.site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    font-size: 14px;
+    font-weight: 650;
+}
+.hero-heading {
+    padding-top: 64px;
+    text-align: center;
+}
+.eyebrow {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+h1 {
+    margin-top: 14px;
+    font-size: clamp(32px, 4vw, 56px);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -2px;
+}
+.desc {
+    margin-top: 18px;
+    color: var(--muted);
+    line-height: 1.7;
+}
+.showcase {
+    padding-top: 32px;
+}
+.coverflow {
+    position: relative;
+    display: grid;
+    place-items: center;
+    height: 470px;
+    overflow: clip;
+    isolation: isolate;
+    touch-action: pan-y;
+}
+.cover-card {
+    grid-area: 1 / 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: min(340px, 76vw);
+    height: 410px;
+    padding: 26px;
+    overflow: hidden;
+    border: 1px solid rgb(255 255 255 / 50%);
+    border-radius: 24px;
+    background: linear-gradient(150deg, var(--card-color), #14274a);
+    color: #fff;
+    text-align: left;
+    box-shadow: 0 22px 36px -24px rgb(20 39 74 / 70%);
+    transform: translateX(calc(var(--offset) * 185px)) scale(var(--scale));
+    transition: transform 450ms ease, opacity 450ms ease;
+    z-index: var(--layer);
+}
+.cover-card::before {
+    content: "";
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    right: -100px;
+    bottom: -80px;
+    border: 45px solid rgb(255 255 255 / 8%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+.cover-card[aria-current="true"] {
+    box-shadow: 0 28px 44px -20px rgb(20 39 74 / 55%);
+}
+.cover-number {
+    font-size: 12px;
+    font-weight: 650;
+    letter-spacing: 2px;
+}
+.cover-image {
+    width: 100%;
+    aspect-ratio: 2 / 1;
+    object-fit: contain;
+    border-radius: 12px;
+    background: #fff;
+}
+.cover-name {
+    display: block;
+    margin-top: 14px;
+    font-size: 32px;
+    font-weight: 750;
+}
+.cover-repo {
+    display: block;
+    margin-top: 6px;
+    overflow-wrap: anywhere;
+    font-size: 13px;
+}
+.cover-hint {
+    display: block;
+    margin-top: 16px;
+    font-size: 12px;
+}
+.carousel-controls, .project-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.round-button {
+    width: 46px;
+    height: 46px;
+    border: 1px solid #8999af;
+    border-radius: 50%;
+    font-size: 22px;
+    background: #fff;
+}
+.round-button:hover {
+    background: #edf3ff;
+}
+.slide-status {
+    min-width: 95px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+}
+.active-project {
+    text-align: center;
+    margin-top: 22px;
+}
+.active-project h2 {
+    font-size: 20px;
+}
+.project-actions {
+    margin-top: 14px;
+}
+.action-link, .preview-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 10px 18px;
+    border: 1px solid #8999af;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 650;
+    background: #fff;
+}
+.action-link.primary {
+    color: #fff;
+    background: var(--blue);
+    border-color: var(--blue);
+}
+.help-text {
+    margin-top: 18px;
+    color: var(--muted);
+    font-size: 13px;
+    text-align: center;
+}
+.teacher {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 26px 32px;
+    margin-top: 54px;
+    border: 1px solid #cddcf6;
+    border-radius: 20px;
+    background: #eff5ff;
+}
+.teacher h2 {
+    margin-top: 6px;
+    font-size: 22px;
+}
+.teacher .project-actions {
+    margin: 0;
+}
+.directory {
+    margin-block: 64px;
+    scroll-margin-top: 24px;
+}
+.section-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 28px;
+}
+h2 {
+    font-size: 28px;
+    letter-spacing: -0.7px;
+}
+.section-heading p {
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 14px;
+}
+.search-box {
+    flex: 0 1 320px;
+    min-width: 0;
+}
+.search-box label {
+    display: block;
+    font-size: 13px;
+    font-weight: 650;
+    margin-bottom: 8px;
+}
+.search-box input {
+    width: 100%;
+    min-height: 48px;
+    border: 1px solid #8999af;
+    border-radius: 12px;
+    padding: 12px 16px;
+    background: #fff;
+}
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: 16px;
+}
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 24px;
+    min-width: 0;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+}
+.card:hover {
+    border-color: #8aa9db;
+    background: #f0f5ff;
+}
+.card-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+.card-index {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border: 1px solid #cfdbec;
+    border-radius: 12px;
+    color: var(--blue);
+    background: #fff;
+    font-size: 13px;
+    font-weight: 750;
+}
+.name {
+    color: var(--blue);
+    font-size: 20px;
+    font-weight: 750;
+}
+.repo {
+    color: var(--muted);
+    overflow-wrap: anywhere;
+    font-size: 13px;
+}
+.card-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: auto;
+    font-size: 13px;
+    font-weight: 650;
+}
+.github {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+.empty-state {
+    padding: 40px;
+    border: 1px dashed #8999af;
+    border-radius: 16px;
+    text-align: center;
+}
+.signature {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 36px;
+    padding: 48px 24px;
+    border-top: 1px solid var(--line);
+    background: #f6f8fc;
+}
+.emblem {
+    width: 136px;
+    height: 136px;
+    object-fit: contain;
+}
+.credit {
+    margin-block: 8px;
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+.credit a {
+    color: var(--blue);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 7px;
+}
+.note {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.8;
+}
+.note a {
+    color: var(--blue);
+    text-decoration: underline;
+}
+dialog {
+    width: min(1100px, calc(100% - 24px));
+    max-height: calc(100dvh - 24px);
+    margin: auto;
+    padding: 20px;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    color: var(--ink);
+    background: #fff;
+}
+dialog::backdrop {
+    background: rgb(15 25 45 / 65%);
+}
+.dialog-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+.preview-frame {
+    display: block;
+    width: 100%;
+    height: min(60dvh, 650px);
+    margin-top: 16px;
+    border: 1px solid var(--line);
+    background: #f6f8fc;
+}
+@media (max-width: 760px) {
     .wrap {
-      width: min(1100px, calc(100% - 40px));
-      margin: 60px auto;
+        width: calc(100% - 32px);
     }
-    h1 {
-      margin: 0 0 8px;
-      font-size: clamp(28px, 4vw, 42px);
+    .hero-heading {
+        padding-top: 40px;
     }
-    .desc {
-      margin: 0 0 32px;
-      color: #656d76;
+    .coverflow {
+        height: 420px;
+    }
+    .cover-card {
+        height: 370px;
+        transform: translateX(calc(var(--offset) * 125px)) scale(var(--scale));
     }
     .teacher {
-      margin-bottom: 28px;
-      padding: 20px 22px;
-      background: #fff;
-      border: 1px solid #d8dee4;
-      border-radius: 14px;
+        padding: 24px;
     }
-    .teacher strong { display: block; margin-bottom: 8px; }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 14px;
+    .signature {
+        text-align: center;
+        gap: 20px;
     }
-    .card {
-      min-height: 122px;
-      padding: 18px;
-      background: #fff;
-      border: 1px solid #d8dee4;
-      border-radius: 14px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+}
+@media (max-width: 420px) {
+    .site-nav {
+        gap: 16px;
     }
-    .name {
-      display: inline-block;
-      width: fit-content;
-      color: #0969da;
-      font-size: 19px;
-      font-weight: 700;
-      text-decoration: none;
+    .cover-card {
+        padding: 20px;
+        transform: translateX(calc(var(--offset) * 90px)) scale(var(--scale));
     }
-    .name:hover { text-decoration: underline; }
-    .repo {
-      margin-top: 8px;
-      color: #656d76;
-      font-size: 13px;
-      word-break: break-all;
+    .search-box {
+        flex-basis: 100%;
     }
-    .github {
-      display: inline-block;
-      width: fit-content;
-      margin-top: 14px;
-      padding: 6px 10px;
-      border: 1px solid #d0d7de;
-      border-radius: 7px;
-      color: #24292f;
-      font-size: 13px;
-      font-weight: 600;
-      text-decoration: none;
-      background: #f6f8fa;
+}
+@media (prefers-reduced-motion: reduce) {
+    .cover-card {
+        transition: none;
     }
-    .github:hover { background: #eef1f4; }
-    .note {
-      margin-top: 26px;
-      color: #656d76;
-      font-size: 13px;
-    }
-  </style>
+}
+
+    </style>
 </head>
 <body>
-  <main class="wrap">
-    <h1>학생 GitHub / 배포 링크</h1>
-    <p class="desc">학생 이름을 클릭하면 배포 페이지가 열리고, GitHub 버튼을 클릭하면 저장소가 열립니다.</p>
+    <a class="skip-link" href="#student-projects">학생 프로젝트 목록 바로가기</a>
+    <header class="site-header wrap" id="site-header">
+        <a class="brand" href="index.html">first<span>Class.</span></a>
+        <nav class="site-nav" id="page-navigation" aria-label="페이지 탐색">
+            <a href="#student-projects">학생 프로젝트</a>
+            <a href="#teacher-project">강사 예시</a>
+            <a href="#contributor">제작 기여</a>
+        </nav>
+    </header>
+    <main>
+        <div class="hero-heading wrap">
+            <p class="eyebrow">2026 · OUR FIRST WEB</p>
+            <h1>서로 다른 생각,<br>하나씩 펼쳐지는 웹.</h1>
+            <p class="desc">26명의 시작을 만나보세요.<br>우리 반의 프로젝트를 둘러보고, 새로운 영감을 발견하세요.</p>
+        </div>
+        <section class="showcase" id="project-showcase" aria-label="학생 프로젝트 캐러셀" hidden>
+            <div class="coverflow" id="coverflow" aria-roledescription="캐러셀" aria-label="프로젝트 선택: 좌우 방향키로 이동" tabindex="0"></div>
+            <div class="carousel-controls">
+                <button type="button" class="round-button" id="previous-project" aria-label="이전 프로젝트">←</button>
+                <p class="slide-status" id="slide-status" aria-live="polite" aria-atomic="true"></p>
+                <button type="button" class="round-button" id="next-project" aria-label="다음 프로젝트">→</button>
+            </div>
+            <div class="active-project wrap">
+                <h2 id="active-name"></h2>
+                <div class="project-actions">
+                    <a id="active-site" class="action-link primary" target="_blank" rel="noopener noreferrer">사이트 방문 ↗</a>
+                    <a id="active-github" class="action-link" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+                    <button type="button" class="preview-button" id="open-preview">사이트 미리보기</button>
+                </div>
+            </div>
+            <p class="help-text wrap">카드를 선택하거나 좌우로 밀어보세요. 카드 이미지는 GitHub 저장소 미리보기입니다.</p>
+        </section>
+        <div class="wrap">
+            <section class="teacher" id="teacher-project" aria-labelledby="teacher-title">
+                <div>
+                    <p class="eyebrow">TEACHER'S PROJECT</p>
+                    <h2 id="teacher-title">강사 예시 · 찐망고</h2>
+                    <p class="repo">JJinMangGo/firstClass</p>
+                </div>
+                <div class="project-actions">
+                    <a class="action-link primary" href="https://jjinmanggo.github.io/firstClass/" target="_blank" rel="noopener noreferrer">배포 페이지 보기 ↗</a>
+                    <a class="action-link" href="https://github.com/JJinMangGo/firstClass" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+                </div>
+            </section>
+            <section class="directory" id="student-projects" aria-labelledby="directory-title">
+                <div class="section-heading">
+                    <div>
+                        <h2 id="directory-title">우리 반 프로젝트</h2>
+                        <p id="result-count" role="status">전체 26명 · 이름순</p>
+                    </div>
+                    <div class="search-box" id="project-search" hidden>
+                        <label for="student-search">이름 또는 GitHub 아이디 검색</label>
+                        <input type="search" id="student-search" name="student-search" placeholder="찾고 싶은 친구가 있나요?" autocomplete="off">
+                    </div>
+                </div>
+                <div class="grid" id="student-grid">
+                    <article class="card" id="student-wuky19">
+                        <div class="card-top">
+                            <span class="card-index" aria-hidden="true">01</span>
+                            <h3><a class="name" href="https://Wuky19.github.io/dfghdhdh/" target="_blank" rel="noopener noreferrer">고영태</a></h3>
+                        </div>
+                        <p class="repo">Wuky19/dfghdhdh</p>
+                        <div class="card-links">
+                            <a class="github" href="https://github.com/Wuky19/dfghdhdh" target="_blank" rel="noopener noreferrer" aria-label="고영태 GitHub 저장소 새 창 열기">GitHub ↗</a>
+                            <button type="button" class="preview-button" data-student-index="0" aria-label="고영태 사이트 미리보기" hidden>미리보기</button>
+                        </div>
+                    </article>
+                    <article class="card" id="student-khsin0829">
+                        <div class="card-top">
+                            <span class="card-index" aria-hidden="true">02</span>
+                            <h3><a class="name" href="https://khsin0829.github.io/firstclass/" target="_blank" rel="noopener noreferrer">곽효신</a></h3>
+                        </div>
+                        <p class="repo">khsin0829/firstclass</p>
+                        <div class="card-links">
+                            <a class="github" href="https://github.com/khsin0829/firstclass" target="_blank" rel="noopener noreferrer" aria-label="곽효신 GitHub 저장소 새 창 열기">GitHub ↗</a>
+                            <button type="button" class="preview-button" data-student-index="1" aria-label="곽효신 사이트 미리보기" hidden>미리보기</button>
+                        </div>
+                    </article>
+                    <article class="card" id="student-coolty81">
+                        <div class="card-top">
+                            <span class="card-index" aria-hidden="true">03</span>
+                            <h3><a class="name" href="https://coolty81.github.io/firstClass/" target="_blank" rel="noopener noreferrer">김나혜</a></h3>
+                        </div>
+                        <p class="repo">coolty81/firstClass</p>
+                        <div class="card-links">
+                            <a class="github" href="https://github.com/coolty81/firstClass" target="_blank" rel="noopener noreferrer" aria-label="김나혜 GitHub 저장소 새 창 열기">GitHub ↗</a>
+                            <button type="button" class="preview-button" data-student-index="2" aria-label="김나혜 사이트 미리보기" hidden>미리보기</button>
+                        </div>
+                    </article>
+                    <article class="card" id="student-fandomneko">
+                        <div class="card-top">
+                            <span class="card-index" aria-hidden="true">04</span>
+                            <h3><a class="name" href="https://fandomneko.github.io/class4/" target="_blank" rel="noopener noreferrer">김민진</a></h3>
+                        </div>
+                        <p class="repo">fandomneko/class4</p>
+                        <div class="card-links">
+                            <a class="github" href="https://github.com/fandomneko/class4" target="_blank" rel="noopener noreferrer" aria-label="김민진 GitHub 저장소 새 창 열기">GitHub ↗</a>
+                            <button type="button" class="preview-button" data-student-index="3" aria-label="김민진 사이트 미리보기" hidden>미리보기</button>
+                        </div>
+                    </article>
+                    <article class="card" id="student-kimsihoo08">
+                        <div class="card-top">
+                            <span class="card-index" aria-hidden="true">05</span>
+                            <h3><a class="name" href="https://kimsihoo08.github.io/class/" target="_blank" rel="noopener noreferrer">김시후</a></h3>
+                        </div>
+                        <p class="repo">kimsihoo08/class</p>
+                        <div class="card-links">
+                            <a class="github" href="https://github.com/kimsihoo08/class" target="_blank" rel="noopener noreferrer" aria-label="김시후 GitHub 저장소 새 창 열기">GitHub ↗</a>
+                            <button type="button" class="preview-button" data-student-index="4" aria-label="김시후 사이트 미리보기" hidden>미리보기</button>
+                        </div>
+                    </article>
+                    <article class="card" id="student-kjm080917-max">
+                        <div class="card-top">
+                            <span class="card-index" aria-hidden="true">06</span>
+                            <h3><a class="name" href="https://kjm080917-max.github.io/first_class/" target="_blank" rel="noopener noreferrer">김정민</a></h3>
+                        </div>
+                        <p class="repo">kjm080917-max/first_class</p>
+                        <div class="card-links">
+                            <a class="github" href="https://github.com/kjm080917-max/first_class" target="_blank" rel="noopener noreferrer" aria-label="김정민 GitHub 저장소 새 창 열기">GitHub ↗</a>
+                            <button type="button" class="preview-button" data-student-index="5" aria-label="김정민 사이트 미리보기" hidden>미리보기</button>
+                        </div>
+                    </article>
+                    <article class="card" id="student-jklmj4241-boop">
+                        <div class="card-top">
+                            <span class="card-index" aria-hidden="true">07</span>
+                            <h3><a class="name" href="https://jklmj4241-boop.github.io/firstClass/" target="_blank" rel="noopener noreferrer">박미주</a></h3>
+                        </div>
+                        <p class="repo">jklmj4241-boop/firstClass</p>
+                        <div class="card-links">
+                            <a class="github" href="https://github.com/jklmj4241-boop/firstClass" target="_blank" rel="noopener noreferrer" aria-label="박미주 GitHub 저장소 새 창 열기">GitHub ↗</a>
+                            <button type="button" class="preview-button" data-student-index="6" aria-label="박미주 사이트 미리보기" hidden>미리보기</button>
+                        </div>
+                    </article>
+                    <article class="card" id="student-minjoon117">
+                        <div class="card-top">
+                            <span class="card-index" aria-hidden="true">08</span>
+                            <h3><a class="name" href="https://minjoon117.github.io/first-Class/" target="_blank" rel="noopener noreferrer">박민준</a></h3>
+                        </div>
+                        <p class="repo">minjoon117/first-Class</p>
+                        <div class="card-links">
+                            <a class="github" href="https://github.com/minjoon117/first-Class" target="_blank" rel="noopener noreferrer" aria-label="박민준 GitHub 저장소 새 창 열기">GitHub ↗</a>
+                            <button type="button" class="preview-button" data-student-index="7" aria-label="박민준 사이트 미리보기" hidden>미리보기</button>
+                        </div>
+                    </article>
+                    <article class="card" id="student-hayun74">
+                        <div class="card-top">
+                            <span class="card-index" aria-hidden="true">09</span>
+                            <h3><a class="name" href="https://hayun74.github.io/FirstClass/" target="_blank" rel="noopener noreferrer">박하윤</a></h3>
+                        </div>
+                        <p class="repo">hayun74/FirstClass</p>
+                        <div class="card-links">
+                            <a class="github" href="https://github.com/hayun74/FirstClass" target="_blank" rel="noopener noreferrer" aria-label="박하윤 GitHub 저장소 새 창 열기">GitHub ↗</a>
+                            <button type="button" class="preview-button" data-student-index="8" aria-label="박하윤 사이트 미리보기" hidden>미리보기</button>
+                        </div>
+                    </article>
+                    <article class="card" id="student-hanbibag15-cloud">
+                        <div class="card-top">
+                            <span class="card-index" aria-hidden="true">10</span>
+                            <h3><a class="name" href="https://hanbibag15-cloud.github.io/Portfolio/" target="_blank" rel="noopener noreferrer">박한비</a></h3>
+                        </div>
+                        <p class="repo">hanbibag15-cloud/Portfolio</p>
+                        <div class="card-links">
+                            <a class="github" href="https://github.com/hanbibag15-cloud/Portfolio" target="_blank" rel="noopener noreferrer" aria-label="박한비 GitHub 저장소 새 창 열기">GitHub ↗</a>
+                            <button type="button" class="preview-button" data-student-index="9" aria-label="박한비 사이트 미리보기" hidden>미리보기</button>
+                        </div>
+                    </article>
+                    <article class="card" id="student-bsw080902">
+                        <div class="card-top">
+                            <span class="card-index" aria-hidden="true">11</span>
+                            <h3><a class="name" href="https://bsw080902.github.io/firstclass/" target="_blank" rel="noopener noreferrer">반승완</a></h3>
+                        </div>
+                        <p class="repo">bsw080902/firstclass</p>
+                        <div class="card-links">
+                            <a class="github" href="https://github.com/bsw080902/firstclass" target="_blank" rel="noopener noreferrer" aria-label="반승완 GitHub 저장소 새 창 열기">GitHub ↗</a>
+                            <button type="button" class="preview-button" data-student-index="10" aria-label="반승완 사이트 미리보기" hidden>미리보기</button>
+                        </div>
+                    </article>
+                    <article class="card" id="student-iastron">
+                        <div class="card-top">
+                            <span class="card-index" aria-hidden="true">12</span>
+                            <h3><a class="name" href="https://iastron.github.io/syhpp/" target="_blank" rel="noopener noreferrer">신요한</a></h3>
+                        </div>
+                        <p class="repo">Iastron/syhpp</p>
+                        <div class="card-links">
+                            <a class="github" href="https://github.com/Iastron/syhpp" target="_blank" rel="noopener noreferrer" aria-label="신요한 GitHub 저장소 새 창 열기">GitHub ↗</a>
+                            <button type="button" class="preview-button" data-student-index="11" aria-label="신요한 사이트 미리보기" hidden>미리보기</button>
+                        </div>
+                    </article>
+                    <article class="card" id="student-ilubmysis">
+                        <div class="card-top">
+                            <span class="card-index" aria-hidden="true">13</span>
+                            <h3><a class="name" href="https://ilubmysis.github.io/first-class/" target="_blank" rel="noopener noreferrer">안재희</a></h3>
+                        </div>
+                        <p class="repo">ilubmysis/first-class</p>
+                        <div class="card-links">
+                            <a class="github" href="https://github.com/ilubmysis/first-class/" target="_blank" rel="noopener noreferrer" aria-label="안재희 GitHub 저장소 새 창 열기">GitHub ↗</a>
+                            <button type="button" class="preview-button" data-student-index="12" aria-label="안재희 사이트 미리보기" hidden>미리보기</button>
+                        </div>
+                    </article>
+                    <article class="card" id="student-anjiyun952">
+                        <div class="card-top">
+                            <span class="card-index" aria-hidden="true">14</span>
+                            <h3><a class="name" href="https://anjiyun952.github.io/firstclass/" target="_blank" rel="noopener noreferrer">안지윤</a></h3>
+                        </div>
+                        <p class="repo">anjiyun952/firstclass</p>
+                        <div class="card-links">
+                            <a class="github" href="https://github.com/anjiyun952/firstclass" target="_blank" rel="noopener noreferrer" aria-label="안지윤 GitHub 저장소 새 창 열기">GitHub ↗</a>
+                            <button type="button" class="preview-button" data-student-index="13" aria-label="안지윤 사이트 미리보기" hidden>미리보기</button>
+                        </div>
+                    </article>
+                    <article class="card" id="student-leewj0770-collab">
+                        <div class="card-top">
+                            <span class="card-index" aria-hidden="true">15</span>
+                            <h3><a class="name" href="https://leewj0770-collab.github.io/class/" target="_blank" rel="noopener noreferrer">이우진</a></h3>
+                        </div>
+                        <p class="repo">leewj0770-collab/class</p>
+                        <div class="card-links">
+                            <a class="github" href="https://github.com/leewj0770-collab/class" target="_blank" rel="noopener noreferrer" aria-label="이우진 GitHub 저장소 새 창 열기">GitHub ↗</a>
+                            <button type="button" class="preview-button" data-student-index="14" aria-label="이우진 사이트 미리보기" hidden>미리보기</button>
+                        </div>
+                    </article>
+                    <article class="card" id="student-qazwsx1344">
+                        <div class="card-top">
+                            <span class="card-index" aria-hidden="true">16</span>
+                            <h3><a class="name" href="https://qazwsx1344.github.io/firstclass/" target="_blank" rel="noopener noreferrer">이유민</a></h3>
+                        </div>
+                        <p class="repo">qazwsx1344/firstclass</p>
+                        <div class="card-links">
+                            <a class="github" href="https://github.com/qazwsx1344/firstclass" target="_blank" rel="noopener noreferrer" aria-label="이유민 GitHub 저장소 새 창 열기">GitHub ↗</a>
+                            <button type="button" class="preview-button" data-student-index="15" aria-label="이유민 사이트 미리보기" hidden>미리보기</button>
+                        </div>
+                    </article>
+                    <article class="card" id="student-hslcrb">
+                        <div class="card-top">
+                            <span class="card-index" aria-hidden="true">17</span>
+                            <h3><a class="name" href="https://first.rhee.life/" target="_blank" rel="noopener noreferrer">이호세</a></h3>
+                        </div>
+                        <p class="repo">hslcrb/firstclass</p>
+                        <div class="card-links">
+                            <a class="github" href="https://github.com/hslcrb/firstclass" target="_blank" rel="noopener noreferrer" aria-label="이호세 GitHub 저장소 새 창 열기">GitHub ↗</a>
+                            <button type="button" class="preview-button" data-student-index="16" aria-label="이호세 사이트 미리보기" hidden>미리보기</button>
+                        </div>
+                    </article>
+                    <article class="card" id="student-24s217-png">
+                        <div class="card-top">
+                            <span class="card-index" aria-hidden="true">18</span>
+                            <h3><a class="name" href="https://24s217-png.github.io/first_class/" target="_blank" rel="noopener noreferrer">임현진</a></h3>
+                        </div>
+                        <p class="repo">24s217-png/first_class</p>
+                        <div class="card-links">
+                            <a class="github" href="https://github.com/24s217-png/first_class" target="_blank" rel="noopener noreferrer" aria-label="임현진 GitHub 저장소 새 창 열기">GitHub ↗</a>
+                            <button type="button" class="preview-button" data-student-index="17" aria-label="임현진 사이트 미리보기" hidden>미리보기</button>
+                        </div>
+                    </article>
+                    <article class="card" id="student-dbsjtmzkf">
+                        <div class="card-top">
+                            <span class="card-index" aria-hidden="true">19</span>
+                            <h3><a class="name" href="https://dbsjtmzkf.github.io/firstClass/" target="_blank" rel="noopener noreferrer">장현서</a></h3>
+                        </div>
+                        <p class="repo">dbsjtmzkf/firstClass</p>
+                        <div class="card-links">
+                            <a class="github" href="https://github.com/dbsjtmzkf/firstClass" target="_blank" rel="noopener noreferrer" aria-label="장현서 GitHub 저장소 새 창 열기">GitHub ↗</a>
+                            <button type="button" class="preview-button" data-student-index="18" aria-label="장현서 사이트 미리보기" hidden>미리보기</button>
+                        </div>
+                    </article>
+                    <article class="card" id="student-daldaldadal11">
+                        <div class="card-top">
+                            <span class="card-index" aria-hidden="true">20</span>
+                            <h3><a class="name" href="https://daldaldadal11.github.io/firstClass/" target="_blank" rel="noopener noreferrer">정혜연</a></h3>
+                        </div>
+                        <p class="repo">daldaldadal11/firstClass</p>
+                        <div class="card-links">
+                            <a class="github" href="https://github.com/daldaldadal11/firstClass" target="_blank" rel="noopener noreferrer" aria-label="정혜연 GitHub 저장소 새 창 열기">GitHub ↗</a>
+                            <button type="button" class="preview-button" data-student-index="19" aria-label="정혜연 사이트 미리보기" hidden>미리보기</button>
+                        </div>
+                    </article>
+                    <article class="card" id="student-yejin0410">
+                        <div class="card-top">
+                            <span class="card-index" aria-hidden="true">21</span>
+                            <h3><a class="name" href="https://yejin0410.github.io/fustclass/" target="_blank" rel="noopener noreferrer">조예진</a></h3>
+                        </div>
+                        <p class="repo">yejin0410/fustclass</p>
+                        <div class="card-links">
+                            <a class="github" href="https://github.com/yejin0410/fustclass" target="_blank" rel="noopener noreferrer" aria-label="조예진 GitHub 저장소 새 창 열기">GitHub ↗</a>
+                            <button type="button" class="preview-button" data-student-index="20" aria-label="조예진 사이트 미리보기" hidden>미리보기</button>
+                        </div>
+                    </article>
+                    <article class="card" id="student-24design10212-web">
+                        <div class="card-top">
+                            <span class="card-index" aria-hidden="true">22</span>
+                            <h3><a class="name" href="https://24design10212-web.github.io/firstClass/" target="_blank" rel="noopener noreferrer">조유나</a></h3>
+                        </div>
+                        <p class="repo">24design10212-web/firstClass</p>
+                        <div class="card-links">
+                            <a class="github" href="https://github.com/24design10212-web/firstClass" target="_blank" rel="noopener noreferrer" aria-label="조유나 GitHub 저장소 새 창 열기">GitHub ↗</a>
+                            <button type="button" class="preview-button" data-student-index="21" aria-label="조유나 사이트 미리보기" hidden>미리보기</button>
+                        </div>
+                    </article>
+                    <article class="card" id="student-gong100baek-ctrl">
+                        <div class="card-top">
+                            <span class="card-index" aria-hidden="true">23</span>
+                            <h3><a class="name" href="https://gong100baek-ctrl.github.io/firstClass/" target="_blank" rel="noopener noreferrer">최고은</a></h3>
+                        </div>
+                        <p class="repo">gong100baek-ctrl/firstClass</p>
+                        <div class="card-links">
+                            <a class="github" href="https://github.com/gong100baek-ctrl/firstClass" target="_blank" rel="noopener noreferrer" aria-label="최고은 GitHub 저장소 새 창 열기">GitHub ↗</a>
+                            <button type="button" class="preview-button" data-student-index="22" aria-label="최고은 사이트 미리보기" hidden>미리보기</button>
+                        </div>
+                    </article>
+                    <article class="card" id="student-ajrwkvkqzhs">
+                        <div class="card-top">
+                            <span class="card-index" aria-hidden="true">24</span>
+                            <h3><a class="name" href="https://ajrwkvkqzhs.github.io/first_class/" target="_blank" rel="noopener noreferrer">최규현</a></h3>
+                        </div>
+                        <p class="repo">ajrwkvkqzhs/first_class</p>
+                        <div class="card-links">
+                            <a class="github" href="https://github.com/ajrwkvkqzhs/first_class" target="_blank" rel="noopener noreferrer" aria-label="최규현 GitHub 저장소 새 창 열기">GitHub ↗</a>
+                            <button type="button" class="preview-button" data-student-index="23" aria-label="최규현 사이트 미리보기" hidden>미리보기</button>
+                        </div>
+                    </article>
+                    <article class="card" id="student-sukeukeu-dot">
+                        <div class="card-top">
+                            <span class="card-index" aria-hidden="true">25</span>
+                            <h3><a class="name" href="https://sukeukeu-dot.github.io/First-Class/" target="_blank" rel="noopener noreferrer">최송윤</a></h3>
+                        </div>
+                        <p class="repo">sukeukeu-dot/First-Class</p>
+                        <div class="card-links">
+                            <a class="github" href="https://github.com/sukeukeu-dot/First-Class" target="_blank" rel="noopener noreferrer" aria-label="최송윤 GitHub 저장소 새 창 열기">GitHub ↗</a>
+                            <button type="button" class="preview-button" data-student-index="24" aria-label="최송윤 사이트 미리보기" hidden>미리보기</button>
+                        </div>
+                    </article>
+                    <article class="card" id="student-hanyubin319-max">
+                        <div class="card-top">
+                            <span class="card-index" aria-hidden="true">26</span>
+                            <h3><a class="name" href="https://hanyubin319-max.github.io/firstclass/" target="_blank" rel="noopener noreferrer">한유빈</a></h3>
+                        </div>
+                        <p class="repo">hanyubin319-max/firstclass</p>
+                        <div class="card-links">
+                            <a class="github" href="https://github.com/hanyubin319-max/firstclass" target="_blank" rel="noopener noreferrer" aria-label="한유빈 GitHub 저장소 새 창 열기">GitHub ↗</a>
+                            <button type="button" class="preview-button" data-student-index="25" aria-label="한유빈 사이트 미리보기" hidden>미리보기</button>
+                        </div>
+                    </article>
+                </div>
+                <p class="empty-state" id="empty-state" hidden>검색 결과가 없어요. 이름이나 아이디를 다시 입력해 주세요.</p>
+                <p class="note">※ 학생이 배포 주소나 저장소 이름을 변경하면 이 페이지의 링크도 수정해야 합니다. 외부 링크는 새 창에서 열립니다.</p>
+            </section>
+        </div>
+    </main>
+    <footer class="signature" id="contributor">
 
-    <section class="teacher">
-      <strong>강사 예시 · 찐망고</strong>
-      <a class="name" href="https://jjinmanggo.github.io/firstClass/" target="_blank" rel="noopener noreferrer">배포 페이지 보기</a>
-      <div class="repo">JJinMangGo/firstClass</div>
-      <a class="github" href="https://github.com/JJinMangGo/firstClass" target="_blank" rel="noopener noreferrer">GitHub</a>
-    </section>
+        <img class="emblem" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MzIuMjQgNTMyLjI0Ij4NCiAgPGcgaWQ9IkxheWVyXzIiIGRhdGEtbmFtZT0iTGF5ZXIgMiI+DQogICAgPGcgaWQ9IuugiOydtOyWtF8xIiBkYXRhLW5hbWU9IuugiOydtOyWtCAxIj4NCiAgICAgIDxnPg0KICAgICAgICA8cGF0aCBkPSJNMjY2LjEyLDUzMi4yNEEyNjYuMTMsMjY2LjEzLDAsMCwxLDc3Ljk0LDc3Ljk0LDI2Ni4xMiwyNjYuMTIsMCwxLDEsNDU0LjI5LDQ1NC4yOSwyNjQuMzQsMjY0LjM0LDAsMCwxLDI2Ni4xMiw1MzIuMjRabTAtNTIxLjhjLTE0MSwwLTI1NS42OCwxMTQuNjktMjU1LjY4LDI1NS42OFMxMjUuMTMsNTIxLjgsMjY2LjEyLDUyMS44LDUyMS44LDQwNy4xLDUyMS44LDI2Ni4xMiw0MDcuMSwxMC40NCwyNjYuMTIsMTAuNDRaIi8+DQogICAgICAgIDxnIGlkPSJyaGVlaG9zZV90eXBvIiBkYXRhLW5hbWU9InJoZWVob3NlIHR5cG8iPg0KICAgICAgICAgIDxnPg0KICAgICAgICAgICAgPHBhdGggZD0iTTIyMy40OCwzODcuMzdjLTIuNjMsMS42OC02LjA2LDUuNjYtOS4xNiwxMC42LTQuNyw3LjQ5LTExLjk1LDIzLjUzLTEyLjQ0LDI3LjQ2LS4xNCwxLjEyLS4wNiwxLjM2LjQ5LDEuODYuNzguNzIsMS44NiwxLjE3LDIuMjIuOTNhMTUuMjUsMTUuMjUsMCwwLDAsMS40My0yLjU4LDQwLjc4LDQwLjc4LDAsMCwxLDIuNDktNC4zMmMxLjI1LTEuODEsNy4zNi04LjQ4LDcuNTgtOC4yNmE1Ljc1LDUuNzUsMCwwLDEtLjYxLDEuNjRjLTIuMjEsNC44NC0yLjMyLDcuODYtLjMzLDkuOTFzNCwxLjc1LDcuNTItMS43YzEuMzYtMS4zMywyLjA4LTEuODYsMi4wOC0xLjU0YTYsNiwwLDAsMCwyLjI5LDMuMjcsNS41NSw1LjU1LDAsMCwwLDQuMjMuNTUsMTcuNzksMTcuNzksMCwwLDAsNS41Ni0zLjVsMS40NC0xLjM2LjIsMWE0LjY5LDQuNjksMCwwLDAsMi42OCwzLjEzYzIuNzYsMS4zMyw2LjY0LS40MywxMC4yNi00LjczLDEuNDYtMS43LDIuMzUtMy42OSwxLjg1LTQuMTctLjIyLS4yMS0uOC4xNi0yLjMyLDEuNi0yLjcxLDIuNTctNS44OSw0LjU2LTcuODMsNS0xLjEzLjI0LTEuODUtLjM3LTEuNi0xLjM4LjM5LTEuNTEuNjktMS45MSwxLjgyLTIuNDdhMjcuNDksMjcuNDksMCwwLDAsNy4xMS01YzEuODUtMiwzLjQzLTQuOTQsMy4yMS01LjgyLS4zLTEuMTktMi4yNy0yLjQxLTMuOS0yLjQ0LTIuOTMsMC04LjEsNS0xMC42OCwxMC4yOC0yLjA3LDQuMTktOS45NSw4LjkyLTExLDYuNjEtLjQ3LTEsLjE5LTIsMS41NS0yLjUyLDUuMDktMiw5LjgyLTYuODYsOS44Mi0xMC4yYTEuOTMsMS45MywwLDAsMC0uNjEtMS42OCw1LjQ5LDUuNDksMCwwLDAtNS43Ni0uNjNjLTIuNTQsMS4yNS02LjgsNi40LTcuOTEsOS42MS0uMzMsMS0uOTEsMS43LTIuOSwzLjQ1LTIuODgsMi41NS00LDMuMzItNC40MiwyLjk1LS43NS0uNzEsMS42Ni04LDQuMTQtMTIuNDMsMS41NS0yLjgxLDEuNTUtMi42OC4yLTMuNDUtMi0xLjEyLTIuMjQtMS02LDIuNDQtMS44OCwxLjczLTQuMTIsMy44My01LDQuNjhsLTEuNjEsMS41MSwxLjE5LTIuNDRjNS41OS0xMS41NSwxMC42Mi0xOS41MiwxNS4yMS0yNC4wNiwxLjYxLTEuNiwxLjY2LTEuNywxLjE3LTIuMDdBMy42LDMuNiwwLDAsMCwyMjMuNDgsMzg3LjM3Wm0yNi42NiwyMS40MWEyNCwyNCwwLDAsMS00LjksNWwtLjk0LjY0LjY3LS45M2MxLjY1LTIuMjMsNS4wNi01Ljc5LDUuNTgtNS44MkMyNTAuNjYsNDA3LjY2LDI1MC40Nyw0MDguMTcsMjUwLjE0LDQwOC43OFptLTEzLjc4LDFhMTguOSwxOC45LDAsMCwxLTQuMjMsNC43LDEyLjYyLDEyLjYyLDAsMCwxLTIuMDcsMS41NGMtLjQyLS4zNywzLjU3LTUuMDcsNS4zMS02LjI5QzIzNi41OCw0MDguOTEsMjM2Ljg2LDQwOC45MSwyMzYuMzYsNDA5Ljc5WiIvPg0KICAgICAgICAgICAgPHBhdGggZD0iTTI4OC45NCwzODkuMjNjLTEsLjc3LTMuMTUsNC00LjksNy4yLTEuMDcsMi00LjcyLDkuNzctNS4xNywxMS0uMDguMjYtMS4wOC42NC0yLjg1LDFhMjYuNDEsMjYuNDEsMCwwLDAtMy4yLjg4Yy0uMjguMTMtLjUuMTYtLjUuMDhzNC4wNi0xMC4xNCw1LTEyLjNjLjU1LTEuMjQuMzYtMS42Mi0xLjI1LTIuMzNhNC43Niw0Ljc2LDAsMCwwLTEuNzctLjUxLDEyLjYxLDEyLjYxLDAsMCwwLTEuMjIsMi41OGMtLjU1LDEuMzUtMS42Myw0LjA5LTIuNDMsNi4wNXMtMS44Miw0LjYtMi4zMiw1Ljg1bC0uODksMi4yNS0yLjE4Ljg1Yy0xLjE5LjQ2LTIuMzguOTEtMi42NiwxYTEuNjQsMS42NCwwLDAsMC0uOC44MmMtLjMuNjEtLjI1Ljc3LjMsMS4zNmEyLjI0LDIuMjQsMCwwLDAsMS44Ni42NiwzLjMyLDMuMzIsMCwwLDEsMS4xOS4xMWMwLC4wOC0uMzEuOTUtLjY5LDJhMzAsMzAsMCwwLDAtMS44LDYuNzIsMi44MiwyLjgyLDAsMCwwLDIuMzIsMi4zNGMuNTUsMCwuNzUtLjE2Ljg2LS43NS40NC0yLjA3LDEuNDktNSwzLjc5LTEwLjQzbC44NS0yLjA1LDMuMzItMS4wOWEyNC41NiwyNC41NiwwLDAsMSwzLjQzLTEsOS4zMyw5LjMzLDAsMCwxLS43NywyLjE4Yy0zLjc2LDkuMDUtNS4xNSwxNC45NS00LDE3LjEuNjMsMS4xNywyLjA3LDEuNDEsMi4wNy4zMiwwLTEuMzYsMy40My0xMSw2LjI4LTE3LjcybDEuMzUtMy4xNiwyLjA4LS40N2MyLjE4LS40OCwzLjY4LS42MSwzLjUxLS4zLTQsNy41Ny00LjU0LDExLjQ1LTEuNzEsMTMuNTJhMy40NSwzLjQ1LDAsMCwwLDIuMzIuNjksNC4zMSw0LjMxLDAsMCwwLDMtMSwyMi41NCwyMi41NCwwLDAsMCw1LjItNS43OWMxLjgtMywyLjQzLTcuNDEsMS4zMy05LjI0YTUuNTcsNS41NywwLDAsMC0zLjcxLTIuMDcsMiwyLDAsMCwxLTEuMjItLjUzYy0uNzQtLjgtMS41Mi0uNjQtMi43Ni41M0wyODksNDA2LjYzbC0yLjY2LjEzLTIuNjguMTMuOTEtMS44YzMuNzYtNy40MSw2LjIyLTExLjY5LDcuNjktMTMuMzlsMS4wNS0xLjIyLS43NS0uNjlhNC43MSw0LjcxLDAsMCwwLTEuNzktLjkzQTEuNTMsMS41MywwLDAsMCwyODguOTQsMzg5LjIzWm02LjcyLDE5LjM5Yy44MywyLjEtMS40NCw2LjU2LTUuMzEsMTAuMzgtMiwyLTIuNzEsMi4xOC0yLjQxLjY3LjQ3LTIuNTgsMy42OC04LjY2LDUuNTQtMTAuNTdDMjk0LjQyLDQwOC4xNCwyOTUuMzgsNDA3LjkzLDI5NS42Niw0MDguNjJaIi8+DQogICAgICAgICAgICA8cGF0aCBkPSJNMzMzLjc3LDM4OS4zNGMtNC41MSwxLjE0LTEwLjczLDUuMTgtMTUuNTcsMTAtMy4zNSwzLjM3LTQuNjUsNS41LTQuODcsNy45NGE2LjcxLDYuNzEsMCwwLDAsMS41LDUuMTJjMS4xNiwxLjU3LDIuMDcsMi4yOSw1LjkyLDQuNmwyLjU3LDEuNTctNC42OCwyLjI4Yy00LjcsMi4zMS04Ljg3LDQuODktOS42OCw2LTEuMywxLjc4LjcsNC40MywzLjY4LDQuODZzNy41Mi0xLjQxLDEwLjY1LTQuMTdjMi4zMi0yLDMuNC0zLjUxLDMuODctNS4zMmEzLjI4LDMuMjgsMCwwLDEsLjg2LTEuNjJjLjI1LS4xMywxLjYzLS42MywzLjA3LTEuMTFsMi42My0uODh2LjY0YTYuMjYsNi4yNiwwLDAsMCwzLjY1LDUuNDRjMS4zNS43Miw0LjIuNjQsNi40MS0uMTUsNC42Mi0xLjY4LDEwLTYuMywxMi4wOS0xMC40MiwxLjYtMy4wOC41NS00LjQ2LTEuMzUtMS43Ny0zLjM1LDQuNy0xMC42LDkuNS0xNC44Myw5LjgyLTEuNjYuMTMtMS44LjExLTIuMjQtLjUzcy0uNDEtLjktLjE3LTIuMmMuNDItMi4wOC44Ni0yLjYzLDIuNTgtMy4xNmExOCwxOCwwLDAsMCw3LjcxLTQuMzljMi4zNS0yLjIzLDMuMjktMy44NSwzLjI5LTUuNmEzLjQ2LDMuNDYsMCwwLDAtMi4zNy0zLjQsMi43MywyLjczLDAsMCwwLTIuOC0uMTljLTMuMjksMS04LDUuNDgtMTAuMzcsOS45MWwtMS4wOCwyLTIuNTQuODVjLTEuNDEuNDgtMy4xOCwxLjExLTQsMS40M2wtMS40MS41OS0xLjgtMS4yOGMtMS0uNjktMi42Mi0xLjg2LTMuNjUtMi41NS0xLjkzLTEuMzUtMy40OC0zLjQyLTMuNDgtNC43LDAtMS41OSwyLjM1LTUuMTIsNS4zNi04LjA3LDMuNzctMy42OSwxMC45My03LjczLDE0LjY5LTguMjYsMS4xOS0uMTksMS4yNS0uMTYsMS4yNS40MiwwLDEuNjItMy43NCw3LTcuMjUsMTAuMzlhMjUuMzksMjUuMzksMCwwLDAtMi43MSwyLjg5YzAsLjgzLDMuNjguNTYsNS4zOS0uNDIsMy0xLjY4LDcuODMtOC44Nyw4LjExLTEyLjA2LjIyLTIuNDItMS4zLTQuMTctNC4xLTQuNzhDMzM2LjQ4LDM4OC43MywzMzYuMTIsMzg4Ljc1LDMzMy43NywzODkuMzRabTE0LDE3LjE4YTE1LDE1LDAsMCwxLTQuNTksNC40NCwxMC44MywxMC44MywwLDAsMS0yLjQxLDEuNDFjLS4yMi0uMjIsNC00LjQ0LDUuNjctNS43MWE2LjExLDYuMTEsMCwwLDEsMS42MS0xQzM0OC4xLDQwNS43LDM0OCw0MDYuMSwzNDcuNzQsNDA2LjUyWk0zMjIuNDksNDIzLjJhNDEuMDYsNDEuMDYsMCwwLDEtNy4wOCw0LjUyLDExLjY2LDExLjY2LDAsMCwxLTIuODguODJsLTEuMzUuMTYsMS43OS0xLjE0YzEuNDQtLjkzLDEwLTUuMjYsMTAuNDktNS4yOUE1LDUsMCwwLDEsMzIyLjQ5LDQyMy4yWiIvPg0KICAgICAgICAgICAgPHBhdGggZD0iTTE5Ny40NSwzOTEuNjJhNDIuNiw0Mi42LDAsMCwwLTEyLjExLDMuODhjLTQuMjEsMi4wNS05LjQzLDYuNDMtOS43MSw4LjIxYTIuNjUsMi42NSwwLDAsMCwxLjEzLDIuNzljLjg2LjUzLDEuNTIuMTYsMS41Mi0uODgsMC0yLjEsOS4zLTcuNzMsMTUuOC05LjU5bDEuODUtLjU2LjkxLS4yNi0xLDEuMjVhMzYuNjEsMzYuNjEsMCwwLDAtMi40MywzLjY0Yy0uOCwxLjMtMS42OSwyLjczLTEuOTQsMy4xOC0xLDEuNjUtMyw1LjM5LTQuMDksNy44Ni0xLDIuMjMtMS4yNywyLjYxLTEuOTQsMi43NC0uOTEuMTYtMS4xOC43Ny0uODgsMS44OC4xOS42Mi0uMTQsMS43OC0xLjUyLDUuNzEtMiw1LjcxLTMuNCwxMC41Mi0zLjQsMTJhMi42NywyLjY3LDAsMCwwLC44NSwyLDIuOTEsMi45MSwwLDAsMCwxLjM2LjkzYy41LDAsMS4xMS0xLjE3LDEuMTEtMi4xOCwwLS44Miw0LjUtMTMuNTIsNC43Mi0xMy4zMWEyNC4wNiwyNC4wNiwwLDAsMSwxLjE3LDIuNzRjMy4zNCw4Ljg3LDguNzYsMTUuNTQsMTUuMTUsMTguNjRoMGExMS4yMywxMS4yMywwLDAsMCw0Ljk0LDEuMTVoLjU5YzMsMCwzLjI3LDAsNC4zNS0uNzUuNzQtLjQ4LDEuMTYtLjkzLDEuMTYtMS4yN3MtLjExLS41My0uNjEtLjRhMTEsMTEsMCwwLDEtNi0uMTFjLTQuNTQtMS40OS0xMC03LjEyLTEzLjY2LTE0LjA1YTU1LjI5LDU1LjI5LDAsMCwxLTMuNDktOC4yM2MwLS4yNC42MS0uNzQsMS40Ny0xLjIsNy43MS00LjA5LDE0LjA4LTEwLjI3LDE3LjE3LTE2LjYyYTYuODMsNi44MywwLDAsMCwuODMtMy42MWMwLTEuNjUtLjA1LTItLjc0LTIuODdDMjA3Ljc5LDM5MS41MiwyMDQsMzkwLjY5LDE5Ny40NSwzOTEuNjJabTksMy40NmMuODMuNTUuNzcsMS40OC0uMiwzLjQ3YTM0LDM0LDAsMCwxLTEzLjEzLDEzLjVjLTEuODMsMS0xLjg4LDEtMS42OS4zNy4zMy0xLDIuMjQtNC45Miw0LjkyLTEwLjIsMi41NS00Ljk0LDMtNi4yMSwyLjQ0LTYuODgtLjQyLS40OC4zNi0uNTgsNC40LS42NEMyMDUuMTcsMzk0LjY1LDIwNiwzOTQuNzYsMjA2LjQ0LDM5NS4wOFoiLz4NCiAgICAgICAgICA8L2c+DQogICAgICAgIDwvZz4NCiAgICAgICAgPGc+DQogICAgICAgICAgPHBvbHlnb24gcG9pbnRzPSIyMTcuNzggNTkuMDIgMjE3LjY2IDU4LjY3IDIxNy43OCA1OS4xNCAyMTcuNzggNTkuMDIiLz4NCiAgICAgICAgICA8cGF0aCBkPSJNNDc3LjYsMjU5LjU3QTIxMi40MywyMTIuNDMsMCwwLDAsNDQxLDE0Ny4wOWwtLjM2LS41NGMtLjM4LS41Ni0uNzctMS4xMS0xLjE2LTEuNjZsLS4yNC0uMzRhMjA3LjcsMjA3LjcsMCwwLDAtNjkuMzQtNjIuNzNsLTEuMTctLjY2YTIxMS40OSwyMTEuNDksMCwwLDAtNjYuNjktMjMuNTUsMjA5LjgyLDIwOS44MiwwLDAsMC03MS41OCwwbC0xLjA5LjE4LTIuMTkuNDEtLjEyLDAtMi42OC41Mi0xLjc0LjM2Yy0xLjUyLjMyLTMsLjY1LTQuNTYsMWwtLjA5LDBoMGwtLjExLDBjLTEuODIuNDItMy42OS44OS01LjczLDEuNDJsLTEuMTQuMzEtLjU5LjE3Yy0xLjQ0LjM5LTIuODguNzktNC4zLDEuMjFsLTEuNzEuNTFxLTIuMzQuNzItNC42NiwxLjQ3bC0xLjEzLjM3Yy0zLjk1LDEuMzMtNy45LDIuNzgtMTEuNzQsNC4zMmwtLjg5LjM3Yy0xLjU1LjYzLTMuMDgsMS4yNy00LjYsMS45NGwtMS42LjctLjExLDBjLTEuMTkuNTMtMi4zOCwxLjA4LTMuNTYsMS42M2wtLjI1LjEyLTIsMWMtLjY1LjMxLTEuMy42My0xLjk0LDFsLS40My4yMWEyMTAuOTQsMjEwLjk0LDAsMCwwLTEwMy44MywxMTVBMTA5LjQsMTA5LjQsMCwwLDAsNjQsMjAzLjU2YTIxMy4yNiwyMTMuMjYsMCwwLDAtNi40MSwyNi42LDIxMS4zMywyMTEuMzMsMCwwLDAsNjQuNTIsMTkxLDIxMi4xMSwyMTIuMTEsMCwwLDAsMTA4LDUzLjUxLDIxMS4zMywyMTEuMzMsMCwwLDAsMTkxLTY0LjUyLDIxMi4xMSwyMTIuMTEsMCwwLDAsNTMuNTEtMTA4LDIwOS44MywyMDkuODMsMCwwLDAsMy4wNi0zNy44N2wwLTEuNzJDNDc3LjY1LDI2MS41MSw0NzcuNjMsMjYwLjU0LDQ3Ny42LDI1OS41N1ptLTYuOCwyMy4yNmEyMDcuNjYsMjA3LjY2LDAsMCwxLTQ4LjM0LDExNi4zMiwyMDMuNDgsMjAzLjQ4LDAsMCwxLTEwOS43NCw2N0EyMDUuNjMsMjA1LjYzLDAsMCwxLDYxLDI1NC4yM2wuNTYtOS45TDY0LDI1NGExMDYuNzQsMTA2Ljc0LDAsMCwwLDYuMzgsMTguMzFBMTA0LjMsMTA0LjMsMCwwLDAsMTE3LDMyMS43MmE0Mi43NCw0Mi43NCwwLDAsMCw5LjcxLDQuNWMuODYuMzUsMS43LjcxLDIuNTYsMWExMDUuMiwxMDUuMiwwLDAsMCwzMy41NCw2LjY3Yy40LDAsLjgsMCwxLjIsMC0xLjc0LjQxLTMuNDQuODQtNS4wOCwxLjI4YTEwNy4xNiwxMDcuMTYsMCwwLDEtMzAuMTgtNi41NkExMDYsMTA2LDAsMCwxLDY5LDI3Mi44OGExMDguNjYsMTA4LjY2LDAsMCwxLTYuNDYtMTguNTYsMjA0LjUzLDIwNC41MywwLDAsMCw1LjA2LDU4LjA2YzI1LjUxLDEwOS40OCwxMzUuMzMsMTc3Ljc5LDI0NC44LDE1Mi4yOCw4OC4zNC0yMC41OCwxNDkuODYtOTYuMDYsMTU2LjkzLTE4MmExMDYuNjcsMTA2LjY3LDAsMCwwLTcuNDYtMjMuMTEsMTA1LjA5LDEwNS4wOSwwLDAsMC0zMi4xMS00MC4zNWMuMTQtLjUyLjI3LTEsLjQtMS41OEExMDYuNTcsMTA2LjU3LDAsMCwxLDQ2My4yMSwyNTlhMTA3LjgsMTA3LjgsMCwwLDEsNy41NywyMy40NGwwLC4yWk00MzEsMjA2LjA2cy0xLjI3LjgyLTMuMzUsMi40MWExMTMuMTcsMTEzLjE3LDAsMCwwLTE0LjUtOGMuMTMtLjM3LjI3LS43My4zOS0xLjFhNDcuMTcsNDcuMTcsMCwwLDAsMS4zLTUuNzJjLjE1LTEsLjMxLTIsLjM3LTNzLjA4LTIsLjA3LTNhNDEuMzcsNDEuMzcsMCwwLDAtLjUxLTYsNDAuNzksNDAuNzksMCwwLDAtMS42NC01Ljg3LDU1LjU5LDU1LjU5LDAsMCwwLTMuNjcsNC43M2MtMi4xOSwzLjA3LTUsNy41MS04LjE0LDEzbC0xLjEsMnEtNS4wNi0xLjY0LTEwLjIyLTIuNzhhNTAuNzUsNTAuNzUsMCwwLDAsNS4xMi0xOS4zMSwzNywzNywwLDAsMC0yLjUyLTE2LDI2LjY0LDI2LjY0LDAsMCwwLTIuNDYtNSw0OC42NSw0OC42NSwwLDAsMC0yLjQ0LDQuOSwxMDEuMzksMTAxLjM5LDAsMCwwLTQuODMsMTMuMzRjLS4zOSwxLjM5LS43OCwyLjgzLTEuMTQsNC4zMnMtLjgsMy4wOC0xLjE2LDQuNjktLjcsMy4yNC0xLDQuOTJjLS4xNC44My0uMjgsMS42Ny0uNDIsMi41M3MtLjMyLDEuNzItLjQ4LDIuNjFjLS4wNi4zNC0uMTEuNjktLjE2LDFhMTE1LjE0LDExNS4xNCwwLDAsMC0xMS44OC0uNzRsLS43MS0uOTVjLS4yMS0uMjctLjQ0LS41My0uNjYtLjc5LjM2LS43My43Ny0xLjU3LDEuMjEtMi41M2E3MS43Myw3MS43MywwLDAsMCw0LjgzLTE0LjI0LDU1LjA5LDU1LjA5LDAsMCwwLDEtMTksMzguNDYsMzguNDYsMCwwLDAtMi40OC05LjY5LDMzLjQsMzMuNCwwLDAsMC01LjA3LTguNzMsNDAuNDEsNDAuNDEsMCwwLDAtMS41OSw0LjczLDgwLjQ3LDgwLjQ3LDAsMCwwLTIuNDksMTIuOGMtLjMyLDIuNjctLjQ4LDUuNTEtLjU4LDguNTlhODguNTYsODguNTYsMCwwLDAsLjE4LDkuNzFjLjE0LDEuNjYuMjksMy4zOC40NCw1LjE1cy40MiwzLjUzLjcyLDUuMzFjLjI3LDEuMzguNSwyLjgyLjc1LDQuMjZsLTEuMzMtMS41Ny0zLjY5LTMuOTFjLS42Mi0uNjUtMS4yMS0xLjMyLTEuODUtMmwtMi0xLjkxcS0zLjM3LTMuMjgtNy02LjQ3Yy4xOC0uNjUuMzYtMS4zNy41NS0yLjE4YTcwLjQxLDcwLjQxLDAsMCwwLDItMTMuNzVBNTUuNzcsNTUuNzcsMCwwLDAsMzQ3LDEzNS4zNWE0My44OSw0My44OSwwLDAsMC0zLjQxLTguNjMsMzUuNDksMzUuNDksMCwwLDAtNS42MS03LjQ5LDM0LjQyLDM0LjQyLDAsMCwwLTEsNC40NCw2NS4yNCw2NS4yNCwwLDAsMC0uODIsMTEuNzcsNzcuNDgsNzcuNDgsMCwwLDAsMi4wOSwxNi44Nyw4My4yMSw4My4yMSwwLDAsMCw0LjA5LDEzYy01Ljg2LTUtMTIuMDctOS43Ny0xOC41NC0xNC4zN2E3Ny4xNSw3Ny4xNSwwLDAsMCwuMTgtMTQuMjdBNTcuMzEsNTcuMzEsMCwwLDAsMzIwLjI5LDEyMWEzNi44NCwzNi44NCwwLDAsMC05LjgyLTE0LjExLDI5Ljg5LDI5Ljg5LDAsMCwwLS41NCw0LDU1LjE2LDU1LjE2LDAsMCwwLC4yOSwxMC42OEE3MSw3MSwwLDAsMCwzMTQsMTM2Ljc1YTY5LjkyLDY5LjkyLDAsMCwwLDMuODcsOC42NGMuMzcuNzQuNzYsMS40OCwxLjE3LDIuMjNsLTEuMjUtLjg2cS05LjE4LTYuMjEtMTguODktMTJjMC0uMywwLS42MiwwLTEsMC0xLjQ1LS4xNC0zLjE3LS4zMy01LjFzLS41My00LTEtNi4yYTU1LjcyLDU1LjcyLDAsMCwwLTQuODEtMTMuOTQsMzcuNjMsMzcuNjMsMCwwLDAtMTAuMjItMTIuMjcsMzksMzksMCwwLDAsLjkyLDEzLjA3LDYzLjI4LDYzLjI4LDAsMCwwLDEwLjA2LDIyLjIzcS04LjI2LTQuNzUtMTYuNzgtOS4yNWwtMi44NCw1Ljc0YTQzMS40Myw0MzEuNDMsMCwwLDEsNDAuNDksMjRBMjUxLjY3LDI1MS42NywwLDAsMSwzNDksMTgwbDEuOTEsMS44NGMuNjIuNjMsMS4xOCwxLjI2LDEuNzgsMS44OWwzLjU1LDMuNzYsMi4zNiwyLjc4YTExMy43MSwxMTMuNzEsMCwwLDAtNTMuOSwxNy40NGwtMjEuMjksOS45VjEzOS44NUwxNjguOTQsMjU2LjcxaDc5LjkxdjBsLTcuMjcsMzYuNTRhOTkuMTEsOTkuMTEsMCwwLDEtMzUuMiwyNi4xYy01Ljc4LTQuODgtMTEuMy05LjkyLTE2LjQ2LTE1LjEyLTEwLjM3LTEwLjQtMTkuMzctMjEuNDgtMjUuNzgtMzIuNThhOTAuMTQsOTAuMTQsMCwwLDEtNy41NC0xNi4zNkE2MC45Myw2MC45MywwLDAsMSwxNTMuNDIsMjQwYTUwLjg1LDUwLjg1LDAsMCwxLDEuMDUtMTQuNTksNjQsNjQsMCwwLDEsNS40LTE1bDEtMS45Mi40OS0xLC41OC0xLDIuMjktMy44NywyLjYzLTMuODdhMjIuMjcsMjIuMjcsMCwwLDEsMS4zOS0xLjkzTDE2OS43LDE5NWwxLjQ2LTEuOTRjLjUtLjY1LDEuMDgtMS4yNywxLjYxLTEuOTFsMy4yNi0zLjgzLDMuNTUtMy43N2MuNTktLjYzLDEuMTYtMS4yNywxLjc4LTEuODlsMS45MS0xLjg0YTI1MS4xMywyNTEuMTMsMCwwLDEsMzQuNjQtMjcuODMsNDM1LDQzNSwwLDAsMSw0MC40OS0yNGwtMi44NC01Ljc0cS04LjUxLDQuNS0xNi43OCw5LjI2YTYzLjM1LDYzLjM1LDAsMCwwLDEwLjA2LTIyLjI1LDM5LDM5LDAsMCwwLC45Mi0xMy4wNywzNy42MywzNy42MywwLDAsMC0xMC4yMiwxMi4yNyw1NS41Miw1NS41MiwwLDAsMC00LjgxLDE0LDYyLjA2LDYyLjA2LDAsMCwwLTEuMzIsMTEuMzFjMCwuMzMsMCwuNjUsMCwuOTVxLTkuNjksNS43Ny0xOC44OSwxMmwtMS4yNS44N2MuNDEtLjc1LjgtMS40OSwxLjE3LTIuMjRhNjguNzIsNjguNzIsMCwwLDAsMy44Ny04LjY1QTcxLDcxLDAsMCwwLDIyMiwxMjEuMzNhNTQuMzIsNTQuMzIsMCwwLDAsLjI4LTEwLjY5LDI4LjMxLDI4LjMxLDAsMCwwLS41NC00LDM3LDM3LDAsMCwwLTkuODIsMTQuMTMsNTcuNzEsNTcuNzEsMCwwLDAtMy42NSwxNS43NSw3Ny40Myw3Ny40MywwLDAsMCwuMTcsMTQuMjhjLTYuNDcsNC42LTEyLjY3LDkuNC0xOC41MywxNC4zOWE4NC4zMSw4NC4zMSwwLDAsMCw0LjA4LTEzLDc3LDc3LDAsMCwwLDIuMDktMTYuODksNjMuNjQsNjMuNjQsMCwwLDAtLjgyLTExLjc4LDM1Ljc5LDM1Ljc5LDAsMCwwLTEtNC40NCwzNS4xMywzNS4xMywwLDAsMC01LjYxLDcuNSw0My40LDQzLjQsMCwwLDAtMy40Miw4LjY0LDU2LjEzLDU2LjEzLDAsMCwwLTEuODMsMTcuNTMsNzAuNjQsNzAuNjQsMCwwLDAsMiwxMy43NmMuMTkuODEuMzgsMS41My41NiwyLjE4LTIuMzksMi4xMy00LjcyLDQuMjgtNyw2LjQ4TDE3NywxNzdjLS42NC42NC0xLjIzLDEuMzEtMS44NSwybC0zLjY5LDMuOTItMS4zMywxLjU2Yy4yNS0xLjQ0LjQ4LTIuODcuNzUtNC4yNnEuNDUtMi42Ny43MS01LjMxYy4xNS0xLjc4LjMtMy40OS40NC01LjE2YTg2LjE4LDg2LjE4LDAsMCwwLC4xOC05LjcxYy0uMS0zLjA5LS4yNi01LjkzLS41Ny04LjZhODEuNDUsODEuNDUsMCwwLDAtMi41LTEyLjgsMzgsMzgsMCwwLDAtMS41OS00Ljc0LDMzLjE1LDMzLjE1LDAsMCwwLTUuMDYsOC43NCwzOC4xMywzOC4xMywwLDAsMC0yLjQ5LDkuNyw1NS4xNSw1NS4xNSwwLDAsMCwxLDE5LDcyLjQ1LDcyLjQ1LDAsMCwwLDQuODQsMTQuMjVjLjQ0LDEsLjg0LDEuOCwxLjIxLDIuNTMtLjIzLjI2LS40NS41Mi0uNjYuNzlsLTEuNTQsMi0xLjU2LDJhMjEuNSwyMS41LDAsMCwwLTEuNDcsMi4wNUwxNTksMTk5LjEzbC0yLjQ3LDQuMTUtLjYyLDEtLjM3Ljc0Yy0uMTctMS42LS4zMy0zLjIxLS40Ny00LjgxLS41LTMuNjQtLjg1LTcuMi0xLjQ2LTEwLjdxLS4yNi0xLjMyLS40OC0yLjYxYy0uMTUtLjg2LS4yOS0xLjctLjQzLTIuNTMtLjMtMS42OC0uNjQtMy4zMi0xLTQuOTNzLS43Ni0zLjE3LTEuMTYtNC42OS0uNzUtMi45My0xLjE1LTQuMzJhMTAxLjYxLDEwMS42MSwwLDAsMC00LjgzLTEzLjM1LDQ4LjY1LDQ4LjY1LDAsMCwwLTIuNDQtNC45LDI2LjI5LDI2LjI5LDAsMCwwLTIuNDUsNUEzOS44MywzOS44MywwLDAsMCwxMzgsMTYyLjRhNDIsNDIsMCwwLDAtLjg5LDEwLjhBNTAuNzksNTAuNzksMCwwLDAsMTQyLjQ4LDE5M2E2MC41NCw2MC41NCwwLDAsMCw4LjkyLDEzLjM0Yy44NiwxLDEuNjIsMS44LDIuMjgsMi40OUE2OC45MSw2OC45MSwwLDAsMCwxNDguMzksMjI0Yy0uMTUuNjUtLjI4LDEuMzEtLjM5LDItMi40NC00LjY5LTUtOS41Ny03LjM5LTE0LjQxLTMuMzEtNi40OC02LjYyLTEyLjgyLTkuNjctMTguMjFzLTUuOTQtOS44OS04LjEzLTEzYTU3LjU5LDU3LjU5LDAsMCwwLTMuNjctNC43NEEzMS45LDMxLjksMCwwLDAsMTE3LDE4Ny41NWMwLDEsMCwyLC4wNiwzcy4yMiwyLC4zNywzYTQ1LjM3LDQ1LjM3LDAsMCwwLDEuMzEsNS43Miw0Nyw0NywwLDAsMCw0Ljc2LDEwLjMxLDU0LjQ3LDU0LjQ3LDAsMCwwLDYuNjUsOC4yOCw1Ni4wNiw1Ni4wNiwwLDAsMCwxMy44MywxMGMxLjM1LjcsMi41MiwxLjI0LDMuNSwxLjY3YTU4LjMyLDU4LjMyLDAsMCwwLS4yNywxMSw2MS4yNCw2MS4yNCwwLDAsMCwuNzcsNi4zNmwtLjI2LS4yNGMtMS4zMi0xLjI2LTIuODItMi41Mi00LjI0LTMuNzdzLTIuODMtMi41MS00LjI5LTMuNzctMi44LTIuNTMtNC4yNi0zLjgtMi43Ni0yLjUzLTQuMTktMy44LTIuODUtMi41Mi00LjEzLTMuNzZsLTcuNzctNy4xMWMtNC44Mi00LjQ3LTkuMzEtOC4yOS0xMi4zOS0xMC43OXMtNS4xNy0zLjgzLTUuMTctMy44M2EzNS45MSwzNS45MSwwLDAsMCwxLjI4LDEzLjQxLDQ3LjUsNDcuNSwwLDAsMCwyLjQxLDYuMDgsMzcuMDgsMzcuMDgsMCwwLDAsMy4zMyw1LjQ1LDQxLjc3LDQxLjc3LDAsMCwwLDguNSw4LjY5LDUxLjM0LDUxLjM0LDAsMCwwLDkuNzQsNS43NCw2MS40Myw2MS40MywwLDAsMCw5LjU3LDMuMjQsNjgsNjgsMCwwLDAsOC4xNSwxLjQ0YzEuNzUuMiwzLjI1LjMsNC40NS4zNmE4NCw4NCwwLDAsMCw2LjY2LDE4LjI3Yy02LTMuMjEtMTItNS45LTE3Ljg0LTguNDgtNy41Mi0zLjI4LTE1LTYuMzYtMjEuNDktOS4wNi0zLjI1LTEuMzUtNi4zNS0yLjU3LTkuMTQtMy42M3MtNS4xNy0yLTcuMjItMi42OGMtNC4xMS0xLjQyLTYuNjMtMi02LjYzLTJhNDAuNzIsNDAuNzIsMCwwLDAsMi40Miw3LDQ3LjM1LDQ3LjM1LDAsMCwwLDMuNiw2LjE4LDQ5LjA4LDQ5LjA4LDAsMCwwLDQuNTcsNS4yMSwzOS42OSwzOS42OSwwLDAsMCw1LjI1LDQuMjNjLjkxLjYzLDEuODIsMS4yMywyLjc1LDEuNzhzMiwxLDIuOTIsMS41MWE1Mi43MSw1Mi43MSwwLDAsMCw1LjksMi40Miw1OS4zOSw1OS4zOSwwLDAsMCwxMS45LDIuNTQsNzEuNzksNzEuNzksMCwwLDAsMTAuOTEuMzQsODUuMzMsODUuMzMsMCwwLDAsOC45My0uODhjMi0uMywzLjY5LS42Myw1LS45Mi41MS45NCwxLDEuODgsMS41NywyLjgyYTE0Mi43NSwxNDIuNzUsMCwwLDAsMTAuNTUsMTUuNTIsMTUxLjg0LDE1MS44NCwwLDAsMC0yMS41OS01LjQ2Yy04LjgxLTEuNi0xNy4zNS0yLjYtMjQuODUtMy4yOS0zLjczLS4zNS03LjI3LS41OC0xMC40Mi0uNzRzLTUuODktLjI1LTguMi0uMjZhNjkuNDEsNjkuNDEsMCwwLDAtNy4zNi4yNiw0Miw0MiwwLDAsMCw0LjUyLDYuMDksNDYuNzksNDYuNzksMCwwLDAsNS4zOSw0LjkxLDQ5LjI4LDQ5LjI4LDAsMCwwLDYsMy43Niw0Ny4wNiw0Ny4wNiwwLDAsMCw2LjQ2LDIuNjgsNDYuMzEsNDYuMzEsMCwwLDAsNi42NywxLjcyLDYxLjc4LDYxLjc4LDAsMCwwLDYuNy44OCw3Mi43Niw3Mi43NiwwLDAsMCwxMy0uMzFBOTcuNjIsOTcuNjIsMCwwLDAsMTY2LjYsMjk2YzIuMi0uNzYsNC0xLjQ3LDUuNDMtMiw0LjE4LDUuMTIsOC43MiwxMC4xNCwxMy41NSwxNSwuOC44LDEuNjIsMS41OSwyLjQzLDIuMzlhMTMwLjM2LDEzMC4zNiwwLDAsMC0yNC4zNS0yLjU2LDE5Mi42OCwxOTIuNjgsMCwwLDAtMjYuNzIsMS41OCwxODIuMjUsMTgyLjI1LDAsMCwwLTE5LjQ5LDMuNTNsLTEuNDQuMzdhOTkuMTYsOTkuMTYsMCwwLDEtNDktODQuNzMsMjAyLjQyLDIwMi40MiwwLDAsMSw0MDEuMTksMjUuNzIsMTEyLjQ2LDExMi40NiwwLDAsMC0zNy4wOC00NC4zOEEzMC40OSwzMC40OSwwLDAsMCw0MzEsMjA2LjA2Wm0tNS44Myw0LjM4YTExMS4yLDExMS4yLDAsMCwwLTEzLjEtNy4xNmMuMTktLjQ2LjQtLjkyLjU4LTEuMzlhMTExLjUxLDExMS41MSwwLDAsMSwxMy43NSw3LjU2bC0uNTcuNDVabS0yNzQsMTE3Ljc4QTEwMC4zMywxMDAuMzMsMCwwLDAsMTg5LDMyNi43NWExMDQuMywxMDQuMywwLDAsMCwxMi0zLjU4bDEuMzEsMS4xYTEwMS40OSwxMDEuNDksMCwwLDEtNTcuMTQsNC4zOWMxLjc5LS4wNiwzLjU2LS4xOCw1LjMxLS4zNVptNS40Ni0uODJjMi41Ni0uNDYsNS4wNi0xLDcuNS0xLjdhMTE4LjMyLDExOC4zMiwwLDAsMCwyMS40Mi04LjI4YzIuMzQtMS4xOCw0LjI3LTIuMjIsNS43LTMsMi43NSwyLjYsNS41OSw1LjE0LDguNDgsNy42NWExMDEuMzMsMTAxLjMzLDAsMCwxLTExLDMuMjVBOTguODYsOTguODYsMCwwLDEsMTU2LjYyLDMyNy40Wm05Mi4yMy03MC45NXYtLjc2aC4yMmwtLjE2Ljc2Wm05MS4zMS02MmExMTIuMDYsMTEyLjA2LDAsMCwxLDE5LjYzLTIuNzZjLjQxLjQ4LjgzLjk1LDEuMjEsMS40NGExMTAsMTEwLDAsMCwwLTIwLjUsMi43OCwxMTEuMjQsMTExLjI0LDAsMCwwLTMxLjkzLDEyLjkxbDIuMjUtM0ExMTIuNjMsMTEyLjYzLDAsMCwxLDM0MC4xNiwxOTQuNDFabTU5LjI5LDIuMzktLjczLDEuMzRjLTMuMzUtMS4wNi02LjczLTItMTAuMTQtMi43LjI0LS40NS40OC0uOTEuNzEtMS4zOFEzOTQuNDIsMTk1LjE5LDM5OS40NSwxOTYuOFpNMjA5Ljg2LDMzMC40NGMtMS44My0uMi0zLjYzLS4zMy01LjQzLS40NCwxLjExLS40MSwyLjItLjg0LDMuMjktMS4yOUMyMDguNDMsMzI5LjI4LDIwOS4xNCwzMjkuODcsMjA5Ljg2LDMzMC40NFptLTkuNDEtLjYxYy0xLjY3LDAtMy4zMywwLTUsMHE0Ljg5LTEuNDEsOS41Ny0zLjI2Yy40NC4zNy45LjcyLDEuMzQsMS4wOVEyMDMuNDcsMzI4LjgzLDIwMC40NSwzMjkuODNabTExLjE3LTYuMTNhMTA1LjI1LDEwNS4yNSwwLDAsMCwzNy4yMy0yOS42MXYyLjM3YTEwNi42NCwxMDYuNjQsMCwwLDEtMzUuOTMsMjguMjdabTM3LjU0LTcyLTIzLjg2LS41NkwyNDYuNjMsMjQwbDQuMTQtMi4xN0wyNDgsMjM0bC0xNC40My0xOS40NywyMS41NSwxMCw0LjQsMiwxLjE3LTQuNzIsNS43NS0yMy4zNiw1Ljc1LDIzLjM2LDEuMTcsNC43Miw0LjQxLTIsNS42Mi0yLjYydjEuODloMS4yMWExMTMuMjksMTEzLjI5LDAsMCwwLTI1LjM3LDM5LjY3cS0xLjI5LDMuNDItMi44MSw2LjcxbC03LjU2LDkuMjZ2LTIuMjVMMjUzLDI1Ni40N2wuOTMtNC42NlptMzcuNTMtMjcuODNoMi4xN0ExMTAuMTksMTEwLjE5LDAsMCwwLDI2MywyNjIuMTZMMjU5Ljg3LDI2NmMuMjUtLjY0LjUxLTEuMjguNzYtMS45M0ExMTEuODEsMTExLjgxLDAsMCwxLDI4Ni42OSwyMjMuODZaTTI4NC44NywyMzRsLTIuNzgsMy43Ni4yMS4xMmExMDUuOTMsMTA1LjkzLDAsMCwwLTEzLjY3LDIyLjcybC0xLjA3LTEuMzFhMTA3LjM0LDEwNy4zNCwwLDAsMSwyMi41OC0zMi4zOVptLTUsMjIuNDQsNC43MywyMy43Ni0xNC45LTE4LjI5YTEwNC4yNiwxMDQuMjYsMCwwLDEsMTQtMjMuMzNsMi41NywxLjM1LDIxLjMzLDExLjE3LTIzLjg2LjU2LTQuNzUuMTJaTTMwMy4yNCwyMTZhMTA3LjUxLDEwNy41MSwwLDAsMSw2MC4wNy0xOS44NGwuNy45MS40My41NmExMDYuMjEsMTA2LjIxLDAsMCwwLTY0LjI5LDIyLjU0Wm02Ny45NC0xOS43MXEzLjI0LjE3LDYuNDUuNTRsLS4xOCwxLjQ4Yy0xLjc0LS4xOS0zLjQ4LS4zNi01LjIyLS40N1ptMTUuNzQsMnE1LjIsMS4wNiwxMC4zMSwyLjY1bC0uNzIsMS4zNWExMDYsMTA2LDAsMCwwLTEwLjQ2LTIuNjRDMzg2LjM0LDE5OS4xOSwzODYuNjMsMTk4Ljc0LDM4Ni45MiwxOTguMjdabS05LjY3LDEuNWMwLC4yMS0uMDUuNDMtLjA4LjY0LS4xNCwxLjYtLjMxLDMuMjEtLjQ3LDQuODMtMS4wNi0yLTIuMjQtMy44OS0zLjQtNS44NEMzNzQuNjIsMTk5LjUsMzc1Ljk0LDE5OS42MiwzNzcuMjUsMTk5Ljc3Wm0zLjU5LDYuNjljMS4yOC0xLjQ5LDIuNzgtMy4zMyw0LjI5LTUuNDhhMTA0LjQ5LDEwNC40OSwwLDAsMSwxMC42NywyLjY0Yy0xLjM4LDIuNjItMi43OCw1LjMzLTQuMTgsOC4wNy0yLjM5LDQuODMtNC45NCw5LjcxLTcuMzgsMTQuMzktLjEyLS42NS0uMjUtMS4zMS0uMzktMkE2OS40Niw2OS40NiwwLDAsMCwzNzguNTYsMjA5QzM3OS4yMiwyMDguMjYsMzgwLDIwNy40NCwzODAuODQsMjA2LjQ2Wm0zLjkzLDIzLjEzYzEtLjQzLDIuMTUtMSwzLjQ5LTEuNjdhNTUuOSw1NS45LDAsMCwwLDEzLjg0LTEwLDU0LjIxLDU0LjIxLDAsMCwwLDYuNjQtOC4yN2MuMTgtLjMuMzUtLjYxLjUzLS45MmExMDYsMTA2LDAsMCwxLDExLDUuODJjLTIuMSwxLjgyLTQuNDIsMy44OS02LjgyLDYuMTFsLTcuNzcsNy4xMWMtMS4yOCwxLjIzLTIuNzUsMi40OS00LjEzLDMuNzZzLTIuNzIsMi41Mi00LjE5LDMuNzktMi44OSwyLjUzLTQuMjYsMy43OS0yLjkzLDIuNTItNC4yOSwzLjc3LTIuOTIsMi41MS00LjI0LDMuNzdsLS4yNi4yNGE2MS4zOSw2MS4zOSwwLDAsMCwuNzctNi4zNUE1OC4xNyw1OC4xNywwLDAsMCwzODQuNzcsMjI5LjU5Wk0zNzgsMTkzLjcyYy0zLS4zNS02LjA4LS41OC05LjEzLS42OGwtMS4xNi0xLjUycTUuMjYuMSwxMC40OS43MUMzNzguMTYsMTkyLjczLDM3OC4xLDE5My4yMiwzNzgsMTkzLjcyWk0yNDguODUsMjg2LjM5VjI4OUExMDIsMTAyLDAsMCwxLDIwOSwzMjEuNTFjLS40My0uMzUtLjg2LS43LTEuMjgtMS4wNkExMDAuNiwxMDAuNiwwLDAsMCwyNDguODUsMjg2LjM5Wm0tOTIsNjguNTJjMTAuMDctLjI2LDIwLjEtMywyOC45LTYuNTNhMTM2LjM5LDEzNi4zOSwwLDAsMCwyMS43NS0xMS4yNGMyLjQ2LTEuNTYsNC40NS0yLjkxLDUuOS0zLjkzcTMuNzMsMi44OCw3LjU1LDUuNjgsNi4zLDQuNTksMTIuODIsOC45MmExMjUuMjksMTI1LjI5LDAsMCwwLTI4LjE4LDIuNzEsMTYzLjcsMTYzLjcsMCwwLDAtNDguNDgsMTksODMuNzUsODMuNzUsMCwwLDAtNy4zNiw0LjgyYzkuMTgsNS4wOCwxOS44MSw2LjEyLDMwLjIzLDQuNjZzMjAuNjgtNS4zNiwyOS41OS05Ljk0YTE1MC43OCwxNTAuNzgsMCwwLDAsMjEuOTEtMTMuOTNjMi41My0xLjk0LDQuNTctMy42LDYtNC44MmwzLDEuOTJxNSwzLjE1LDEwLDYuMTNjMS42OCwxLDMuMzUsMS45NSw1LDIuODhsMi40NSwxLjM2LDIuMSwxLjEzLDIuNzctNS43OC0yLTEuMDYtMi4zOS0xLjMyYy0xLjYxLS45LTMuMjYtMS44Ni00LjktMi44Mi0zLjI4LTEuOTQtNi41Ny00LTkuODQtNi02LjUyLTQuMTUtMTIuOTUtOC41MS0xOS4xOC0xMy4wNnEtNS4yNS0zLjg0LTEwLjMzLTcuODRhMTA4LjA3LDEwOC4wNywwLDAsMCwzNC42NC0yN3Y0Mi4yOUwzNjMuMywyMjMuODZIMjk4QTEwNC41NSwxMDQuNTUsMCwwLDEsMzY1LjUsMTk5LjFsMi41NCwzLjc0LDIuMjksMy44Ny41OCwxLC40OSwxLDEsMS45MWE2My43NCw2My43NCwwLDAsMSw1LjQsMTUsNTEuMzYsNTEuMzYsMCwwLDEsMS4wNSwxNC41Niw2MC44Niw2MC44NiwwLDAsMS0zLjE4LDE1LjM0LDkwLjMsOTAuMywwLDAsMS03LjU0LDE2LjM0Yy02LjQxLDExLjA4LTE1LjQxLDIyLjE1LTI1Ljc4LDMyLjU1YTI4OS4zNSwyODkuMzUsMCwwLDEtMzQuNjIsMjkuM2MtNi4yMyw0LjU1LTEyLjY2LDguOTEtMTkuMTgsMTMuMDYtMy4yNywyLjA2LTYuNTYsNC4wOC05Ljg0LDYtMS42NCwxLTMuMjksMS45Mi00LjksMi44MmwtMi4zOCwxLjMyLTIsMS4wNiwyLjc3LDUuNzgsMi4xLTEuMTMsMi40Ni0xLjM2YzEuNjUtLjkzLDMuMzMtMS45LDUtMi44OHE1LTMsMTAtNi4xM2MxLS42MywyLTEuMjcsMy0xLjkxLDEuNDUsMS4yMiwzLjQ4LDIuODgsNiw0LjgyQTE1MiwxNTIsMCwwLDAsMzIyLjY2LDM2OWM4LjkxLDQuNTgsMTkuMTYsOC40OSwyOS41OSw5Ljk0czIxLjA1LjQyLDMwLjIzLTQuNjVhODMuNzUsODMuNzUsMCwwLDAtNy4zNi00LjgyLDE2My43NywxNjMuNzcsMCwwLDAtNDguNDctMTksMTI2LDEyNiwwLDAsMC0yOC4xOS0yLjcycTYuNTMtNC4zMiwxMi44My04LjkxYzIuNTUtMS44Niw1LjA2LTMuNzYsNy41NS01LjY3LDEuNDUsMSwzLjQ0LDIuMzcsNS45LDMuOTNhMTM2LjI5LDEzNi4yOSwwLDAsMCwyMS43NCwxMS4yM2M4LjgsMy41NCwxOC44Myw2LjI4LDI4LjksNi41NHMyMC4xOS0xLjkzLDI4LjU3LThjMCwwLTIuNjktMS41NS03LjQ2LTMuNjRhMTYwLjczLDE2MC43MywwLDAsMC0xOS43Ni03LjA4LDE2NiwxNjYsMCwwLDAtMjcuODUtNS42LDEyMy44NSwxMjMuODUsMCwwLDAtMjYuNS0uMTNjNi40OC01LjE0LDEyLjcyLTEwLjQ4LDE4LjYyLTE2LDEuNDMuODEsMy4zNiwxLjg1LDUuNjksM2ExMTcuNjYsMTE3LjY2LDAsMCwwLDIxLjQzLDguMjksODcuMDYsODcuMDYsMCwwLDAsMTMuNiwyLjYxLDY0Ljc4LDY0Ljc4LDAsMCwwLDE0LjMzLDBjOS41Ni0xLjEyLDE5LTQuODEsMjYuMjYtMTIuMjFhNzQuNiw3NC42LDAsMCwwLTcuNTMtMi4yLDE4MS43NywxODEuNzcsMCwwLDAtMTkuNDktMy41MywxOTIuNTQsMTkyLjU0LDAsMCwwLTI2LjcxLTEuNTksMTMxLjI4LDEzMS4yOCwwLDAsMC0yNC4zNiwyLjU1Yy44Mi0uNzksMS42NC0xLjU5LDIuNDQtMi4zOSw0LjgzLTQuODUsOS4zNy05Ljg2LDEzLjU1LTE1LDEuMzkuNTcsMy4yMywxLjI4LDUuNDMsMmE5Ny42Miw5Ny42MiwwLDAsMCwyMC44OCw0LjgyLDcxLjgyLDcxLjgyLDAsMCwwLDEzLC4zMSw1OS4zNiw1OS4zNiwwLDAsMCw2LjctLjg3LDQ5LjQsNDkuNCwwLDAsMCwxMy4xMi00LjQsNTAuNDQsNTAuNDQsMCwwLDAsNi0zLjc1LDQ2Ljg3LDQ2Ljg3LDAsMCwwLDUuNC00LjkxLDQzLjQxLDQzLjQxLDAsMCwwLDQuNTItNi4wOCw3MC44Myw3MC44MywwLDAsMC03LjM3LS4yN2MtMi4zMSwwLTUuMDguMDktOC4yLjI3cy02LjY4LjM4LTEwLjQyLjczYy03LjUuNjktMTYsMS42OS0yNC44NCwzLjI4YTE1MS40MywxNTEuNDMsMCwwLDAtMjEuNTksNS40NSwxNDAuMTcsMTQwLjE3LDAsMCwwLDEwLjU0LTE1LjUxYy41NS0uOTMsMS4wNy0xLjg3LDEuNTgtMi44MSwxLjM0LjI5LDMsLjYyLDUsLjkyYTg1LjA1LDg1LjA1LDAsMCwwLDguOTMuODgsNzEuNTYsNzEuNTYsMCwwLDAsMTAuOS0uMzMsNjAsNjAsMCwwLDAsMTEuOTEtMi41NCw1NC40Myw1NC40MywwLDAsMCw1Ljg5LTIuNDFjMS0uNDcsMS45NS0xLDIuOTItMS41MnMxLjg1LTEuMTQsMi43Ni0xLjc3YTM5LjY5LDM5LjY5LDAsMCwwLDUuMjUtNC4yMyw0Ny4xOCw0Ny4xOCwwLDAsMCw0LjU3LTUuMjEsNDcuNyw0Ny43LDAsMCwwLDMuNi02LjE3LDM5Ljg3LDM5Ljg3LDAsMCwwLDIuNDEtN3MtMi41Mi41OC02LjYyLDJjLTIuMDUuNy00LjUsMS42LTcuMjIsMi42N3MtNS45LDIuMjgtOS4xNCwzLjYzYy02LjUzLDIuNjktMTQsNS43Ny0yMS40OSw5LTUuODksMi41OS0xMS44Niw1LjI2LTE3Ljg0LDguNDhhODQsODQsMCwwLDAsNi42Ni0xOC4yNWMxLjItLjA2LDIuNy0uMTcsNC40NS0uMzdhNjUuNTgsNjUuNTgsMCwwLDAsOC4xNC0xLjQ0LDYwLjA2LDYwLjA2LDAsMCwwLDkuNTgtMy4yMyw1MS4yOCw1MS4yOCwwLDAsMCw5Ljc0LTUuNzNBNDIsNDIsMCwwLDAsNDI0LDIzMWEzNywzNywwLDAsMCwzLjMzLTUuNDQsNDYuNzEsNDYuNzEsMCwwLDAsMi00LjgsMTAzLjU2LDEwMy41NiwwLDAsMSwzMS4yNSwzOS40NywxMDUuMjQsMTA1LjI0LDAsMCwxLDcuMzIsMjIuNThBMjAyLjQxLDIwMi40MSwwLDAsMSw2My43MSwyNjMuNjVjMS4xNCwzLjM0LDIuNDUsNi42NCwzLjkxLDkuODVhMTA4LjM4LDEwOC4zOCwwLDAsMCw4Ny4yLDYyLjg2LDE1OS4zNSwxNTkuMzUsMCwwLDAtMTkuMDgsNi44Nyw4MC4xNyw4MC4xNywwLDAsMC03LjQ2LDMuNjVDMTM2LjY2LDM1MywxNDYuNzksMzU1LjE5LDE1Ni44NSwzNTQuOTFaTTQxMCwyMDcuNDJjLjI0LS40My40Ni0uODkuNjgtMS4zM2ExMDcuMTcsMTA3LjE3LDAsMCwxLDExLjkxLDYuNDNsLTEuMTksMUExMDYuNDMsMTA2LjQzLDAsMCwwLDQxMCwyMDcuNDJabTU4LjUzLDU2LjM2Yy0uODctMi4yNS0xLjctNC4yNC0yLjUzLTYuMDhhMTA5LjY5LDEwOS42OSwwLDAsMC0zNS4yNi00My40MmMuMDgtLjU2LjE1LTEuMTMuMi0xLjdhMTExLDExMSwwLDAsMSwzNi40Miw0NC41Yy45MiwyLDEuNzcsNC4wOCwyLjU3LDYuMTZBMjAzLjk0LDIwMy45NCwwLDAsMCw2NS41LDIyOS4zNSwxMDAuNzQsMTAwLjc0LDAsMCwwLDExNCwzMTQuNzdjLS43NS4yMS0xLjQxLjQxLTIsLjU4YTEwMi4yOSwxMDIuMjksMCwwLDEtNDgtODZ2LS4xNGwwLS4xNGEyMDUuNDIsMjA1LjQyLDAsMCwxLDQwNy40NCwzNC4xNGwuMTIsOC4zOVoiLz4NCiAgICAgICAgICA8cGF0aCBkPSJNNDgwLjY2LDI2Mi40NGMwLTEsMC0yLS4wNi0zQTIxNS4yNywyMTUuMjcsMCwwLDAsNDQzLjUyLDE0NS40bC0uMzctLjU1Yy0uMzktLjU3LS43OC0xLjEzLTEuMTgtMS42OWwtLjIzLS4zM2EyMTAuODEsMjEwLjgxLDAsMCwwLTcwLjMzLTYzLjYybC0xLjE5LS42N2EyMTYuNDQsMjE2LjQ0LDAsMCwwLTI3LjY0LTEyLjg5QTIxMy4yNywyMTMuMjcsMCwwLDAsMjMwLDU0LjY1bC0xLjEuMTktMi4yMi40MS0uMTMsMC0yLjguNTUtMS42OC4zNGMtMS41LjMyLTMsLjY0LTQuNDksMWwtLjM1LjA4Yy0xLjg1LjQ0LTMuNzUuOTEtNS44MSwxLjQ1bC0xLjE3LjMyLS41OS4xNmMtMS40Ni40LTIuOTEuODEtNC4zNiwxLjIzbC0xLjc0LjUycS0yLjM3LjcyLTQuNzIsMS40OWwtMS4xNC4zOGMtNCwxLjM0LTgsMi44MS0xMS45MSw0LjM4bC0uOTEuMzdjLTEuNTYuNjQtMy4xMSwxLjI5LTQuNjYsMmwtMS42Mi43MS0uMTEuMDVjLTEuMjEuNTQtMi40MSwxLjA5LTMuNjEsMS42NWwtLjI1LjEyLTIuMDUsMS0yLDEtLjQzLjIyQTIxMy45MiwyMTMuOTIsMCwwLDAsNjQuODcsMTkwLjc3YTEwOS43NywxMDkuNzcsMCwwLDAtMy43MywxMiwyMTYuNDgsMjE2LjQ4LDAsMCwwLTYuNDksMjYuOSwyMTQuMTksMjE0LjE5LDAsMCwwLDY1LjQ0LDE5My42NkEyMTQuNDgsMjE0LjQ4LDAsMCwwLDI1OSw0ODAuNmMyLjMxLjA4LDQuNjEuMTEsNi45Mi4xMWEyMTUuMzcsMjE1LjM3LDAsMCwwLDQ4Ljg3LTUuNjUsMjEzLjYyLDIxMy42MiwwLDAsMCwxMDguNTEtNjIuOTEsMjE1LjE3LDIxNS4xNywwLDAsMCw1NC4yOC0xMDkuNTYsMjE0LDIxNCwwLDAsMCwzLjEtMzguNFptLTQuNTUsMzkuOUEyMTMuMDksMjEzLjA5LDAsMSwxLDYyLjU3LDIwMy4yYTEwNi44NywxMDYuODcsMCwwLDEsMy43MS0xMS45QTIxMi44LDIxMi44LDAsMCwxLDE3MC44NCw3NS41M2MuNzktLjQsMS41OS0uOCwyLjM5LTEuMThzMS41MS0uNzIsMi4yNy0xLjA4YzEuMTktLjU2LDIuMzktMS4xLDMuNTktMS42NGwxLjcyLS43NmMxLjUzLS42NywzLjA4LTEuMzIsNC42My0ybC45LS4zN3E1LjgzLTIuMzQsMTEuODItNC4zNWwxLjE0LS4zN2MxLjU2LS41MSwzLjEyLTEsNC42OS0xLjQ4bDEuNzItLjUyYzEuNDQtLjQyLDIuODgtLjgzLDQuMzMtMS4yMmwxLjc1LS40OHEyLjg4LS43NSw1Ljc3LTEuNDRsLjA5LDAsLjEsMGgwYzEuNTMtLjM2LDMuMDYtLjY5LDQuNTktMWwxLjc1LS4zNiwyLjctLjUyYy43OC0uMTUsMS41Ni0uMywyLjMzLS40M2wxLjEtLjE5QTIxMS43NiwyMTEuNzYsMCwwLDEsMzQyLDY3LjA1YTIxMy43NSwyMTMuNzUsMCwwLDEsMjcuNDUsMTIuOGwuMi4xMSwxLC41NWEyMTAuNiwyMTAuNiwwLDAsMSw2OS44NCw2My4xOGwxLjQxLDIsLjM2LjU1QTIxMy43LDIxMy43LDAsMCwxLDQ3OS4xLDI1OS41MmMwLDEuMTIsMCwyLjI0LjA3LDMuMzYsMCwuNDQsMCwuODgsMCwxLjMyQTIxMSwyMTEsMCwwLDEsNDc2LjExLDMwMi4zNFoiLz4NCiAgICAgICAgPC9nPg0KICAgICAgICA8Zz4NCiAgICAgICAgICA8cGF0aCBkPSJNMzIyLjM1LDMxLjc3LDMyNCw0NC4wOWwuMTgsMCw3LjQ2LTkuOTQsNC4yMiwxLjEtNC4yOCwxNi40Mi0zLjMyLS44NywyLjgxLTEwLjc1LS4xMywwLTcuMDgsOS41NkwzMjEuNTksNDlsLTEuNDgtMTEuODUtLjE0LDBMMzE3LjE1LDQ4bC0zLjMxLS44Niw0LjI5LTE2LjQyWiIvPg0KICAgICAgICAgIDxwYXRoIGQ9Ik0zMzMsNTIuMTlsMTEuMi0xNCw0LjI3LDEuNTEtLjE0LDE4LTMuNTUtMS4yNi4xMS00LjExLTUuNzktMi0yLjUyLDMuMjZabTEyLTIuODMuMTUtNi44My0uMTEsMC00LjE1LDUuNDJaIi8+DQogICAgICAgICAgPHBhdGggZD0iTTM1NCw0MS42M2wxMi44LDUuNDQtMS4xNCwyLjY4LTQuNzktMi01LjUxLDEyLjk1LTMuMjItMS4zNyw1LjUxLTEyLjk1LTQuNzktMloiLz4NCiAgICAgICAgICA8cGF0aCBkPSJNMzY4LjkxLDQ4LjA3bDEyLjQsNi4yOUwzODAsNTdsLTQuNjQtMi4zNkwzNjksNjcuMTRsLTMuMTItMS41OEwzNzIuMjMsNTNsLTQuNjQtMi4zNloiLz4NCiAgICAgICAgICA8cGF0aCBkPSJNMzg0LDU1Ljg1bDMsMS44MS0zLjYyLDYsNi4zLDMuOCwzLjYzLTYsMywxLjgzLTguNzUsMTQuNTQtMy0xLjgzLDMuNjMtNi02LjMxLTMuOC0zLjYzLDYtMy0xLjgyWiIvPg0KICAgICAgICAgIDxwYXRoIGQ9Ik0zOTkuNDEsNjUuMzVsOS4zMyw2LjUzLTEuNjcsMi4zOC02LjQ1LTQuNTItMi4zNiwzLjM4LDYsNC4xOC0xLjY2LDIuMzgtNi00LjE4LTIuMzcsMy4zOCw2LjQ3LDQuNTNMMzk5LDg1Ljc5bC05LjM1LTYuNTRaIi8+DQogICAgICAgICAgPHBhdGggZD0iTTQxMS4wNiw3My4zMmwzLDIuNDYtNS4zOCwxMSwuMTEuMDksMTAtNy4xMywyLjU0LDIuMTEtNS4yLDExLjE0LjExLjA5LDkuOC03LjMyLDMsMi40Ni0xNC41OSwxMC0yLjY1LTIuMjEsNC42OC0xMC42OS0uMTEtLjA5LTkuNjcsNi41NEw0MDQsODkuNDhaIi8+DQogICAgICAgICAgPHBhdGggZD0iTTQyOCwxMTEuMzJsLTIuNDgtMi41Myw5LjcxLTkuNTQtLjA2LS4wNi00LjQ3LTEuMDcsMi4yMy0yLjE5LDQuODQsMS4xMywyLjMzLDIuMzdaIi8+DQogICAgICAgICAgPHBhdGggZD0iTTQzNi43OCwxMDguMTljNC4xOS0zLjY1LDguMjctMy43OSwxMS4wNi0uNTlzMi4wOCw3LjIzLTIuMDksMTAuODctOC4yNywzLjc5LTExLjA2LjU5UzQzMi41OSwxMTEuODQsNDM2Ljc4LDEwOC4xOVptNi42LDcuNTZjMi45MS0yLjU0LDMuNTgtNC43NywyLjI4LTYuMjZzLTMuNTktMS4xMi02LjUxLDEuNDItMy41Niw0Ljc2LTIuMjcsNi4yNFM0NDAuNDQsMTE4LjM0LDQ0My4zOCwxMTUuNzVaIi8+DQogICAgICAgICAgPHBhdGggZD0iTTQ0My44OSwxMjMuMzhhMS45NCwxLjk0LDAsMCwxLDIuNzUuMzQsMiwyLDAsMSwxLTIuNzUtLjM0Wm03LTUuNTNhMS45MiwxLjkyLDAsMCwxLDIuNzQuMzQsMiwyLDAsMCwxLS4zMiwyLjczLDIsMiwwLDAsMS0yLjc1LS4zQTIsMiwwLDAsMSw0NTAuOTEsMTE3Ljg1WiIvPg0KICAgICAgICAgIDxwYXRoIGQ9Ik00NDguNTUsMTI4bDIuMDcsMi44OWMtMSwuOC0xLDIuMjgsMCwzLjYxczIuNDcsMS44MSwzLjU3LDEsMS4yMS0yLjM2LjA2LTRsLS45Mi0xLjI4LDIuMTItMS41MS45MSwxLjI3YzEsMS4zNiwyLjM5LDEuNzgsMy40OCwxYTIuMjIsMi4yMiwwLDAsMCwuMzMtMy4yOWMtLjg3LTEuMjItMi4yOC0xLjc0LTMuMzUtMWwtMi0yLjc1YzIuNDEtMS42Niw1LjU5LS42OCw3LjYsMi4xNHMxLjczLDYtLjQ3LDcuNTdhMy41OSwzLjU5LDAsMCwxLTQuNzktLjUzbC0uMTEuMDhjMS4xOSwyLjIuNzYsNC4yMS0xLDUuNDEtMi4zNSwxLjcxLTUuNjYuNjctNy44OC0yLjQ0UzQ0Ni4xOSwxMjkuNzcsNDQ4LjU1LDEyOFoiLz4NCiAgICAgICAgICA8cGF0aCBkPSJNNDU4LjIzLDEzOS45MmwxMy4yOS4yNCwyLjMyLDMuNzgtOS40OCw1Ljg0LDEuMTMsMS44My0yLjQxLDEuNDlMNDYyLDE1MS4yN2wtMi41NiwxLjU3TDQ1Ny42MywxNTBsMi41Ni0xLjU4LTQuMzMtN1ptNC40LDcsNi4xOC0zLjgxLS4wOC0uMTQtOC40Ny0uMTUtLjEyLjA3WiIvPg0KICAgICAgICAgIDxwYXRoIGQ9Ik00NjMuNzIsMTYwLjM1bDE3LjgzLTIuMTksMiw0LjA3TDQ3MC44OCwxNzVsLTEuNjYtMy4zOSwzLTIuODYtMi43MS01LjUyLTQuMDguNTdabTEwLjUzLDYuMzUsNC44OS00Ljc3LS4wNS0uMTEtNi43NiwxWiIvPg0KICAgICAgICAgIDxwYXRoIGQ9Ik00NzYuNzQsMTg5LjU1bC0xLjEzLTIuODMsNy4yNC0xMC45Mi0uMDUtLjEzLTEwLDQtMS4zMS0zLjI3LDE1Ljc2LTYuMjksMS4xNCwyLjg3LTcuMjYsMTAuODguMDYuMTUsMTAtNCwxLjMsMy4yNFoiLz4NCiAgICAgICAgICA8cGF0aCBkPSJNNDc3LjU5LDE5MS45MmwxNi4xNy01LjEsMS44Miw1Ljc2YzEuNTQsNC44Ny0uNTYsOC44LTUuNTksMTAuMzlzLTkuMDUtLjQxLTEwLjYxLTUuMzVabTQuNjMsNC42NmMxLDMuMDgsMy4wOSw0LjE4LDYuNzEsM3M0LjY4LTMuMjUsMy43MS02LjMxbC0uNy0yLjIzLTEwLjQxLDMuMjhaIi8+DQogICAgICAgICAgPHBhdGggZD0iTTUwMS4zOCwyMTMuODIsNDkxLDIyMC43bDAsLjE4LDEyLjIxLDIuMzYuODUsNC4yNy0xNi42MywzLjM0LS42OC0zLjM2LDEwLjktMi4xOCwwLS4xNEw0ODYsMjIzbC0uNDYtMi4zLDEwLTYuNTIsMC0uMTQtMTAuOTMsMi4xOS0uNjgtMy4zNSwxNi42NC0zLjM0WiIvPg0KICAgICAgICAgIDxwYXRoIGQ9Ik00ODcuNjgsMjMyLjM2bDE3LjUyLDMuOTIuNTEsNC40OS0xNi4xOSw3Ljc1LS40My0zLjc1LDMuNzUtMS43LS43LTYuMS00LS44NFptNy43OCw5LjUxLDYuMjEtMi44NXYtLjEyTDQ5NSwyMzcuNTRaIi8+DQogICAgICAgICAgPHBhdGggZD0iTTUwNi4zNCwyNDYuNTRsLjcyLDEzLjg4LTIuOS4xNS0uMjctNS4yLTE0LjA1LjczLS4xOC0zLjQ4LDE0LS43NC0uMjctNS4xOVoiLz4NCiAgICAgICAgICA8cGF0aCBkPSJNNTA3LjExLDI2Mi43N2wtLjIxLDEzLjktMi45MS0uMDUuMDgtNS4yTDQ5MCwyNzEuMmwuMDUtMy40OSwxNC4wNy4yMi4wOC01LjJaIi8+DQogICAgICAgICAgPHBhdGggZD0iTTUwNi43NSwyNzkuNzFsLS4zLDMuNS03LS41OS0uNjIsNy4zMyw3LC41OS0uMywzLjUzLTE2LjktMS40NC4zLTMuNTIsNywuNTkuNjItNy4zMy03LS41OS4zLTMuNVoiLz4NCiAgICAgICAgICA8cGF0aCBkPSJNNTA1LDI5Ny43OCw1MDMuMjgsMzA5bC0yLjg3LS40NSwxLjIxLTcuNzgtNC4wOC0uNjQtMS4xMiw3LjIxLTIuODctLjQ1LDEuMTItNy4yLTQuMDgtLjY0LTEuMjEsNy44MS0yLjg3LS40NSwxLjc1LTExLjI4WiIvPg0KICAgICAgICAgIDxwYXRoIGQ9Ik01MDMsMzExLjc3bC0uOTEsMy43M0g0ODkuODhsMCwuMTMsMTAuNzgsNS44My0uNzgsMy4yMS0xMi4yNy4yMiwwLC4xNCwxMC44Nyw1LjU4LS45LDMuNzMtMTUuMzQtOC43MS44MS0zLjM1LDExLjY0LS41LDAtLjEzLTEwLjEyLTUuODEuODEtMy4zNVoiLz4NCiAgICAgICAgICA8cGF0aCBkPSJNNDg1LDMzMy4xMWwtMS4wOCwzLjI0YTIuNTUsMi41NSwwLDAsMC0zLDEuOTIsMi44OCwyLjg4LDAsMCwwLDEuODksMy44LDMsMywwLDAsMCwzLjg4LTEuOTIsMi43NSwyLjc1LDAsMCwwLS41MS0zbDEtMyw5LDQtMy4zMiw5LjktMi43NC0uOTEsMi40LTcuMTUtMy45Mi0xLjgxLDAsLjEzYTQuMjcsNC4yNywwLDAsMSwuMjgsMy42OCw1LjM0LDUuMzQsMCwwLDEtNywzLjM4Yy0zLjI0LTEuMDktNC43NS00LjM0LTMuNTQtOEM0NzkuMzYsMzM0LDQ4Mi4xNSwzMzIuMjUsNDg1LDMzMy4xMVoiLz4NCiAgICAgICAgICA8cGF0aCBkPSJNNDc5LjMsMzQ3LjFhMS45MywxLjkzLDAsMCwxLDEuMDksMi41NCwyLDIsMCwwLDEtMy42NC0xLjQyQTEuOTQsMS45NCwwLDAsMSw0NzkuMywzNDcuMVptOC4zMiwzLjI0YTEuOTQsMS45NCwwLDAsMSwxLjEsMi41NEEyLDIsMCwwLDEsNDg2LjIsMzU0YTIsMiwwLDAsMS0xLjEzLTIuNTNBMiwyLDAsMCwxLDQ4Ny42MiwzNTAuMzRaIi8+DQogICAgICAgICAgPHBhdGggZD0iTTQ3OC42NCwzNTMuNzdsNy4yNywxMS4xMi0xLjgxLDQtMTAuMTYtNC41NS0uODgsMi0yLjU5LTEuMTYuODgtMkw0NjguNjEsMzYybDEuMzctMy4wNiwyLjc0LDEuMjMsMy4zOC03LjUzWm0tMy4zNSw3LjU5LDYuNjMsMywuMDctLjE1LTQuNjMtNy4wOC0uMTMtLjA2WiIvPg0KICAgICAgICAgIDxwYXRoIGQ9Ik00NzIuMDcsMzY4LjIybDYuNDgsMTEuNTktMi4wOSwzLjkxLTkuODEtNS4yNS0xLDEuOS0yLjUtMS4zMywxLTEuOTEtMi42NS0xLjQxLDEuNTgtMywyLjY1LDEuNDEsMy44OS03LjI3Wm0tMy44Nyw3LjM0LDYuNDEsMy40Mi4wOC0uMTQtNC4xMy03LjM5LS4xMi0uMDdaIi8+DQogICAgICAgICAgPHBhdGggZD0iTTQ1NS4xLDM5OS4xMWw0LjM2LTYuNCwyLjI4LDEuNTYtNC4zNSw2LjM5WiIvPg0KICAgICAgICAgIDxwYXRoIGQ9Ik00NTQuMDksNDE2LjkybC00LjMsNS4wOGMtMi41LDIuOTUtNS41OCwzLjIyLTguMTQsMS4wNmE0Ljg5LDQuODksMCwwLDEtMS43NS01LjQxbC03LjM3LTEuNTEsMi41MS0zLDYuNjksMS40MiwxLjc0LTIuMDYtNC42LTMuODksMi4yNy0yLjY4Wm0tMTAtLjY0Yy0xLjM1LDEuNTktMS4zNCwyLjkyLS4wNSw0czIuNjcuOTQsNC0uNjVsMS42MS0xLjktNC0zLjM2WiIvPg0KICAgICAgICAgIDxwYXRoIGQ9Ik00NDMuNjcsNDI5LjFsLTIuNDUsMi41Mi01LTQuOTFMNDMxLDQzMmw1LDQuOTEtMi40NywyLjU0LTEyLjE1LTExLjg1LDIuNDctMi41Myw1LDQuOTEsNS4xNC01LjI4LTUtNC45LDIuNDYtMi41MloiLz4NCiAgICAgICAgICA8cGF0aCBkPSJNNDMwLjg5LDQ0MS45NGwtOC40OCw3LjYtMS45NC0yLjE3LDUuODctNS4yNS0yLjc1LTMuMDctNS40Myw0Ljg2LTEuOTQtMi4xNyw1LjQzLTQuODYtMi43NS0zLjA3TDQxMyw0MzkuMDhsLTEuOTQtMi4xNyw4LjUtNy42MVoiLz4NCiAgICAgICAgICA8cGF0aCBkPSJNNDE5LjcxLDQ1MS44MWwtOC45NCw3LjA2LTEuOC0yLjI4LDYuMTgtNC44OC0yLjU2LTMuMjRMNDA2Ljg3LDQ1M2wtMS44LTIuMjgsNS43Mi00LjUyTDQwOC4yNCw0NDNsLTYuMiw0Ljg5LTEuODEtMi4yOCw5LTcuMDdaIi8+DQogICAgICAgICAgPHBhdGggZD0iTTQwMy4xNiw0NjQuNGwtMi45NCwxLjkxLTMuODMtNS45LTYuMTcsNCwzLjgyLDUuODktMywxLjkzTDM4MS44NCw0NThsMy0xLjkyLDMuODIsNS44OSw2LjE4LTQtMy44My01LjksMi45NS0xLjkxWiIvPg0KICAgICAgICAgIDxwYXRoIGQ9Ik0zNzIuODgsNDYyLjc1YzQtMi4xNyw4LjUyLTEsMTEuMTUsMy44NnMxLjE2LDkuMy0yLjgxLDExLjQ2LTguNDksMS0xMS4xMy0zLjg4UzM2OSw0NjQuODgsMzcyLjg4LDQ2Mi43NVptNi44NSwxMi41OGMyLjMtMS4yNSwyLjg5LTMuODEsMS4xNS03cy00LjItNC4xLTYuNTEtMi44NC0yLjg3LDMuOC0xLjEzLDdTMzc3LjQyLDQ3Ni41OSwzNzkuNzMsNDc1LjMzWiIvPg0KICAgICAgICAgIDxwYXRoIGQ9Ik0zNTguOTEsNDg1LjU1YzEuNjQtLjY5LDIuMjItMS44MywxLjgxLTIuODhzLTEuODctMS4xNC0zLjMzLS44OGwtMS41NS4yNWMtMi45My41NC01LjUyLDAtNi42Mi0yLjU4LTEuMjItMi44Ny4yNS01LjY0LDQtNy4yNXM2Ljk0LS44OCw4LjQ0LDIuNDNMMzU4LjU2LDQ3NmMtLjc4LTEuNTMtMi4zNy0xLjgtNC4wOS0xLjA3cy0yLjQ3LDItMiwzLjE1LDEuNjMsMS4xNSwzLjUxLjg1bDEuODgtLjMxYzIuOTEtLjQ3LDUuMDkuMTYsNi4wNiwyLjQ1LDEuMiwyLjg1LS41LDUuNzktMy45MSw3LjIzcy02LjU1LjUyLTcuNzctMi4yM2wzLjExLTEuMzJDMzU2LDQ4NS45MSwzNTcuMzMsNDg2LjIyLDM1OC45MSw0ODUuNTVaIi8+DQogICAgICAgICAgPHBhdGggZD0iTTM1MS4wNiw0OTEuNjlsLTEwLjc1LDMuNzctMS0yLjc0LDcuNDMtMi42MS0xLjM2LTMuODktNi44OCwyLjQxLTEtMi43NCw2Ljg4LTIuNDItMS4zNy0zLjg5LTcuNDUsMi42MS0xLTIuNzQsMTAuNzctMy43OFoiLz4NCiAgICAgICAgICA8cGF0aCBkPSJNMzE1LjksNDkxLjgxbDcuNTItMS43OS42NCwyLjY5LTcuNTIsMS43OVoiLz4NCiAgICAgICAgICA8cGF0aCBkPSJNMzAxLjQxLDQ5MGwtNS4zMyw2LjMzYy0xLjM5LDEuNzItMi4xMSwyLjc2LTEuOTQsNC4wOGEyLjY3LDIuNjcsMCwwLDAsNS4yNi0uODZsMy4zMi0uNDNjLjQ1LDMuMy0xLjcyLDUuNzEtNS4yOCw2LjE2cy02LjI2LTEuMjctNi42NC00LjJjLS4yNC0xLjkxLjQ4LTMuNjEsMy41NC03LjE5bDIuMjQtMi44MnYtLjFsLTcuMTguOTNMMjg5LDQ4OWwxMi4wNS0xLjU1WiIvPg0KICAgICAgICAgIDxwYXRoIGQ9Ik0yODcuNTcsNDk3LjY3Yy4zNSw1LjU1LTIsOC44Ny02LjI3LDkuMTNzLTctMi43NS03LjM1LTguMjgsMi04Ljg3LDYuMjYtOS4xM1MyODcuMjIsNDkyLjEyLDI4Ny41Nyw0OTcuNjdabS0xMCwuNjNjLjI0LDMuODYsMS42MSw1Ljc1LDMuNTcsNS42MnMzLjA5LTIuMTYsMi44NC02LTEuNi01LjcyLTMuNTctNS42UzI3Ny4yOCw0OTQuMzksMjc3LjU1LDQ5OC4zWiIvPg0KICAgICAgICAgIDxwYXRoIGQ9Ik0yNzEuNDUsNDk4LjY1Yy0uMDksNS41NS0yLjcyLDguNjgtNyw4LjYxcy02Ljc3LTMuMjktNi42OC04LjgzLDIuNzEtOC42Nyw2Ljk1LTguNjFTMjcxLjU0LDQ5My4wOSwyNzEuNDUsNDk4LjY1Wm0tMTAtLjE2Yy0uMDYsMy44NywxLjE1LDUuODYsMy4xMiw1Ljg5czMuMjQtMS45MiwzLjMtNS43OS0xLjE1LTUuODMtMy4xMi01Ljg2UzI2MS40Niw0OTQuNTgsMjYxLjQyLDQ5OC40OVoiLz4NCiAgICAgICAgICA8cGF0aCBkPSJNMjU1LjcxLDQ5NC40OWE0LjMyLDQuMzIsMCwwLDEtNC4wNSwzLjkxdi4xMWEzLjc5LDMuNzksMCwwLDEsMi44MSw0Yy0uMiwyLjY0LTIuODcsNC4zNy02LjMzLDQuMTJzLTUuODQtMi4zNy01LjY2LTVhMy44MiwzLjgyLDAsMCwxLDMuMzYtMy41MVY0OThhNC4zNSw0LjM1LDAsMCwxLTMuNDEtNC40NmMuMjEtMi43NiwzLjE0LTQuNTgsNy00LjNTMjU1LjkyLDQ5MS43MywyNTUuNzEsNDk0LjQ5Wm0tOS43OCw3YTIuNTksMi41OSwwLDAsMCw1LjEyLjM4LDIuNTgsMi41OCwwLDAsMC01LjEyLS4zOFptLjE1LTcuMzdhMi42OCwyLjY4LDAsMCwwLDIuNzgsMi43NmMxLjczLjEzLDMuMDctLjg1LDMuMTUtMi4zMnMtMS0yLjU0LTIuNzgtMi42OFMyNDYuMTgsNDkyLjY4LDI0Ni4wOCw0OTQuMTNaIi8+DQogICAgICAgICAgPHBhdGggZD0iTTIzNC4xMyw0OTYuNDVjLS45Miw1LjQ4LTQsOC4xNy04LjE2LDcuNDdzLTYuMi00LjI3LTUuMjgtOS43Miw0LTguMTcsOC4xNi03LjQ3UzIzNS4wNSw0OTEsMjM0LjEzLDQ5Ni40NVptLTkuODgtMS42NmMtLjY0LDMuODIuMjUsNiwyLjE5LDYuMjlzMy41LTEuNDEsNC4xMy01LjIyLS4yNi01Ljk0LTIuMi02LjI2UzIyNC44Nyw0OTAuOTMsMjI0LjI1LDQ5NC43OVoiLz4NCiAgICAgICAgICA8cGF0aCBkPSJNMjA1LjI2LDQ5MS4wNWMxLjMyLTUuNjIsNC43OC04LjI4LDguOTMtNy4yOSwzLjMyLjgsNS4wOCwzLjQxLDQuNzUsNi4zbC0zLjM3LS44MWEyLjUyLDIuNTIsMCwwLDAtMi4wOS0yLjU1Yy0yLjI2LS41NC0zLjkyLDEuMTgtNC43MSw0LjQ5bC4xMywwYTQuODMsNC44MywwLDAsMSw0LjgtMS4zMSw1LjI1LDUuMjUsMCwwLDEsMy45LDYuNTVjLS44LDMuMzMtMy44OCw1LjE1LTcuNjEsNC4yM0MyMDYuNTcsNDk5Ljg1LDIwMy44Miw0OTcsMjA1LjI2LDQ5MS4wNVptOSw0LjdhMi45MSwyLjkxLDAsMCwwLTIuMi0zLjU5LDMsMywwLDEsMC0xLjQyLDUuODNBMi45MywyLjkzLDAsMCwwLDIxNC4yMyw0OTUuNzVaIi8+DQogICAgICAgICAgPHBhdGggZD0iTTE5My4xNiw0NzcuOTJsMy4zNiwxLjExTDE5Mi4yNiw0OTJsLjA5LDAsNC40Ni0xLjEtMSwzTDE5MSw0OTUuMDdsLTMuMTYtMVoiLz4NCiAgICAgICAgICA8cGF0aCBkPSJNMTc3LjMxLDQ4Ni45bDAsLjExLDcuNzQsMy0xLDIuNjktMTEuMTUtNC4zNywxLjA3LTIuNzMsMTEuNzctMTAuNDYsMy40MSwxLjMzWiIvPg0KICAgICAgICAgIDxwYXRoIGQ9Ik0xNTcsNDY5LjgzbDYuODgsMy41NC0xLjI3LDIuNDYtNi44OC0zLjU0WiIvPg0KICAgICAgICAgIDxwYXRoIGQ9Ik0xMzkuMDcsNDcxbC0yLjkzLTIsMy44OS01Ljg2LTYuMTMtNC4wN0wxMzAsNDY1bC0yLjk1LTIsOS4zOS0xNC4xNCwzLDItMy44OSw1Ljg2LDYuMTMsNC4wNywzLjg5LTUuODYsMi45MywxLjk1WiIvPg0KICAgICAgICAgIDxwYXRoIGQ9Ik0xMjAuNzQsNDU0LjhjMS40MSwxLjA4LDIuNjksMSwzLjM5LjE2cy4wOS0yLjE4LS44Ni0zLjMzbC0xLTEuMjNjLTEuOS0yLjI5LTIuNzItNC43OS0xLTcsMS45LTIuNDcsNS0yLjU0LDguMywwczQuMTcsNS42MSwyLDguNTVsLTIuNzEtMi4wOWMxLTEuNDMuNDEtMi45NS0xLjA4LTQuMDlzLTIuOTQtMS4xNy0zLjcxLS4xNy0uMiwyLDEsMy40OGwxLjIsMS40OGMxLjgzLDIuMzEsMi4zNSw0LjUxLjgzLDYuNDgtMS44OSwyLjQ1LTUuMjgsMi40LTguMjIuMTRzLTMuNjYtNS40Ni0xLjg2LTcuODZsMi42NywyLjA2QzExOSw0NTIuNDYsMTE5LjM4LDQ1My43NSwxMjAuNzQsNDU0LjhaIi8+DQogICAgICAgICAgPHBhdGggZD0iTTExMS41Nyw0NTFsLTIuNjQtMi4zMSw5LjI0LTEwLjU4LTUuNS00LjgxLDEuOTEtMi4xOSw4LjE1LDcuMTJaIi8+DQogICAgICAgICAgPHBhdGggZD0iTTk4LjIzLDQzNC44NGMxLjg4LDEuODcsNC41NSwxLjY0LDcuMDYtLjg5czIuNy01LjIxLjg1LTdhMy41MywzLjUzLDAsMCwwLTQuNjktLjU3bC0yLjUxLTIuNTJjMi40OS0xLjk1LDYuMzctMi4xMyw5LjQzLjkxLDMuMjMsMy4yLDMuMzYsNy44Mi0uNTQsMTEuNzVzLTguNTcsMy43Ny0xMS43NC42MmMtMi43OC0yLjc2LTMuMjktNi40My0uODgtOS41MmwyLjUyLDIuNTFBMy41LDMuNSwwLDAsMCw5OC4yMyw0MzQuODRaIi8+DQogICAgICAgICAgPHBhdGggZD0iTTg4Ljc5LDQyOS4zbC00LjM5LTVjLTIuNTUtMi45MS0yLjM2LTYsLjE2LTguMjFhNC44Nyw0Ljg3LDAsMCwxLDUuNjEtLjkybDIuNi03LjA3TDk1LjMzLDQxMWwtMi40LDYuNCwxLjc4LDIsNC41My00LDIuMzIsMi42NFptMi4xMy05Ljg0Yy0xLjM4LTEuNTctMi42OS0xLjc2LTQtLjY0cy0xLjMzLDIuNSwwLDQuMDdsMS42NCwxLjg3LDMuOTEtMy40M1oiLz4NCiAgICAgICAgICA8cGF0aCBkPSJNNzguMzYsNDE3LjE4bC00LjEtNS4zNmMtMi4yNy0zLTItNS41NiwwLTcuMTFhMy42MSwzLjYxLDAsMCwxLDQuNzQuMjFsLjEzLS4xYTMuOTQsMy45NCwwLDAsMSwxLTUuNDZjMi4xNC0xLjY0LDUtMS4yNCw3LjI4LDEuODFsNC4zNyw1LjcxWm0tMS40NC0xMGMtMSwuNzMtMS4xLDEuOTUtLjEyLDMuMjRsMS43LDIuMjEsMy4zNy0yLjU3LTEuNjUtMi4xNkM3OS4zMiw0MDYuNzUsNzgsNDA2LjM3LDc2LjkyLDQwNy4yWm01LjIzLTQuNzRjLTEuMTQuODctMS4yOCwyLjM0LS4yMywzLjcybDEuODYsMi40MywzLjYyLTIuNzUtMS44MS0yLjM3Qzg0LjM1LDQwMS44Nyw4My4xNiw0MDEuNyw4Mi4xNSw0MDIuNDZaIi8+DQogICAgICAgICAgPHBhdGggZD0iTTY2LjY1LDM4Mi44NWw0LDYuNjEtMi4zNiwxLjQ0LTQtNi42MVoiLz4NCiAgICAgICAgICA8cGF0aCBkPSJNNTAuODcsMzc0LjU2bC0yLjg1LTZjLTEuNjUtMy40OS0uNjItNi40MSwyLjQxLTcuODRhNC44Niw0Ljg2LDAsMCwxLDUuNjQuNjRsNC40My02LjA4LDEuNjcsMy41Mi00LjA3LDUuNDksMS4xNiwyLjQ0LDUuNDQtMi41OCwxLjUsMy4xOFptNC43NC04Ljg4Yy0uODktMS44OC0yLjEtMi40Mi0zLjYzLTEuN3MtMiwyLTEuMDcsMy45M0w1MiwzNzAuMTVsNC43LTIuMjJaIi8+DQogICAgICAgICAgPHBhdGggZD0iTTQ0LjA4LDM2MGwtMS4yNy0zLjI4LDYuNTYtMi41NC0yLjY3LTYuODctNi41NSwyLjU1LTEuMjgtMy4zLDE1LjgxLTYuMTQsMS4yOSwzLjMtNi41NiwyLjU0LDIuNjYsNi44Niw2LjU2LTIuNTQsMS4yNywzLjI4WiIvPg0KICAgICAgICAgIDxwYXRoIGQ9Ik0zNy43LDM0My4wNWwtMy4zOC0xMC44NywyLjc3LS44NiwyLjM0LDcuNTEsMy45NC0xLjIyLTIuMTctNywyLjc4LS44NiwyLjE2LDcsMy45NC0xLjIzTDQ3LjczLDMyOGwyLjc4LS44Nkw1My45LDMzOFoiLz4NCiAgICAgICAgICA8cGF0aCBkPSJNMzMuMzgsMzI4Ljc5bC0yLjctMTEuMDcsMi44My0uNjksMS44Niw3LjY1LDQtMS0xLjczLTcuMDgsMi44Mi0uNjlMNDIuMiwzMjNsNC0xLTEuODctNy42NywyLjgyLS42OSwyLjcxLDExLjA5WiIvPg0KICAgICAgICAgIDxwYXRoIGQ9Ik0yOS45LDMxNC4ybC0uNTktMy40Niw2LjkzLTEuMTlMMzUsMzAyLjI5bC02LjkzLDEuMTktLjYtMy40OCwxNi43My0yLjg4LjYsMy40OS02LjkzLDEuMTksMS4yNCw3LjI2TDQ2LDMwNy44N2wuNiwzLjQ2WiIvPg0KICAgICAgICAgIDxwYXRoIGQ9Ik00My4zOCwyODdjLjQyLDQuNS0yLjQ2LDguMjEtOCw4Ljcycy05LTIuNjEtOS40Mi03LjExLDIuNDQtOC4xOSw4LTguN1M0MywyODIuNTgsNDMuMzgsMjg3Wm0tMTQuMjYsMS4zMmMuMjQsMi42MSwyLjM2LDQuMTYsNiwzLjgyczUuNDItMi4yNCw1LjE4LTQuODYtMi4zNy00LjEzLTYtMy44UzI4Ljg3LDI4NS43NCwyOS4xMiwyODguMzZaIi8+DQogICAgICAgICAgPHBhdGggZD0iTTI4LDI3MWMwLDEuNzguODgsMi43NSwyLDIuNzVzMS43NS0xLjMsMi4wNS0yLjc2bC4zNS0xLjUzYy41OS0yLjkyLDItNS4xMyw0Ljg2LTUuMTksMy4xMS0uMDcsNS4xMywyLjMzLDUuMjIsNi40NXMtMS43Niw2Ljc3LTUuMzksNi45NEwzNywyNzQuMmMxLjcxLS4xNiwyLjU1LTEuNTMsMi41MS0zLjQxcy0uOTMtMy0yLjItMy0xLjY2LDEuMDktMi4wOSwyLjk1bC0uNDEsMS44NmMtLjY0LDIuODgtMiw0LjY2LTQuNTIsNC43MS0zLjEuMDctNS4xOS0yLjYxLTUuMjctNi4zMXMyLTYuMjgsNS02LjM5bC4wNywzLjM4QzI4LjcxLDI2OC4xNiwyNy45NCwyNjkuMjUsMjgsMjcxWiIvPg0KICAgICAgICAgIDxwYXRoIGQ9Ik0yNS4yLDI2MS40MmwuNDgtMTEuMzcsMi45LjEyTDI4LjI1LDI1OGw0LjEyLjE4LjMtNy4yOCwyLjkuMTItLjMsNy4yOCw0LjEyLjE3LjMzLTcuODksMi45LjEyLS40NywxMS40WiIvPg0KICAgICAgICAgIDxwYXRoIGQ9Ik00MS4xMywyNDguMDdhMS45MywxLjkzLDAsMCwxLTEuNzctMi4xMywyLDIsMCwwLDEsMy45LjM0QTIsMiwwLDAsMSw0MS4xMywyNDguMDdaIi8+DQogICAgICAgICAgPHBhdGggZD0iTTMwLjUsMjMyLjJjLS4zNywyLjYyLDEuNDEsNC42Miw0LjkzLDUuMTJzNS43OS0xLDYuMTYtMy41NGEzLjUzLDMuNTMsMCwwLDAtMi4zNi00LjA5bC41Mi0zLjUyYzMsLjgzLDUuNTEsMy44Myw0LjkxLDguMDktLjYzLDQuNS00LjI1LDcuMzgtOS43Miw2LjYxcy04LjE2LTQuNi03LjUzLTljLjU0LTMuODcsMy4xOC02LjQ4LDcuMS02LjRMMzQsMjI5QTMuNDksMy40OSwwLDAsMCwzMC41LDIzMi4yWiIvPg0KICAgICAgICAgIDxwYXRoIGQ9Ik00Ny43MiwyMTcuNDljLTEsNC40Mi00Ljg2LDcuMDctMTAuMjQsNS44N3MtNy43Ny01LjIyLTYuNzktOS42NCw0LjgyLTcuMDUsMTAuMjItNS44NVM0OC42OCwyMTMuMTIsNDcuNzIsMjE3LjQ5Wm0tMTQtMy4xYy0uNTcsMi41NywxLDQuNjksNC41Myw1LjQ3czUuODQtLjQ4LDYuNDEtMy0xLTQuNjYtNC41My01LjQ1UzM0LjMsMjExLjgzLDMzLjczLDIxNC4zOVoiLz4NCiAgICAgICAgICA8cGF0aCBkPSJNMzQuODIsMTk4LjM3bDEyLjM5LTEuMDUuMDYtLjE4LTkuNTgtNy45NEwzOSwxODVsMTYuMTksNS4wOC0xLDMuMjYtMTAuNi0zLjMyLDAsLjEzLDkuMjEsNy41NEw1MiwyMDBsLTExLjkuOTEtLjA1LjEzLDEwLjY1LDMuMzUtMSwzLjI2LTE2LjItNS4wOFoiLz4NCiAgICAgICAgICA8cGF0aCBkPSJNNTcsMTY3LjY3bC0zLjE4LDcuMDUtMi41Mi0xLjE0LDMuMTgtNy4wNVoiLz4NCiAgICAgICAgICA8cGF0aCBkPSJNNjAuMDcsMTQxLjExbDEwLjI1LDUuOTRjMi44NiwxLjY1LDMuNDgsNC43LDEuNzcsNy42Ni0xLjU0LDIuNjYtNC4xNSwzLjk0LTcsMi4yNGwxLjc2LTNhMiwyLDAsMCwwLDIuOS0uNzVjLjY3LTEuMTYuMy0yLjI1LTEuMTQtMy4wOGwtMTAuMjUtNS45M1oiLz4NCiAgICAgICAgICA8cGF0aCBkPSJNNjEuOTQsMTM4LjA3bDYuMjktOS41MSwyLjQyLDEuNjEtNC4zNSw2LjU3TDY5Ljc1LDEzOWw0LTYuMDksMi40MywxLjYxLTQsNi4wOCwzLjQ1LDIuMjhMODAsMTM2LjMxbDIuNDIsMS42LTYuMyw5LjUzWiIvPg0KICAgICAgICAgIDxwYXRoIGQ9Ik03Ni4yNCwxMjIuM2MtMS4wNywxLjQyLTEsMi43LS4xMywzLjM5czIuMTguMDcsMy4zMi0uODlsMS4yMi0xYzIuMjgtMS45Miw0Ljc3LTIuNzYsNy0xLDIuNDksMS44OSwyLjU4LDUsLjA5LDguMzFzLTUuNTcsNC4yMS04LjUzLDIuMDlsMi4wNy0yLjczYzEuNDQuOTQsMywuMzgsNC4wOC0xLjExczEuMTUtMi45NS4xNC0zLjcyLTItLjE4LTMuNDcsMWwtMS40OCwxLjJjLTIuMjgsMS44Ni00LjQ5LDIuMzktNi40Ni44OS0yLjQ3LTEuODctMi40NS01LjI3LS4yMi04LjIyczUuNDMtMy43LDcuODUtMS45M2wtMiwyLjY5Qzc4LjU2LDEyMC41Niw3Ny4yOCwxMjAuOTMsNzYuMjQsMTIyLjNaIi8+DQogICAgICAgICAgPHBhdGggZD0iTTg5LjI0LDEwMi40NGw4LjI5LDcuMjRjMi44LDIuNDUsMi44MSw2LjE4LDAsOS4zNnMtNi40NiwzLjY2LTkuMjYsMS4yMUw4MCwxMTNsMi4zMS0yLjY0LDguMDgsN0EzLjQ5LDMuNDksMCwwLDAsOTUsMTEyLjE2bC04LjA4LTcuMDZaIi8+DQogICAgICAgICAgPHBhdGggZD0iTTk4LjE4LDk3LjIxYy0xLjI2LDEuMjYtMS4zOCwyLjU0LS42MSwzLjM1czIuMTYuMzcsMy40Mi0uNDNsMS4zNC0uOGMyLjUyLTEuNTksNS4xMS0yLjA4LDcuMTEtLjA3LDIuMiwyLjIsMS44Niw1LjMyLTEuMDYsOC4yM3MtNi4xLDMuNC04LjczLjg5bDIuNDItMi40MWMxLjI5LDEuMTMsMi44Ny43OCw0LjE5LS41NHMxLjU1LTIuNzYuNjYtMy42Ni0xLjk0LS40NS0zLjU4LjUybC0xLjYzLDFjLTIuNTIsMS41Mi00Ljc3LDEuNzUtNi41MywwLTIuMTgtMi4xOS0xLjY5LTUuNTUuOTMtOC4xN3M1Ljg5LTIuOTIsOC0uODNsLTIuMzksMi4zOUMxMDAuNzIsOTUuODEsOTkuMzksOTYsOTguMTgsOTcuMjFaIi8+DQogICAgICAgICAgPHBhdGggZD0iTTEyMS4xNSw5NS40MmwtMi42NiwyLjNMMTA3LjQsODQuODhsMi42Ni0yLjNaIi8+DQogICAgICAgICAgPHBhdGggZD0iTTExOS4yNyw3OC41OGMtMS40LDEuMS0xLjY3LDIuMzUtMSwzLjI1czIuMDkuNjIsMy40NCwwbDEuNDMtLjY0YzIuNjktMS4yOCw1LjMxLTEuNDYsNy4wNi43NywxLjkzLDIuNDUsMS4yMyw1LjUtMiw4cy02LjQ2LDIuNjYtOC43OC0uMTRsMi43LTIuMTJjMS4xNCwxLjI4LDIuNzUsMS4xMiw0LjIyLDBzMS44Ni0yLjU2LDEuMDgtMy41NS0xLjg3LS42OC0zLjYxLjA5bC0xLjc0LjhjLTIuNjgsMS4yMS00Ljk0LDEuMTctNi40OC0uNzktMS45MS0yLjQzLTEtNS43MSwxLjg5LThzNi4xOS0yLjIsOC4wOC4xM2wtMi42NiwyLjA4QzEyMiw3Ny40OSwxMjAuNjIsNzcuNTMsMTE5LjI3LDc4LjU4WiIvPg0KICAgICAgICAgIDxwYXRoIGQ9Ik0xMzAsNjcuMiwxMzMsNjUuMjlsNC4wOSw2LjMyLjItLjEzLDEuMDktOS42NywzLjU2LTIuMy0xLjE5LDkuODEsMTAuNDYsNC40TDE0Ny42NSw3NmwtNy43Ni0zLjMzLS4zMywyLjc4LDIuNjQsNC4wNy0yLjk1LDEuOTFaIi8+DQogICAgICAgICAgPHBhdGggZD0iTTE1NS41NSw3MS4zM2wtMywxLjc2TDE0NCw1OC40bDMuMDUtMS43NloiLz4NCiAgICAgICAgICA8cGF0aCBkPSJNMTcwLjM5LDYzLjVsLTIuNzEsMS4zOS0xMS41NS02LjItLjEyLjA3LDQuOTEsOS41OUwxNTcuOCw3MGwtNy43NC0xNS4wOSwyLjc1LTEuNDEsMTEuNSw2LjIxLjE1LS4wN0wxNTkuNTUsNTBsMy4xLTEuNTlaIi8+DQogICAgICAgICAgPHBhdGggZD0iTTE3NC4zLDQ2LjQ3Yy0yLjQyLDEtMy4yOSwzLjU2LTEuOTEsNi44NHMzLjc4LDQuNTIsNi4yNiwzLjQ3YzIuMjQtLjkzLDMtMi43NSwyLjI1LTQuNzVsLTMuMzksMS40Mi0xLTIuNDRMMTgzLDQ4LjI3bC44MSwxLjk1YzEuNzMsNC4xLDAsNy43OS00LDkuNDUtNC4zOCwxLjg0LTguNjUsMC0xMC43My00Ljkzcy0uMi05LjM5LDMuOTMtMTEuMTJjMy41Mi0xLjQ4LDcuMTUtLjQ2LDguODcsMi40NWwtMy4yOCwxLjM4QTMuNSwzLjUsMCwwLDAsMTc0LjMsNDYuNDdaIi8+DQogICAgICAgICAgPHBhdGggZD0iTTIwNC40NSw0My4zNywxOTcsNDUuNTVsLS43OC0yLjY1LDcuNDItMi4xOVoiLz4NCiAgICAgICAgICA8cGF0aCBkPSJNMjE2LjUsMzAuMjdsMTEtMi4wNS41MywyLjg1LTcuNTMsMS40MS43Niw0LjA2LDYuODItMS4yOC41MywyLjg2LTYuODIsMS4yNywxLjI5LDYuOTItMy40Ni42NFoiLz4NCiAgICAgICAgICA8cGF0aCBkPSJNMjMwLjU1LDI3Ljc1bDYuNjEtLjgxYzMuODMtLjQ2LDYuMjgsMS40Myw2LjY5LDQuNzZhNC44Nyw0Ljg3LDAsMCwxLTIuMzksNS4xNUwyNDUuODQsNDNsLTMuODYuNDdMMjM4LDM3Ljg2bC0yLjY3LjMyLjcyLDYtMy40OC40M1ptNi45Myw3LjNjMi4wNy0uMjYsMy0xLjI0LDIuNzctMi45MXMtMS4zMy0yLjUxLTMuNC0yLjI2bC0yLjQ2LjMxLjYzLDUuMTZaIi8+DQogICAgICAgICAgPHBhdGggZD0iTTI0Ni40MSwyNS45NGwxMS4zOC0uNjUuMTYsMi45LTcuODYuNDUuMjMsNC4xMiw3LjI4LS40Mi4xNywyLjktNy4yOC40Mi4yNCw0LjEyLDcuODktLjQ1LjE2LDIuOS0xMS40LjY1WiIvPg0KICAgICAgICAgIDxwYXRoIGQ9Ik0yNjEuNDksMjUuMTJsMTEuMzkuMTgsMCwyLjkxTDI2NSwyOC4wOGwtLjA3LDQuMTMsNy4yOS4xMS0uMDUsMi45MS03LjI4LS4xMi0uMDcsNC4xMyw3LjkuMTItLjA1LDIuOTEtMTEuNDEtLjE4WiIvPg0KICAgICAgICAgIDxwYXRoIGQ9Ik0yOTQuNDQsMzYuNzYsMjg2Ljc1LDM2LDI4NywzMy4ybDcuNjkuODFaIi8+DQogICAgICAgIDwvZz4NCiAgICAgIDwvZz4NCiAgICA8L2c+DQogIDwvZz4NCjwvc3ZnPg0K" alt="hslcrb 문장 · Emblem" width="136" height="136">
 
-    <section class="grid" aria-label="학생 프로젝트 링크">
-      <article class="card"><div><a class="name" href="https://Wuky19.github.io/dfghdhdh/" target="_blank" rel="noopener noreferrer">고영태</a><div class="repo">Wuky19/dfghdhdh</div></div><a class="github" href="https://github.com/Wuky19/dfghdhdh" target="_blank" rel="noopener noreferrer">GitHub</a></article>
-      <article class="card"><div><a class="name" href="https://khsin0829.github.io/firstclass/" target="_blank" rel="noopener noreferrer">곽효신</a><div class="repo">khsin0829/firstclass</div></div><a class="github" href="https://github.com/khsin0829/firstclass" target="_blank" rel="noopener noreferrer">GitHub</a></article>
-      <article class="card"><div><a class="name" href="https://coolty81.github.io/firstClass/" target="_blank" rel="noopener noreferrer">김나혜</a><div class="repo">coolty81/firstClass</div></div><a class="github" href="https://github.com/coolty81/firstClass" target="_blank" rel="noopener noreferrer">GitHub</a></article>
-      <article class="card"><div><a class="name" href="https://fandomneko.github.io/class4/" target="_blank" rel="noopener noreferrer">김민진</a><div class="repo">fandomneko/class4</div></div><a class="github" href="https://github.com/fandomneko/class4" target="_blank" rel="noopener noreferrer">GitHub</a></article>
-      <article class="card"><div><a class="name" href="https://kimsihoo08.github.io/class/" target="_blank" rel="noopener noreferrer">김시후</a><div class="repo">kimsihoo08/class</div></div><a class="github" href="https://github.com/kimsihoo08/class" target="_blank" rel="noopener noreferrer">GitHub</a></article>
-      <article class="card"><div><a class="name" href="https://kjm080917-max.github.io/first_class/" target="_blank" rel="noopener noreferrer">김정민</a><div class="repo">kjm080917-max/first_class</div></div><a class="github" href="https://github.com/kjm080917-max/first_class" target="_blank" rel="noopener noreferrer">GitHub</a></article>
-      <article class="card"><div><a class="name" href="https://jklmj4241-boop.github.io/firstClass/" target="_blank" rel="noopener noreferrer">박미주</a><div class="repo">jklmj4241-boop/firstClass</div></div><a class="github" href="https://github.com/jklmj4241-boop/firstClass" target="_blank" rel="noopener noreferrer">GitHub</a></article>
-      <article class="card"><div><a class="name" href="https://minjoon117.github.io/first-Class/" target="_blank" rel="noopener noreferrer">박민준</a><div class="repo">minjoon117/first-Class</div></div><a class="github" href="https://github.com/minjoon117/first-Class" target="_blank" rel="noopener noreferrer">GitHub</a></article>
-      <article class="card"><div><a class="name" href="https://hayun74.github.io/FirstClass/" target="_blank" rel="noopener noreferrer">박하윤</a><div class="repo">hayun74/FirstClass</div></div><a class="github" href="https://github.com/hayun74/FirstClass" target="_blank" rel="noopener noreferrer">GitHub</a></article>
-      <article class="card"><div><a class="name" href="https://hanbibag15-cloud.github.io/Portfolio/" target="_blank" rel="noopener noreferrer">박한비</a><div class="repo">hanbibag15-cloud/Portfolio</div></div><a class="github" href="https://github.com/hanbibag15-cloud/Portfolio" target="_blank" rel="noopener noreferrer">GitHub</a></article>
-      <article class="card"><div><a class="name" href="https://bsw080902.github.io/firstclass/" target="_blank" rel="noopener noreferrer">반승완</a><div class="repo">bsw080902/firstclass</div></div><a class="github" href="https://github.com/bsw080902/firstclass" target="_blank" rel="noopener noreferrer">GitHub</a></article>
-      <article class="card"><div><a class="name" href="https://iastron.github.io/syhpp/" target="_blank" rel="noopener noreferrer">신요한</a><div class="repo">Iastron/syhpp</div></div><a class="github" href="https://github.com/Iastron/syhpp" target="_blank" rel="noopener noreferrer">GitHub</a></article>
-      <article class="card"><div><a class="name" href="https://ilubmysis.github.io/first-class/" target="_blank" rel="noopener noreferrer">안재희</a><div class="repo">ilubmysis/first-class</div></div><a class="github" href="https://github.com/ilubmysis/first-class/" target="_blank" rel="noopener noreferrer">GitHub</a></article>
-      <article class="card"><div><a class="name" href="https://anjiyun952.github.io/firstclass/" target="_blank" rel="noopener noreferrer">안지윤</a><div class="repo">anjiyun952/firstclass</div></div><a class="github" href="https://github.com/anjiyun952/firstclass" target="_blank" rel="noopener noreferrer">GitHub</a></article>
-      <article class="card"><div><a class="name" href="https://leewj0770-collab.github.io/class/" target="_blank" rel="noopener noreferrer">이우진</a><div class="repo">leewj0770-collab/class</div></div><a class="github" href="https://github.com/leewj0770-collab/class" target="_blank" rel="noopener noreferrer">GitHub</a></article>
-      <article class="card"><div><a class="name" href="https://qazwsx1344.github.io/firstclass/" target="_blank" rel="noopener noreferrer">이유민</a><div class="repo">qazwsx1344/firstclass</div></div><a class="github" href="https://github.com/qazwsx1344/firstclass" target="_blank" rel="noopener noreferrer">GitHub</a></article>
-      <article class="card"><div><a class="name" href="https://first.rhee.life/" target="_blank" rel="noopener noreferrer">이호세</a><div class="repo">hslcrb/firstclass</div></div><a class="github" href="https://github.com/hslcrb/firstclass" target="_blank" rel="noopener noreferrer">GitHub</a></article>
-      <article class="card"><div><a class="name" href="https://24s217-png.github.io/first_class/" target="_blank" rel="noopener noreferrer">임현진</a><div class="repo">24s217-png/first_class</div></div><a class="github" href="https://github.com/24s217-png/first_class" target="_blank" rel="noopener noreferrer">GitHub</a></article>
-      <article class="card"><div><a class="name" href="https://dbsjtmzkf.github.io/firstClass/" target="_blank" rel="noopener noreferrer">장현서</a><div class="repo">dbsjtmzkf/firstClass</div></div><a class="github" href="https://github.com/dbsjtmzkf/firstClass" target="_blank" rel="noopener noreferrer">GitHub</a></article>
-      <article class="card"><div><a class="name" href="https://daldaldadal11.github.io/firstClass/" target="_blank" rel="noopener noreferrer">정혜연</a><div class="repo">daldaldadal11/firstClass</div></div><a class="github" href="https://github.com/daldaldadal11/firstClass" target="_blank" rel="noopener noreferrer">GitHub</a></article>
-      <article class="card"><div><a class="name" href="https://yejin0410.github.io/fustclass/" target="_blank" rel="noopener noreferrer">조예진</a><div class="repo">yejin0410/fustclass</div></div><a class="github" href="https://github.com/yejin0410/fustclass" target="_blank" rel="noopener noreferrer">GitHub</a></article>
-      <article class="card"><div><a class="name" href="https://24design10212-web.github.io/firstClass/" target="_blank" rel="noopener noreferrer">조유나</a><div class="repo">24design10212-web/firstClass</div></div><a class="github" href="https://github.com/24design10212-web/firstClass" target="_blank" rel="noopener noreferrer">GitHub</a></article>
-      <article class="card"><div><a class="name" href="https://gong100baek-ctrl.github.io/firstClass/" target="_blank" rel="noopener noreferrer">최고은</a><div class="repo">gong100baek-ctrl/firstClass</div></div><a class="github" href="https://github.com/gong100baek-ctrl/firstClass" target="_blank" rel="noopener noreferrer">GitHub</a></article>
-      <article class="card"><div><a class="name" href="https://ajrwkvkqzhs.github.io/first_class/" target="_blank" rel="noopener noreferrer">최규현</a><div class="repo">ajrwkvkqzhs/first_class</div></div><a class="github" href="https://github.com/ajrwkvkqzhs/first_class" target="_blank" rel="noopener noreferrer">GitHub</a></article>
-      <article class="card"><div><a class="name" href="https://sukeukeu-dot.github.io/First-Class/" target="_blank" rel="noopener noreferrer">최송윤</a><div class="repo">sukeukeu-dot/First-Class</div></div><a class="github" href="https://github.com/sukeukeu-dot/First-Class" target="_blank" rel="noopener noreferrer">GitHub</a></article>
-      <article class="card"><div><a class="name" href="https://hanyubin319-max.github.io/firstclass/" target="_blank" rel="noopener noreferrer">한유빈</a><div class="repo">hanyubin319-max/firstclass</div></div><a class="github" href="https://github.com/hanyubin319-max/firstclass" target="_blank" rel="noopener noreferrer">GitHub</a></article>
-    </section>
+        <div>
+            <p class="eyebrow">DESIGN &amp; DEVELOPMENT CONTRIBUTION</p>
+            <p class="credit">PRed by <a href="https://github.com/hslcrb" target="_blank" rel="noopener noreferrer">hslcrb</a></p>
+            <p class="note">함께 만드는 첫 번째 웹, 함께 넓혀가는 가능성.</p>
+            <p class="note">UI 코드 기준 · <a href="https://github.com/hslcrb/limsflex" target="_blank" rel="noopener noreferrer">limsflex</a></p>
+        </div>
+    </footer>
+    <dialog id="preview-dialog" aria-labelledby="preview-title" aria-describedby="preview-help">
+        <div class="dialog-heading">
+            <h2 id="preview-title">사이트 미리보기</h2>
+            <button type="button" class="preview-button" id="close-preview" autofocus>닫기 ✕</button>
+        </div>
+        <p class="note" id="preview-help">외부 사이트를 불러옵니다. 화면이 비어 있거나 기능이 제한되면 새 창으로 열어주세요.</p>
+        <a class="github" id="preview-external" target="_blank" rel="noopener noreferrer">사이트 새 창으로 열기 ↗</a>
+        <iframe class="preview-frame" id="preview-frame" title="학생 사이트 미리보기" sandbox="allow-scripts" referrerpolicy="no-referrer"></iframe>
+    </dialog>
+    <script>
+    (() => {
+        const cards = Array.from(document.querySelectorAll('#student-grid .card'));
+        const students = cards.map((card) => ({
+            name: card.querySelector('.name').textContent,
+            url: card.querySelector('.name').href,
+            repo: card.querySelector('.repo').textContent,
+            github: card.querySelector('.github').href
+        }));
+        const colors = ['#426cd8', '#00877d', '#a14b76', '#ac6529', '#6957b7', '#287ba7'];
+        const stage = document.getElementById('coverflow');
+        const dialog = document.getElementById('preview-dialog');
+        const frame = document.getElementById('preview-frame');
+        const search = document.getElementById('student-search');
+        let current = 0;
+        let trigger = null;
+        let pointerStart = null;
+        let suppressClick = false;
 
-    <p class="note">※ 학생이 배포 주소나 저장소 이름을 변경하면 이 페이지의 링크도 수정해야 합니다.</p>
-  </main>
+        const slides = students.map((student, index) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'cover-card';
+            button.style.setProperty('--card-color', colors[index % colors.length]);
+            button.setAttribute('aria-label', `${student.name} 프로젝트 선택`);
+            const number = document.createElement('span');
+            number.className = 'cover-number';
+            number.textContent = `FIRST CLASS / ${String(index + 1).padStart(2, '0')}`;
+            const image = document.createElement('img');
+            image.className = 'cover-image';
+            image.alt = `${student.repo} GitHub 저장소 미리보기`;
+            image.loading = 'lazy';
+            image.decoding = 'async';
+            image.referrerPolicy = 'no-referrer';
+            image.addEventListener('error', () => { image.hidden = true; });
+            const text = document.createElement('span');
+            const name = document.createElement('span');
+            name.className = 'cover-name';
+            name.textContent = student.name;
+            const repo = document.createElement('span');
+            repo.className = 'cover-repo';
+            repo.textContent = student.repo;
+            const hint = document.createElement('span');
+            hint.className = 'cover-hint';
+            hint.textContent = '생각이 웹이 되는 곳 ↗';
+            text.append(name, repo, hint);
+            button.append(number, image, text);
+            button.addEventListener('click', () => {
+                if (suppressClick) {
+                    suppressClick = false;
+                    return;
+                }
+                select(index);
+            });
+            stage.append(button);
+            return button;
+        });
+
+        function select(index) {
+            current = (index + students.length) % students.length;
+            slides.forEach((slide, position) => {
+                let offset = (position - current + students.length) % students.length;
+                if (offset > students.length / 2) offset -= students.length;
+                const distance = Math.abs(offset);
+                slide.hidden = distance > 3;
+                slide.style.setProperty('--offset', offset);
+                slide.style.setProperty('--scale', 1 - Math.min(distance, 3) * 0.085);
+                slide.style.setProperty('--layer', 10 - distance);
+                slide.tabIndex = position === current ? 0 : -1;
+                slide.setAttribute('aria-current', String(position === current));
+                const image = slide.querySelector('img');
+                if (distance <= 3 && !image.hasAttribute('src')) {
+                    image.src = `https://opengraph.githubassets.com/1/${students[position].repo}`;
+                }
+            });
+            const student = students[current];
+            document.getElementById('slide-status').textContent = `${String(current + 1).padStart(2, '0')} / ${students.length}`;
+            document.getElementById('active-name').textContent = `${student.name}의 프로젝트`;
+            document.getElementById('active-site').href = student.url;
+            document.getElementById('active-github').href = student.github;
+        }
+
+        function openPreview(index, opener) {
+            const student = students[index];
+            trigger = opener;
+            document.getElementById('preview-title').textContent = `${student.name} · 사이트 미리보기`;
+            document.getElementById('preview-external').href = student.url;
+            frame.title = `${student.name} 사이트 미리보기`;
+            frame.src = student.url;
+            dialog.showModal();
+        }
+
+        document.getElementById('previous-project').addEventListener('click', () => select(current - 1));
+        document.getElementById('next-project').addEventListener('click', () => select(current + 1));
+        stage.addEventListener('keydown', (event) => {
+            const targets = { ArrowLeft: current - 1, ArrowRight: current + 1, Home: 0, End: students.length - 1 };
+            if (!(event.key in targets)) return;
+            event.preventDefault();
+            select(targets[event.key]);
+            slides[current].focus({ preventScroll: true });
+        });
+        stage.addEventListener('pointerdown', (event) => {
+            if (!event.isPrimary || event.button !== 0) return;
+            pointerStart = { x: event.clientX, y: event.clientY, id: event.pointerId };
+            suppressClick = false;
+        });
+        stage.addEventListener('pointerup', (event) => {
+            if (!pointerStart || pointerStart.id !== event.pointerId) return;
+            const x = event.clientX - pointerStart.x;
+            const y = event.clientY - pointerStart.y;
+            pointerStart = null;
+            if (Math.abs(x) > 45 && Math.abs(x) > Math.abs(y)) {
+                suppressClick = true;
+                select(current + (x < 0 ? 1 : -1));
+            }
+        });
+        stage.addEventListener('pointercancel', () => { pointerStart = null; });
+        stage.addEventListener('dragstart', (event) => event.preventDefault());
+        document.getElementById('open-preview').addEventListener('click', (event) => openPreview(current, event.currentTarget));
+        document.querySelectorAll('[data-student-index]').forEach((button) => {
+            button.hidden = false;
+            button.addEventListener('click', () => openPreview(Number(button.dataset.studentIndex), button));
+        });
+        document.getElementById('close-preview').addEventListener('click', () => dialog.close());
+        dialog.addEventListener('close', () => {
+            frame.removeAttribute('src');
+            if (trigger) trigger.focus();
+        });
+        search.addEventListener('input', () => {
+            const query = search.value.trim().toLocaleLowerCase();
+            let matches = 0;
+            cards.forEach((card, index) => {
+                const student = students[index];
+                const match = `${student.name} ${student.repo}`.toLocaleLowerCase().includes(query);
+                card.hidden = !match;
+                if (match) matches += 1;
+            });
+            document.getElementById('result-count').textContent = query ? `검색 결과 ${matches}명 / 전체 ${students.length}명` : `전체 ${students.length}명 · 이름순`;
+            document.getElementById('empty-state').hidden = matches !== 0;
+        });
+        select(0);
+        document.getElementById('project-showcase').hidden = false;
+        document.getElementById('project-search').hidden = false;
+    })();
+    </script>
 </body>
 </html>

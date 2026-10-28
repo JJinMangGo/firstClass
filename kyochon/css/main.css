@@ -1,6 +1,36 @@
+/* Figma Variables: Primitives + Semantic (Mode 1)
+   Source: kyochon Figma design / Local Variables
+   Note: neutral/border is #707070 in the current Figma file. */
+:root {
+    /* Primitives */
+    --brand-yellow: #F8B915;
+    --brand-black: #020000;
+    --yellow-soft: #FFF0C2;
+    --neutral-ivory: #FFFDF5;
+    --neutral-white: #FFFFFF;
+    --neutral-charcoal: #333333;
+    --neutral-gray: #707070;
+    --neutral-border: #707070;
+
+    /* Semantic: aliases to Primitives */
+    --bg-default: var(--neutral-white);
+    --bg-subtle: var(--neutral-ivory);
+    --bg-accent: var(--yellow-soft);
+    --surface-default: var(--neutral-white);
+    --text-primary: var(--brand-black);
+    --text-secondary: var(--neutral-charcoal);
+    --text-muted: var(--neutral-gray);
+    --border-default: var(--neutral-border);
+    --action-primary: var(--brand-yellow);
+    --action-text: var(--brand-black);
+    --accent-primary: var(--brand-yellow);
+
+    --font-primary: "Pretendard Variable", sans-serif;
+}
+
 body {
     background-color: yellow;
-    font-family: "Pretendard Variable", sans-serif;
+    font-family: var(--font-primary);
 }
 .mo {
     display: none;

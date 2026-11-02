@@ -1,0 +1,83 @@
+
+/* Neo Brutalism override: load after login.css */
+.neo-brutalism {
+  --primary: #00a83b;
+  --black: #111;
+  --label: #111;
+  --line: #111;
+  --border: #111;
+  --subText: #222;
+  --bg: #fff7ce;
+  background: var(--bg);
+}
+.neo-brutalism #wrap { background: var(--bg); border-inline: 2px solid #111; }
+.neo-brutalism header { height: 66px; background: #ffdf37; border-bottom: 3px solid #111; }
+.neo-brutalism header h1 { font-size: 2rem; font-weight: 900; }
+.neo-brutalism .back_btn::before { border-width: 3px; }
+.neo-brutalism main { padding-top: 38px; }
+.neo-brutalism .login_title {
+  width: fit-content; margin: 0 auto 40px; padding: 10px 22px;
+  border: 3px solid #111; background: #ff6b9a; color: #111;
+  box-shadow: 6px 6px 0 #111; font-size: 3.6rem; font-weight: 900;
+  transform: rotate(-2deg);
+}
+.neo-brutalism .input_box {
+  height: 100px; border: 3px solid #111; background: #fff;
+  box-shadow: 5px 5px 0 #111;
+}
+.neo-brutalism .input_box + .input_box { margin-top: 18px; }
+.neo-brutalism .input_box label { color: #111; font-weight: 900; }
+.neo-brutalism .input_box input {
+  border-bottom: 2px solid #111; border-radius: 0; color: #111;
+}
+.neo-brutalism .input_box input::placeholder { color: #757575; font-weight: 500; }
+.neo-brutalism .input_box:focus-within {
+  background: #efffea; box-shadow: 5px 5px 0 #00a83b;
+}
+.neo-brutalism .input_box input:focus-visible {
+  outline: 2px solid #111; outline-offset: 3px; border-bottom-color: #00a83b;
+}
+.neo-brutalism .save_id { margin-top: 23px; }
+.neo-brutalism .save_id span { font-weight: 800; }
+.neo-brutalism .save_id .check + span::before {
+  width: 25px; height: 25px; border: 2px solid #111;
+  background: #fff; box-shadow: 3px 3px 0 #111;
+}
+.neo-brutalism .save_id .check:checked + span::before {
+  background: #ffdf37 url(img/checkbox-on.svg) no-repeat center / contain;
+}
+.neo-brutalism .save_id .check:focus-visible + span::before {
+  outline: 3px solid #00a83b; outline-offset: 4px;
+}
+.neo-brutalism .login_btn {
+  margin-top: 35px; border: 3px solid #111; border-radius: 0;
+  background: #00a83b; color: #111; box-shadow: 6px 6px 0 #111;
+  cursor: pointer; transition: transform 120ms ease, box-shadow 120ms ease;
+}
+.neo-brutalism .login_btn:hover { background: #ffdf37; }
+.neo-brutalism .login_btn:active {
+  transform: translate(4px, 4px); box-shadow: 2px 2px 0 #111;
+}
+.neo-brutalism .login_btn:focus-visible,
+.neo-brutalism a:focus-visible,
+.neo-brutalism .back_btn:focus-visible {
+  outline: 3px solid #d50064; outline-offset: 4px;
+}
+.neo-brutalism .login_links { margin-top: 32px; }
+.neo-brutalism .login_links a {
+  color: #111; font-weight: 800; text-decoration: underline; text-underline-offset: 3px;
+}
+.neo-brutalism .login_links li + li::before { width: 2px; background: #111; }
+.neo-brutalism .bottom_nav {
+  background: #ffdf37; border-top: 3px solid #111; box-shadow: none;
+}
+.neo-brutalism .bottom_nav li > a[aria-current="page"] {
+  background: #fff; border: 2px solid #111;
+}
+.neo-brutalism .order_link {
+  border: 3px solid #111; background: #ff6b9a; box-shadow: 5px 5px 0 #111;
+}
+.neo-brutalism .order_link span { color: #111; font-weight: 900; }
+@media (prefers-reduced-motion: reduce) {
+  .neo-brutalism .login_btn { transition: none; }
+}

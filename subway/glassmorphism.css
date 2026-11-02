@@ -1,0 +1,129 @@
+/* Glassmorphism: 기존 login.css 위에 덮어쓰는 독립 스타일 */
+body.glassmorphism {
+  --primary: #007c55;
+  --black: #173c44;
+  --label: #315963;
+  --line: rgba(255,255,255,.65);
+  --border: rgba(255,255,255,.75);
+  --subText: #315963;
+  --bg: transparent;
+  background: linear-gradient(140deg, #8fe7d4 0%, #b6d6ff 48%, #e8b5e7 100%);
+  background-attachment: fixed;
+}
+.glassmorphism #wrap {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 10% 24%, rgba(255,255,255,.65) 0, transparent 31%),
+    radial-gradient(circle at 98% 60%, rgba(255,118,182,.65) 0, transparent 36%),
+    linear-gradient(150deg,#8fe3d8 0%,#b4d0ff 57%,#ddaff5 100%);
+}
+.glassmorphism #wrap::before,
+.glassmorphism #wrap::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.glassmorphism #wrap::before {
+  top: 112px; right: -78px; width: 250px; height: 250px;
+  background: linear-gradient(135deg,#fff0a0,#ff88be);
+  filter: blur(4px); opacity: .75;
+}
+.glassmorphism #wrap::after {
+  top: 380px; left: -95px; width: 210px; height: 210px;
+  background: linear-gradient(135deg,#63e7d4,#86a5ff);
+  filter: blur(8px); opacity: .83;
+}
+.glassmorphism header {
+  background: rgba(255,255,255,.35);
+  border-bottom: 1px solid rgba(255,255,255,.75);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+.glassmorphism header h1 { color: #173c44; font-weight: 800; }
+.glassmorphism main { padding-top: 38px; }
+.glassmorphism .login_title {
+  margin-bottom: 32px; color: #134c65;
+  font-size: 3.8rem; letter-spacing: .09em;
+  text-shadow: 0 2px 12px rgba(255,255,255,.85);
+}
+.glassmorphism form fieldset {
+  padding: 24px 18px 28px;
+  border: 1px solid rgba(255,255,255,.8);
+  border-radius: 24px;
+  background: rgba(255,255,255,.28);
+  -webkit-backdrop-filter: blur(22px);
+  backdrop-filter: blur(22px);
+  box-shadow: 0 16px 40px rgba(38,77,128,.15), inset 0 1px 0 rgba(255,255,255,.6);
+}
+.glassmorphism .input_box {
+  border: 1px solid rgba(255,255,255,.9);
+  border-radius: 14px;
+  background: rgba(255,255,255,.52);
+  box-shadow: 0 4px 18px rgba(30,65,100,.07);
+}
+.glassmorphism .input_box + .input_box { margin-top: 14px; }
+.glassmorphism .input_box label { color: #315963; }
+.glassmorphism .input_box input {
+  border-bottom: 1px solid rgba(23,60,68,.3);
+  color: #173c44;
+}
+.glassmorphism .input_box input::placeholder { color: #526b78; font-weight: 400; }
+.glassmorphism .input_box:focus-within {
+  border-color: #087f65;
+  background: rgba(255,255,255,.82);
+}
+.glassmorphism .input_box input:focus-visible {
+  outline: 2px solid #087f65; outline-offset: 2px;
+}
+.glassmorphism .save_id { margin-top: 18px; }
+.glassmorphism .save_id span { color: #173c44; font-weight: 700; }
+.glassmorphism .save_id .check:focus-visible + span::before {
+  outline: 3px solid #087f65; outline-offset: 4px;
+}
+.glassmorphism .login_btn {
+  margin-top: 28px;
+  border: 1px solid rgba(255,255,255,.75);
+  border-radius: 14px;
+  color: #fff;
+  background: rgba(0,111,88,.85);
+  box-shadow: 0 10px 24px rgba(0,75,75,.22), inset 0 1px 0 rgba(255,255,255,.35);
+  cursor: pointer;
+  transition: background .15s ease, transform .15s ease;
+}
+.glassmorphism .login_btn:hover { background: #005d50; }
+.glassmorphism .login_btn:active { transform: translateY(2px); }
+.glassmorphism .login_btn:focus-visible,
+.glassmorphism a:focus-visible,
+.glassmorphism .back_btn:focus-visible {
+  outline: 3px solid #005d50; outline-offset: 4px;
+}
+.glassmorphism .login_links { margin-top: 24px; }
+.glassmorphism .login_links a { color: #173c44; text-decoration: underline; text-underline-offset: 3px; }
+.glassmorphism .login_links li + li::before { background: rgba(23,60,68,.45); }
+.glassmorphism .bottom_nav {
+  border-top: 1px solid rgba(255,255,255,.78);
+  background: rgba(240,251,255,.58);
+  box-shadow: 0 -5px 25px rgba(32,65,100,.1);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+}
+.glassmorphism .order_link {
+  border: 1px solid rgba(255,255,255,.85);
+  background: rgba(255,255,255,.72);
+  box-shadow: 0 8px 25px rgba(35,65,95,.18);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+.glassmorphism .order_link span { color: #173c44; }
+/* 흐림 효과를 지원하지 않는 환경의 대체 배경 */
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .glassmorphism form fieldset { background: rgba(255,255,255,.88); }
+  .glassmorphism .bottom_nav { background: rgba(240,251,255,.95); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .glassmorphism .login_btn { transition: none; }
+}

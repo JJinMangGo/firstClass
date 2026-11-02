@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="교촌치킨 리뉴얼 포트폴리오의 메뉴 탐색 시안입니다.">
+  <title>MENU | 교촌치킨 리뉴얼 포트폴리오</title>
+  <link rel="stylesheet" href="../css/default.css">
+  <link rel="stylesheet" href="../font/css/pretendardvariable.css">
+  <link rel="stylesheet" href="css/menu.css">
+  <script src="js/menu.js" defer></script>
+</head>
+<body>
+  <div id="wrap">
+    <a class="skip-link" href="#main-content">본문 바로가기</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html" aria-label="교촌치킨 리뉴얼 메인으로 이동">
+          <span class="brand-mark" aria-hidden="true">K</span>
+          <span class="brand-name">KYOCHON<span class="brand-dot">.</span></span>
+        </a>
+        <nav class="gnb" aria-label="주 메뉴">
+          <a href="menu.html" aria-current="page">MENU</a>
+          <span class="gnb-note">KYOCHON RENEWAL PROJECT</span>
+        </nav>
+        <a class="header-home" href="index.html">HOME <span aria-hidden="true">↗</span></a>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="page-hero" aria-labelledby="page-title">
+        <div class="page-hero-inner">
+          <p class="eyebrow"><span class="eyebrow-line" aria-hidden="true"></span> KYOCHON MENU</p>
+          <h1 id="page-title">진심을 담은<br><span>한 조각의 맛.</span></h1>
+          <p class="hero-description">취향에 맞는 메뉴를 한눈에 찾아보세요.<br>다양한 메뉴를 카테고리별로 살펴볼 수 있습니다.</p>
+          <span class="hero-deco" aria-hidden="true">MENU <span>01</span></span>
+        </div>
+      </section>
+
+      <section class="menu-section" aria-labelledby="menu-heading">
+        <div class="content-inner">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">OUR MENU / SELECT YOUR FAVORITE</p>
+              <h2 id="menu-heading">MENU</h2>
+            </div>
+            <p class="section-description">카테고리를 선택해<br>원하는 메뉴를 확인해 보세요.</p>
+          </div>
+
+          <div class="menu-toolbar">
+            <div class="menu-tabs" role="group" aria-label="메뉴 카테고리 필터">
+              <button type="button" class="menu-tab is-active" data-filter="all" aria-pressed="true">전체메뉴</button>
+              <button type="button" class="menu-tab" data-filter="new" aria-pressed="false">신메뉴</button>
+              <button type="button" class="menu-tab" data-filter="chicken" aria-pressed="false">치킨</button>
+              <button type="button" class="menu-tab" data-filter="side" aria-pressed="false">사이드</button>
+              <button type="button" class="menu-tab" data-filter="drink" aria-pressed="false">주류</button>
+            </div>
+            <p class="result-count" aria-live="polite">총 <strong id="menu-count">0</strong>개 메뉴</p>
+          </div>
+
+          <p class="demo-notice">본 페이지는 리뉴얼 디자인 실습 시안이며, 메뉴명과 설명은 예시 콘텐츠입니다. 실제 판매 정보 및 가격과 다를 수 있습니다.</p>
+          <div id="menu-grid" class="menu-grid" aria-live="polite" aria-relevant="additions removals"></div>
+          <div class="empty-state" id="empty-state" hidden>해당 카테고리에 등록된 메뉴가 없습니다.</div>
+        </div>
+      </section>
+
+      <section class="bottom-banner" aria-labelledby="bottom-title">
+        <div class="bottom-banner-inner">
+          <div>
+            <p class="section-kicker">KYOCHON / BRAND EXPERIENCE</p>
+            <h2 id="bottom-title">맛있는 순간을<br>더 특별하게.</h2>
+          </div>
+          <a href="index.html" class="back-home">메인으로 돌아가기 <span aria-hidden="true">↗</span></a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-brand">KYOCHON<span>.</span></div>
+        <div class="footer-meta">
+          <p>교촌치킨 웹사이트 리뉴얼 디자인 실습</p>
+          <p>본 페이지는 교육용 포트폴리오이며 공식 사이트가 아닙니다.</p>
+        </div>
+        <a href="index.html">BACK TO HOME <span aria-hidden="true">↑</span></a>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

@@ -149,11 +149,18 @@ h1 {
 .coverflow::-webkit-scrollbar { display: none; }
 .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    align-items: start;
     gap: var(--rail-gap);
     padding: 4px 4px 48px;
 }
+.gallery-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: var(--rail-gap);
+}
+.coverflow.is-dragging, .coverflow.is-dragging .cover-card { cursor: grabbing; }
+.gallery-control .play-icon, .gallery-control[aria-pressed="true"] .pause-icon { display: none; }
+.gallery-control[aria-pressed="true"] .play-icon { display: block; }
 .cover-card {
     display: block;
     width: 100%;
@@ -486,6 +493,10 @@ dialog::backdrop {
             <div class="gallery-bar">
                 <h2 id="gallery-title">프로젝트 갤러리</h2>
                 <div class="gallery-controls">
+                    <button type="button" class="gallery-control" id="gallery-playback" aria-label="자동 이동 일시정지" aria-pressed="false" aria-controls="coverflow">
+                        <svg class="pause-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h3v14H7zm7 0h3v14h-3z"/></svg>
+                        <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m8 5 11 7-11 7z"/></svg>
+                    </button>
                     <button type="button" class="gallery-control" id="previous-project" aria-label="이전 프로젝트 행" aria-controls="coverflow">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m6 14 6-6 6 6"/></svg>
                     </button>
@@ -865,13 +876,19 @@ dialog::backdrop {
             const variant = (index + variation) % 6;
             const stroke = (d, color, width) =>
                 `<path d="${d}" fill="none" stroke="${color}" stroke-width="${width}"/>`;
-            if (variant === 0 || variant === 3) {
+            if (variant === 0) {
                 // A twisting stack of vaulted glass fins.
                 for (let n = 0; n < 34; n++) {
                     const x = n * 4;
                     const crown = -48 + n * 1.8 + variation * 4;
                     const d = `M${-70 + x} 199 Q${-1 + x} ${crown} ${121 + x} ${25 + n * 1.2} Q${179 + x} ${77 - n} ${192 + x} 180`;
                     paths.push(stroke(d, gradient, n % 5 ? 1.5 : 3));
+                }
+            } else if (variant === 3) {
+                // Rings spread across the pool in perspective.
+                for (let n = 1; n <= 38; n++) {
+                    const radius = n * (4 + n * .105);
+                    paths.push(`<ellipse cx="${112 + variation * 12}" cy="${94 - n * .8}" rx="${radius}" ry="${radius * .39}" transform="rotate(-17 112 94)" fill="none" stroke="${gradient}" stroke-width="${n % 5 ? 1.4 : 3}"/>`);
                 }
             } else if (variant === 1 || variant === 5) {
                 // Elevation contours bend around two opposing slopes.
@@ -906,7 +923,7 @@ dialog::backdrop {
                     </linearGradient>
                 </defs>
                 <rect width="320" height="154" fill="url(#${paper})"/>
-                <g transform="translate(${variant === 3 || variant === 5 ? 320 : 0} 0) scale(${variant === 3 || variant === 5 ? -1 : 1} 1)">${paths.join('')}</g>
+                <g transform="translate(${variant === 5 ? 320 : 0} 0) scale(${variant === 5 ? -1 : 1} 1)">${paths.join('')}</g>
             </svg>`;
         }
 
@@ -934,7 +951,12 @@ dialog::backdrop {
             caption.append(name, repo, arrow);
             button.append(artwork, caption);
             button.addEventListener('click', () => openPreview(index, button));
-            grid.append(button);
+            if (index % 2 === 0) {
+                const row = document.createElement('div');
+                row.className = 'gallery-row';
+                grid.append(row);
+            }
+            grid.lastElementChild.append(button);
             return button;
         });
         function openPreview(index, opener) {
@@ -947,12 +969,189 @@ dialog::backdrop {
             dialog.showModal();
         }
 
-        function scrollRow(direction) {
-            const distance = slides[2].offsetTop - slides[0].offsetTop;
-            stage.scrollBy({ top: distance * direction });
+        const playback = document.getElementById('gallery-playback');
+        const motion = matchMedia('(prefers-reduced-motion: reduce)');
+        let paused = motion.matches;
+        let visible = false;
+        let hovering = false;
+        let interacting = false;
+        let resumeTimer = 0;
+        let request = 0;
+        let previousTime = 0;
+        let remainder = 0;
+        let drag = null;
+        let dragged = false;
+
+        function rowHeight() {
+            const first = grid.firstElementChild;
+            return first?.nextElementSibling
+                ? first.nextElementSibling.offsetTop - first.offsetTop
+                : 0;
         }
-        document.getElementById('previous-project').addEventListener('click', () => scrollRow(-1));
-        document.getElementById('next-project').addEventListener('click', () => scrollRow(1));
+
+        // Recycle complete rows beyond the viewport. Each student keeps a single button.
+        function makeRoom() {
+            const height = rowHeight();
+            const max = stage.scrollHeight - stage.clientHeight;
+            if (!height || max <= height * 3) return;
+            if (stage.scrollTop < height) {
+                grid.prepend(grid.lastElementChild);
+                stage.scrollTop += height;
+            } else if (stage.scrollTop > max - height) {
+                grid.append(grid.firstElementChild);
+                stage.scrollTop -= height;
+            }
+        }
+
+        function moveRow(direction) {
+            makeRoom();
+            stage.scrollTop += rowHeight() * direction;
+        }
+
+        function canFlow() {
+            return visible && !paused && !document.hidden && !dialog.open && !hovering &&
+                !interacting && !stage.contains(document.activeElement);
+        }
+
+        function tick(time) {
+            request = 0;
+            if (!canFlow()) {
+                previousTime = 0;
+                return;
+            }
+            if (previousTime) {
+                // Browsers round scrollTop. Carry fractions to keep the speed independent of refresh rate.
+                remainder += Math.min(64, time - previousTime) * 0.018;
+                if (remainder >= 1) {
+                    makeRoom();
+                    const pixels = Math.floor(remainder);
+                    stage.scrollTop += pixels;
+                    remainder -= pixels;
+                }
+            }
+            previousTime = time;
+            request = requestAnimationFrame(tick);
+        }
+
+        function updateFlow() {
+            if (canFlow()) {
+                if (!request) request = requestAnimationFrame(tick);
+            } else {
+                cancelAnimationFrame(request);
+                previousTime = 0;
+                request = 0;
+            }
+        }
+
+        function setPaused(value) {
+            paused = value;
+            playback.setAttribute('aria-pressed', String(paused));
+            playback.title = paused ? '자동 이동 재생' : '자동 이동 일시정지';
+            updateFlow();
+        }
+
+        function waitForGesture() {
+            clearTimeout(resumeTimer);
+            interacting = true;
+            updateFlow();
+        }
+
+        function resumeAfterGesture() {
+            clearTimeout(resumeTimer);
+            resumeTimer = setTimeout(() => {
+                interacting = false;
+                updateFlow();
+            }, 1200);
+        }
+
+        playback.addEventListener('click', () => setPaused(!paused));
+        motion.addEventListener('change', () => setPaused(motion.matches));
+        document.getElementById('previous-project').addEventListener('click', () => moveRow(-1));
+        document.getElementById('next-project').addEventListener('click', () => moveRow(1));
+
+        stage.addEventListener('keydown', (event) => {
+            const order = slides.indexOf(document.activeElement);
+            const firstVisible = Array.from(grid.children).find(row =>
+                row.offsetTop + row.offsetHeight > stage.scrollTop + 8);
+            const current = order >= 0 ? order : slides.indexOf(firstVisible?.firstElementChild);
+            const moves = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -2, ArrowDown: 2 };
+            let target;
+            if (event.key === 'Home') target = 0;
+            else if (event.key === 'End') target = slides.length - 1;
+            else if (event.key in moves) target = (current + moves[event.key] + slides.length) % slides.length;
+            else if (event.key === 'Enter' && order < 0 && current >= 0) {
+                event.preventDefault();
+                slides[current].click();
+                return;
+            } else return;
+            event.preventDefault();
+            const button = slides[target];
+            const box = button.getBoundingClientRect();
+            const bounds = stage.getBoundingClientRect();
+            if (box.top < bounds.top || box.bottom > bounds.bottom) {
+                stage.scrollTop += box.top - bounds.top - 4;
+            }
+            button.focus({ preventScroll: true });
+        });
+
+        // Touch and wheel use native scrolling; dragging with a mouse uses the same scroll position.
+        stage.addEventListener('pointerdown', (event) => {
+            if (!event.isPrimary || event.button !== 0) return;
+            waitForGesture();
+            dragged = false;
+            if (event.pointerType !== 'mouse') return;
+            event.preventDefault();
+            drag = { id: event.pointerId, lastY: event.clientY };
+        });
+        stage.addEventListener('pointermove', (event) => {
+            if (!drag || drag.id !== event.pointerId) return;
+            const delta = drag.lastY - event.clientY;
+            if (!dragged && Math.abs(delta) < 5) return;
+            if (!dragged) {
+                stage.setPointerCapture(event.pointerId);
+                stage.classList.add('is-dragging');
+                dragged = true;
+            }
+            makeRoom();
+            stage.scrollTop += delta;
+            drag.lastY = event.clientY;
+        });
+        function endDrag() {
+            if (!interacting) return;
+            drag = null;
+            stage.classList.remove('is-dragging');
+            resumeAfterGesture();
+        }
+        window.addEventListener('pointerup', endDrag);
+        window.addEventListener('pointercancel', endDrag);
+        stage.addEventListener('click', (event) => {
+            if (dragged && event.detail !== 0) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            dragged = false;
+        }, true);
+        stage.addEventListener('wheel', () => {
+            waitForGesture();
+            resumeAfterGesture();
+        }, { passive: true });
+        stage.addEventListener('pointerenter', (event) => {
+            hovering = event.pointerType === 'mouse';
+            updateFlow();
+        });
+        stage.addEventListener('pointerleave', () => {
+            hovering = false;
+            updateFlow();
+        });
+        stage.addEventListener('focusin', updateFlow);
+        stage.addEventListener('focusout', () => queueMicrotask(updateFlow));
+        document.addEventListener('visibilitychange', updateFlow);
+        dialog.addEventListener('close', updateFlow);
+        new IntersectionObserver(([entry]) => {
+            visible = entry.isIntersecting;
+            updateFlow();
+        }).observe(stage);
+        setPaused(paused);
         document.querySelectorAll('[data-student-index]').forEach((button) => {
             button.hidden = false;
             button.addEventListener('click', () => openPreview(Number(button.dataset.studentIndex), button));

@@ -393,34 +393,112 @@ h2 {
     color: var(--blue);
     text-decoration: underline;
 }
-dialog {
-    width: min(1100px, calc(100% - 24px));
-    max-height: calc(100dvh - 24px);
+#preview-dialog {
+    --glint-x: 18%;
+    --glint-y: 0%;
+    box-sizing: border-box;
+    width: min(1040px, calc(100% - 32px));
+    height: min(790px, calc(100dvh - 40px));
+    max-height: none;
     margin: auto;
-    padding: 20px;
-    border: 1px solid var(--line);
-    border-radius: 20px;
-    color: var(--ink);
-    background: #fff;
+    padding: clamp(14px, 2.2vw, 28px);
+    isolation: isolate;
+    overflow: auto;
+    overscroll-behavior: contain;
+    border: 1px solid rgb(249 255 255 / 88%);
+    border-radius: clamp(18px, 2vw, 28px);
+    background: #d3eaf1;
+    color: #10394e;
+    box-shadow: inset 1px 1px 1px white, inset -1px -1px 2px rgb(51 98 126 / 32%),
+        0 24px 80px rgb(3 31 57 / 38%);
 }
-dialog::backdrop {
-    background: rgb(15 25 45 / 65%);
+#preview-dialog[open] {
+    display: grid;
+    grid-template-rows: auto minmax(110px, 1fr) auto;
+    gap: clamp(12px, 1.7vw, 22px);
 }
-.dialog-heading {
+#preview-dialog::backdrop {
+    background: rgb(6 32 57 / 50%);
+}
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    #preview-dialog {
+        background: rgb(210 235 244 / 78%);
+        -webkit-backdrop-filter: blur(25px) saturate(200%) brightness(1.1);
+        backdrop-filter: blur(25px) saturate(200%) brightness(1.1);
+    }
+}
+#preview-dialog::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(ellipse at var(--glint-x) var(--glint-y), rgb(255 255 255 / 72%), transparent 52%),
+        linear-gradient(164deg, rgb(231 255 251 / 58%), transparent 44%, rgb(102 179 207 / 24%));
+}
+.dialog-heading, .preview-footer {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    margin-bottom: 16px;
+}
+#preview-title {
+    margin: 0;
+    font-size: clamp(20px, 3vw, 32px);
+    line-height: 1.3;
+    color: #10394e;
+}
+.preview-dialog-button, #preview-external {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 44px;
+    padding: 0 16px;
+    border: 1px solid rgb(31 79 101 / 24%);
+    border-radius: 24px;
+    background: rgb(255 255 255 / 57%);
+    color: #10394e;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 650;
+    text-decoration: none;
+    cursor: pointer;
+}
+.preview-dialog-button:hover, #preview-external:hover {
+    background: #f6ffff;
+}
+#preview-dialog :focus-visible {
+    outline: 3px solid #005d89;
+    outline-offset: 3px;
 }
 .preview-frame {
     display: block;
+    box-sizing: border-box;
     width: 100%;
-    height: min(60dvh, 650px);
-    margin-top: 16px;
-    border: 1px solid var(--line);
-    background: #f6f8fc;
+    height: 100%;
+    border: 1px solid rgb(23 82 108 / 25%);
+    border-radius: 12px;
+    background: #fff;
+}
+#preview-help {
+    margin: 0;
+    color: #254c60;
+    font-size: 14px;
+    line-height: 1.5;
+    word-break: keep-all;
+}
+@media (max-width: 560px) {
+    #preview-dialog {
+        width: calc(100% - 16px);
+        height: calc(100dvh - 24px);
+    }
+    .preview-footer {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
 }
 @media (max-width: 760px) {
     .wrap {
@@ -823,11 +901,13 @@ dialog::backdrop {
     <dialog id="preview-dialog" aria-labelledby="preview-title" aria-describedby="preview-help">
         <div class="dialog-heading">
             <h2 id="preview-title">사이트 미리보기</h2>
-            <button type="button" class="preview-button" id="close-preview" autofocus>닫기 ✕</button>
+            <button type="button" class="preview-dialog-button" id="close-preview" autofocus>닫기 <span aria-hidden="true">×</span></button>
         </div>
-        <p class="note" id="preview-help">외부 사이트를 불러옵니다. 화면이 비어 있거나 기능이 제한되면 새 창으로 열어주세요.</p>
-        <a class="github" id="preview-external" target="_blank" rel="noopener noreferrer">사이트 새 창으로 열기 ↗</a>
         <iframe class="preview-frame" id="preview-frame" title="학생 사이트 미리보기" sandbox="allow-scripts" referrerpolicy="no-referrer"></iframe>
+        <div class="preview-footer">
+            <p id="preview-help">미리보기가 표시되지 않으면 새 창에서 프로젝트를 열어 보세요.</p>
+            <a id="preview-external" target="_blank" rel="noopener noreferrer">새 창에서 열기 <span aria-hidden="true">↗</span></a>
+        </div>
     </dialog>
     <script>
     (() => {

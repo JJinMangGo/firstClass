@@ -140,7 +140,7 @@ a:hover { text-decoration: underline; text-underline-offset: .22em; }
 }
 .garden-title em { display: block; color: #c7fbf5; font-weight: inherit; }
 .garden-caption { margin-bottom: 8px; font-weight: 670; font-size: clamp(20px, 1.7vw, 27px); }
-.garden-description { max-width: 30ch; color: #effaff; font-size: 16px; line-height: 1.65; }
+.garden-description { max-width: 100%; color: #effaff; font-size: 16px; line-height: 1.65; }
 .panel-foot {
     display: flex;
     flex-wrap: wrap;
@@ -172,12 +172,29 @@ a:hover { text-decoration: underline; text-underline-offset: .22em; }
     background: var(--swatch);
     margin-left: -3px;
 }
+.garden-scene::after {
+    content: "";
+    position: absolute;
+    inset: 50% 0 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(ellipse at 14% 87%, #55e0cf77, transparent 38%),
+                radial-gradient(ellipse at 60% 95%, #348de180, transparent 43%),
+                radial-gradient(ellipse at 81% 46%, #94f4d966, transparent 28%);
+    mix-blend-mode: soft-light;
+}
+@media (prefers-reduced-motion: no-preference) {
+    .garden-scene::after { animation: waterlight 12s ease-in-out infinite alternate; }
+    @keyframes waterlight { from { opacity: .35; } to { opacity: .95; } }
+}
 .garden-scene > .showcase { min-width: 0; }
+.garden-scene .active-project .project-actions { color: var(--ink); text-shadow: none; }
 .garden-scene .active-project, .garden-scene .help-text, .garden-scene .slide-status { color: #fff; text-shadow: 0 1px 4px #003047; }
 @media (max-width: 850px) {
     html { scroll-snap-type: none; }
     .garden-scene { grid-template-columns: 1fr; width: calc(100% - 24px); gap: 28px; padding: 28px; }
-    .garden-panel { max-width: none; }
+    .garden-scene .garden-panel { max-width: none; padding: 28px; }
     .garden-title { margin-top: 26px; font-size: clamp(62px, 12vw, 92px); }
     .garden-title em { display: inline; }
     .garden-description { max-width: none; }
@@ -186,10 +203,10 @@ a:hover { text-decoration: underline; text-underline-offset: .22em; }
     .site-header { min-height: 66px; gap: 4px; }
     .brand { font-size: 21px; gap: 6px; }
     .brand svg { width: 27px; }
-    .site-nav { gap: 0; }
+    .site-header .site-nav { gap: 0; }
     .site-nav a { font-size: 12px; padding-inline: 8px; }
     .garden-scene { width: calc(100% - 16px); padding: 22px 14px; border-radius: 20px; }
-    .garden-panel { padding: 24px; border-radius: 19px; }
+    .garden-scene .garden-panel { padding: 24px; border-radius: 19px; }
     .garden-title { font-size: clamp(49px, 10vw, 65px); }
     .panel-foot { margin-top: 22px; padding-top: 16px; }
 }
@@ -528,6 +545,9 @@ dialog::backdrop {
     .wrap {
         width: calc(100% - 32px);
     }
+    .hero-heading {
+        padding-top: 40px;
+    }
     .coverflow {
         height: 420px;
     }
@@ -544,7 +564,9 @@ dialog::backdrop {
     }
 }
 @media (max-width: 420px) {
-    .site-nav a { padding-inline: 7px; }
+    .site-nav {
+        gap: 16px;
+    }
     .cover-card {
         padding: 20px;
         transform: translateX(calc(var(--offset) * 90px)) scale(var(--scale));
@@ -578,7 +600,7 @@ dialog::backdrop {
     </header>
     <main>
         <section class="garden-scene" id="exhibition" aria-labelledby="exhibit-title">
-            <div class="garden-panel">
+            <div class="garden-panel hero-heading">
                 <p class="exhibit-label">2026 학생 프로젝트 전시</p>
                 <h1 class="garden-title" id="exhibit-title" lang="en">Water <em>Garden</em></h1>
                 <p class="garden-caption">물빛 정원</p>
@@ -589,7 +611,7 @@ dialog::backdrop {
                         <i style="--swatch:#163d5e"></i><i style="--swatch:#37749a"></i><i style="--swatch:#70baca"></i><i style="--swatch:#9be0d6"></i><i style="--swatch:#d7efff"></i>
                     </span>
                 </div>
-            </div>
+        </div>
         <section class="showcase" id="project-showcase" aria-label="학생 프로젝트 캐러셀" hidden>
             <div class="coverflow" id="coverflow" aria-roledescription="캐러셀" aria-label="프로젝트 선택: 좌우 방향키로 이동" tabindex="0"></div>
             <div class="carousel-controls">

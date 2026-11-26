@@ -339,10 +339,10 @@ a:hover { text-decoration: underline; text-underline-offset: .22em; }
     align-items: center;
     gap: 20px;
     padding: 26px 32px;
-    margin-top: 54px;
+    margin: 0 0 60px;
     border: 1px solid #cddcf6;
     border-radius: 20px;
-    background: #eff5ff;
+    background: linear-gradient(115deg, #e4f1f1, #edf5f6);
 }
 .teacher h2 {
     margin-top: 6px;
@@ -352,8 +352,8 @@ a:hover { text-decoration: underline; text-underline-offset: .22em; }
     margin: 0;
 }
 .directory {
-    margin-block: 64px;
-    scroll-margin-top: 24px;
+    padding-block: clamp(44px, 6vw, 90px) 48px;
+    scroll-snap-align: start;
 }
 .section-heading {
     display: flex;
@@ -365,8 +365,9 @@ a:hover { text-decoration: underline; text-underline-offset: .22em; }
 }
 h2 {
     font-size: 28px;
-    letter-spacing: -0.7px;
 }
+.directory h2 { font-size: clamp(30px, 3vw, 46px); line-height: 1.15; }
+.eyebrow { color: var(--blue); font-size: 13px; font-weight: 650; }
 .section-heading p {
     margin-top: 8px;
     color: var(--muted);
@@ -392,7 +393,7 @@ h2 {
 }
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 245px), 1fr));
     gap: 16px;
 }
 .card {
@@ -401,13 +402,13 @@ h2 {
     gap: 20px;
     padding: 24px;
     min-width: 0;
-    background: var(--paper);
+    background: #fcfefe;
     border: 1px solid var(--line);
     border-radius: 16px;
 }
 .card:hover {
-    border-color: #8aa9db;
-    background: #f0f5ff;
+    border-color: #85b2bb;
+    background: #f4fbfb;
 }
 .card-top {
     display: flex;
@@ -419,15 +420,15 @@ h2 {
     place-items: center;
     width: 42px;
     height: 42px;
-    border: 1px solid #cfdbec;
+    border: 1px solid #c5dce1;
     border-radius: 12px;
-    color: var(--blue);
-    background: #fff;
+    color: #245562;
+    background: #e8f3f3;
     font-size: 13px;
     font-weight: 750;
 }
 .name {
-    color: var(--blue);
+    color: var(--ink);
     font-size: 20px;
     font-weight: 750;
 }
@@ -465,9 +466,9 @@ h2 {
     justify-content: flex-start;
     flex-wrap: wrap;
     gap: 36px;
-    padding: 48px 24px;
+    padding: 32px max(24px, calc((100% - 1360px) / 2));
     border-top: 1px solid var(--line);
-    background: #f6f8fc;
+    background: #e9f1f3;
 }
 .emblem {
     width: 136px;
@@ -543,9 +544,7 @@ dialog::backdrop {
     }
 }
 @media (max-width: 420px) {
-    .site-nav {
-        gap: 16px;
-    }
+    .site-nav a { padding-inline: 7px; }
     .cover-card {
         padding: 20px;
         transform: translateX(calc(var(--offset) * 90px)) scale(var(--scale));
@@ -572,7 +571,7 @@ dialog::backdrop {
             firstClass
         </a>
         <nav class="site-nav" id="page-navigation" aria-label="페이지 탐색">
-            <a href="#exhibition" aria-current="location">전시관</a>
+            <a href="#exhibition">전시관</a>
             <a href="#student-projects">학생 목록</a>
             <a href="#teacher-project">강사 예시</a>
         </nav>
@@ -610,26 +609,15 @@ dialog::backdrop {
         </section>
         </section>
         <div class="wrap">
-            <section class="teacher" id="teacher-project" aria-labelledby="teacher-title">
-                <div>
-                    <p class="eyebrow">TEACHER'S PROJECT</p>
-                    <h2 id="teacher-title">강사 예시 · 찐망고</h2>
-                    <p class="repo">JJinMangGo/firstClass</p>
-                </div>
-                <div class="project-actions">
-                    <a class="action-link primary" href="https://jjinmanggo.github.io/firstClass/" target="_blank" rel="noopener noreferrer">배포 페이지 보기 ↗</a>
-                    <a class="action-link" href="https://github.com/JJinMangGo/firstClass" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
-                </div>
-            </section>
             <section class="directory" id="student-projects" aria-labelledby="directory-title">
                 <div class="section-heading">
                     <div>
-                        <h2 id="directory-title">우리 반 프로젝트</h2>
+                        <h2 id="directory-title">학생 프로젝트</h2>
                         <p id="result-count" role="status">전체 26명 · 이름순</p>
                     </div>
                     <div class="search-box" id="project-search" hidden>
                         <label for="student-search">이름 또는 GitHub 아이디 검색</label>
-                        <input type="search" id="student-search" name="student-search" placeholder="찾고 싶은 친구가 있나요?" autocomplete="off">
+                        <input type="search" id="student-search" name="student-search" placeholder="이름 또는 GitHub 아이디" autocomplete="off">
                     </div>
                 </div>
                 <div class="grid" id="student-grid">
@@ -920,15 +908,26 @@ dialog::backdrop {
                         </div>
                     </article>
                 </div>
-                <p class="empty-state" id="empty-state" hidden>검색 결과가 없어요. 이름이나 아이디를 다시 입력해 주세요.</p>
-                <p class="note">※ 학생이 배포 주소나 저장소 이름을 변경하면 이 페이지의 링크도 수정해야 합니다. 외부 링크는 새 창에서 열립니다.</p>
+                <p class="empty-state" id="empty-state" hidden>검색 결과가 없습니다. 다른 이름이나 아이디를 입력해 주세요.</p>
+                <p class="note">학생 이름을 누르면 배포한 사이트가 새 창에서 열립니다.</p>
+            </section>
+            <section class="teacher" id="teacher-project" aria-labelledby="teacher-title">
+                <div>
+                    <p class="eyebrow">강사 프로젝트</p>
+                    <h2 id="teacher-title">찐망고의 예시 프로젝트</h2>
+                    <p class="repo">JJinMangGo/firstClass</p>
+                </div>
+                <div class="project-actions">
+                    <a class="action-link primary" href="https://jjinmanggo.github.io/firstClass/" target="_blank" rel="noopener noreferrer">배포 페이지 보기 ↗</a>
+                    <a class="action-link" href="https://github.com/JJinMangGo/firstClass" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+                </div>
             </section>
         </div>
     </main>
     <footer class="signature" id="contributor">
          <div>
-            <p class="eyebrow">DESIGN &amp; DEVELOPMENT CONTRIBUTION</p>
-            <p class="credit">PRed by <a href="https://github.com/hslcrb" target="_blank" rel="noopener noreferrer">hslcrb</a></p>
+            <p class="eyebrow">디자인 · 개발 기여</p>
+            <p class="credit"><a href="https://github.com/hslcrb" target="_blank" rel="noopener noreferrer">hslcrb</a></p>
             <p class="note">UI 코드 기준 · <a href="https://github.com/hslcrb/limsflex" target="_blank" rel="noopener noreferrer">limsflex</a></p>
         </div>
     </footer>
@@ -941,6 +940,20 @@ dialog::backdrop {
         <a class="github" id="preview-external" target="_blank" rel="noopener noreferrer">사이트 새 창으로 열기 ↗</a>
         <iframe class="preview-frame" id="preview-frame" title="학생 사이트 미리보기" sandbox="allow-scripts" referrerpolicy="no-referrer"></iframe>
     </dialog>
+    <script>
+    (() => {
+        const links = Array.from(document.querySelectorAll('#page-navigation a'));
+        const observer = new IntersectionObserver((entries) => {
+            const visible = entries.find(entry => entry.isIntersecting);
+            if (!visible) return;
+            links.forEach(link => {
+                if (link.hash === '#' + visible.target.id) link.setAttribute('aria-current', 'location');
+                else link.removeAttribute('aria-current');
+            });
+        }, { rootMargin: '-10% 0px -65% 0px' });
+        links.forEach(link => observer.observe(document.querySelector(link.hash)));
+    })();
+    </script>
     <script>
     (() => {
         const cards = Array.from(document.querySelectorAll('#student-grid .card'));

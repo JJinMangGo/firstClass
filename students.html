@@ -100,112 +100,122 @@ h1 {
     line-height: 1.7;
 }
 .showcase {
-    padding-top: 32px;
+    width: min(100%, 760px);
+    min-width: 0;
+    margin-inline: auto;
+    color: #123f51;
 }
-.coverflow {
-    position: relative;
-    display: grid;
-    place-items: center;
-    height: 470px;
-    overflow: clip;
-    isolation: isolate;
-    touch-action: pan-y;
-}
-.cover-card {
-    grid-area: 1 / 1;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: min(340px, 76vw);
-    height: 410px;
-    padding: 26px;
-    overflow: hidden;
-    border: 1px solid rgb(255 255 255 / 50%);
-    border-radius: 24px;
-    background: linear-gradient(150deg, var(--card-color), #14274a);
-    color: #fff;
-    text-align: left;
-    box-shadow: 0 22px 36px -24px rgb(20 39 74 / 70%);
-    transform: translateX(calc(var(--offset) * 185px)) scale(var(--scale));
-    transition: transform 450ms ease, opacity 450ms ease;
-    z-index: var(--layer);
-}
-.cover-card::before {
-    content: "";
-    position: absolute;
-    width: 250px;
-    height: 250px;
-    right: -100px;
-    bottom: -80px;
-    border: 45px solid rgb(255 255 255 / 8%);
-    border-radius: 50%;
-    pointer-events: none;
-}
-.cover-card[aria-current="true"] {
-    box-shadow: 0 28px 44px -20px rgb(20 39 74 / 55%);
-}
-.cover-number {
-    font-size: 12px;
-    font-weight: 650;
-    letter-spacing: 2px;
-}
-.cover-image {
-    width: 100%;
-    aspect-ratio: 2 / 1;
-    object-fit: contain;
-    border-radius: 12px;
-    background: #fff;
-}
-.cover-name {
-    display: block;
-    margin-top: 14px;
-    font-size: 32px;
-    font-weight: 750;
-}
-.cover-repo {
-    display: block;
-    margin-top: 6px;
-    overflow-wrap: anywhere;
-    font-size: 13px;
-}
-.cover-hint {
-    display: block;
-    margin-top: 16px;
-    font-size: 12px;
-}
-.carousel-controls, .project-actions {
+.gallery-bar, .gallery-controls, .project-actions {
     display: flex;
     align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
+}
+.gallery-bar {
+    justify-content: space-between;
     gap: 12px;
+    padding: 0 4px 12px;
 }
-.round-button {
-    width: 46px;
-    height: 46px;
-    border: 1px solid #8999af;
+.gallery-bar h2 {
+    margin: 0;
+    font-size: clamp(17px, 1.5vw, 22px);
+    font-weight: 730;
+    letter-spacing: normal;
+    color: inherit;
+}
+.gallery-controls { gap: 5px; }
+.gallery-control {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgb(101 170 183 / 40%);
     border-radius: 50%;
-    font-size: 22px;
-    background: #fff;
+    background: rgb(245 255 255 / 90%);
+    color: #104658;
+    cursor: pointer;
 }
-.round-button:hover {
-    background: #edf3ff;
+.gallery-control:hover { background: #d3f5f4; }
+.gallery-control svg { display: block; width: 17px; height: 17px; }
+.coverflow {
+    --rail-gap: clamp(10px, 1.25vw, 18px);
+    position: relative;
+    height: clamp(330px, 58svh, 540px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+    overflow-anchor: none;
+    touch-action: pan-y pinch-zoom;
+    border-radius: 16px;
 }
-.slide-status {
-    min-width: 95px;
-    text-align: center;
-    font-variant-numeric: tabular-nums;
-    font-weight: 700;
+.coverflow::-webkit-scrollbar { display: none; }
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: var(--rail-gap);
+    padding: 4px 4px 48px;
 }
-.active-project {
-    text-align: center;
-    margin-top: 22px;
+.cover-card {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid rgb(227 253 255 / 95%);
+    border-radius: 15px;
+    background: #f3fcfb;
+    color: #103d50;
+    text-align: start;
+    cursor: pointer;
+    box-shadow: 0 3px 9px rgb(1 26 47 / 14%);
+    touch-action: pan-y pinch-zoom;
+    user-select: none;
 }
-.active-project h2 {
-    font-size: 20px;
+.cover-card:nth-child(even) { transform: translateY(36px); }
+.cover-card:focus-visible {
+    outline: 3px solid #0086ae;
+    outline-offset: 1px;
+}
+.cover-art {
+    display: block;
+    width: 100%;
+    aspect-ratio: 2.08;
+    overflow: hidden;
+    background: var(--art-base);
+}
+.cover-art svg { display: block; width: 100%; height: 100%; }
+.cover-caption {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    align-items: center;
+    gap: 3px 7px;
+    padding: clamp(10px, 1vw, 17px);
+}
+.cover-name {
+    font-weight: 740;
+    line-height: 1.25;
+    font-size: clamp(14px, 1.15vw, 18px);
+}
+.cover-repo {
+    grid-area: 2 / 1;
+    min-width: 0;
+    overflow: hidden;
+    color: #4a6875;
+    font-size: clamp(10px, .8vw, 12px);
+    line-height: 1.3;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.cover-arrow {
+    grid-area: 1 / 2 / 3 / 3;
+    color: #2a6879;
+    font-size: 21px;
+    line-height: 1;
 }
 .project-actions {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
     margin-top: 14px;
 }
 .action-link, .preview-button {
@@ -429,13 +439,7 @@ dialog::backdrop {
     .hero-heading {
         padding-top: 40px;
     }
-    .coverflow {
-        height: 420px;
-    }
-    .cover-card {
-        height: 370px;
-        transform: translateX(calc(var(--offset) * 125px)) scale(var(--scale));
-    }
+    .showcase { width: min(100%, 620px); }
     .teacher {
         padding: 24px;
     }
@@ -448,10 +452,8 @@ dialog::backdrop {
     .site-nav {
         gap: 16px;
     }
-    .cover-card {
-        padding: 20px;
-        transform: translateX(calc(var(--offset) * 90px)) scale(var(--scale));
-    }
+    .cover-card { border-radius: 11px; }
+    .cover-card:nth-child(even) { transform: translateY(24px); }
     .search-box {
         flex-basis: 100%;
     }
@@ -480,22 +482,21 @@ dialog::backdrop {
             <h1>서로 다른 생각,<br>하나씩 펼쳐지는 웹.</h1>
             <p class="desc">26명의 시작을 만나보세요.<br>우리 반의 프로젝트를 둘러보고, 새로운 영감을 발견하세요.</p>
         </div>
-        <section class="showcase" id="project-showcase" aria-label="학생 프로젝트 캐러셀" hidden>
-            <div class="coverflow" id="coverflow" aria-roledescription="캐러셀" aria-label="프로젝트 선택: 좌우 방향키로 이동" tabindex="0"></div>
-            <div class="carousel-controls">
-                <button type="button" class="round-button" id="previous-project" aria-label="이전 프로젝트">←</button>
-                <p class="slide-status" id="slide-status" aria-live="polite" aria-atomic="true"></p>
-                <button type="button" class="round-button" id="next-project" aria-label="다음 프로젝트">→</button>
-            </div>
-            <div class="active-project wrap">
-                <h2 id="active-name"></h2>
-                <div class="project-actions">
-                    <a id="active-site" class="action-link primary" target="_blank" rel="noopener noreferrer">사이트 방문 ↗</a>
-                    <a id="active-github" class="action-link" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
-                    <button type="button" class="preview-button" id="open-preview">사이트 미리보기</button>
+        <section class="showcase" id="project-showcase" aria-labelledby="gallery-title" hidden>
+            <div class="gallery-bar">
+                <h2 id="gallery-title">프로젝트 갤러리</h2>
+                <div class="gallery-controls">
+                    <button type="button" class="gallery-control" id="previous-project" aria-label="이전 프로젝트 행" aria-controls="coverflow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m6 14 6-6 6 6"/></svg>
+                    </button>
+                    <button type="button" class="gallery-control" id="next-project" aria-label="다음 프로젝트 행" aria-controls="coverflow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m6 10 6 6 6-6"/></svg>
+                    </button>
                 </div>
             </div>
-            <p class="help-text wrap">카드를 선택하거나 좌우로 밀어보세요. 카드 이미지는 GitHub 저장소 미리보기입니다.</p>
+            <div class="coverflow" id="coverflow" role="region" aria-roledescription="캐러셀" aria-labelledby="gallery-title" tabindex="0">
+                <div class="gallery-grid" id="gallery-grid"></div>
+            </div>
         </section>
         <div class="wrap">
             <section class="teacher" id="teacher-project" aria-labelledby="teacher-title">
@@ -838,79 +839,104 @@ dialog::backdrop {
             repo: card.querySelector('.repo').textContent,
             github: card.querySelector('.github').href
         }));
-        const colors = ['#426cd8', '#00877d', '#a14b76', '#ac6529', '#6957b7', '#287ba7'];
         const stage = document.getElementById('coverflow');
         const dialog = document.getElementById('preview-dialog');
         const frame = document.getElementById('preview-frame');
         const search = document.getElementById('student-search');
-        let current = 0;
         let trigger = null;
-        let pointerStart = null;
-        let suppressClick = false;
+        const grid = document.getElementById('gallery-grid');
+        const palettes = [
+            ['#0a396e', '#5cbce8', '#d7fbff'],
+            ['#064b53', '#38aba2', '#dcfff1'],
+            ['#183579', '#537fe1', '#d4edff'],
+            ['#328a9e', '#a1e7e9', '#f4ffff'],
+            ['#07334e', '#368da5', '#b7f7ef'],
+            ['#1d62a4', '#82c9ed', '#e9faff']
+        ];
+
+        // Architectural studies printed on each gallery cover.
+        function coverArt(index) {
+            const [base, mid, light] = palettes[index % palettes.length];
+            const variation = Math.floor(index / palettes.length);
+            const ink = `garden-ink-${index}`;
+            const paper = `garden-paper-${index}`;
+            const paths = [];
+            const gradient = `url(#${ink})`;
+            const variant = (index + variation) % 6;
+            const stroke = (d, color, width) =>
+                `<path d="${d}" fill="none" stroke="${color}" stroke-width="${width}"/>`;
+            if (variant === 0 || variant === 3) {
+                // A twisting stack of vaulted glass fins.
+                for (let n = 0; n < 34; n++) {
+                    const x = n * 4;
+                    const crown = -48 + n * 1.8 + variation * 4;
+                    const d = `M${-70 + x} 199 Q${-1 + x} ${crown} ${121 + x} ${25 + n * 1.2} Q${179 + x} ${77 - n} ${192 + x} 180`;
+                    paths.push(stroke(d, gradient, n % 5 ? 1.5 : 3));
+                }
+            } else if (variant === 1 || variant === 5) {
+                // Elevation contours bend around two opposing slopes.
+                for (let n = -9; n < 43; n++) {
+                    const y = n * 4.3;
+                    const crest = 61 * Math.sin(n / 18 + variation * .4);
+                    const d = `M-20 ${y + 52} C52 ${y - crest} 89 ${y - 73} 154 ${y - 11} S272 ${y + crest} 348 ${y - 37}`;
+                    paths.push(stroke(d, gradient, n % 7 ? 1.2 : 2.8));
+                }
+            } else if (variant === 2) {
+                // A curtain wall recedes toward a tilted vanishing point.
+                for (let n = -9; n <= 17; n++) {
+                    paths.push(stroke(`M${n * 49 + variation * 13} -10 L${165 + n * 14} 168`, gradient, 2.6));
+                }
+                for (let n = 0; n < 17; n++) {
+                    const y = 163 - 220 * Math.pow(.84, n);
+                    paths.push(stroke(`M-5 ${y - 13} L325 ${y + 16}`, light, 1.4));
+                }
+            } else {
+                // Revolved wireframe of a shell, cropped at the edge of the sheet.
+                for (let n = 0; n < 48; n++) {
+                    paths.push(`<ellipse cx="156" cy="79" rx="135" ry="42" fill="none" stroke="${gradient}" stroke-width="1.4" transform="rotate(${n * 3 + variation * 7} 172 83)"/>`);
+                }
+            }
+            return `<svg viewBox="0 0 320 154" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                <defs>
+                    <linearGradient id="${paper}" x2="1" y2=".8" gradientUnits="objectBoundingBox">
+                        <stop stop-color="${mid}"/><stop offset=".48" stop-color="${base}"/><stop offset="1" stop-color="${mid}"/>
+                    </linearGradient>
+                    <linearGradient id="${ink}" x2="1" y2=".45" gradientUnits="objectBoundingBox">
+                        <stop stop-color="${light}"/><stop offset=".35" stop-color="${mid}"/><stop offset=".58" stop-color="${light}"/><stop offset="1" stop-color="${mid}"/>
+                    </linearGradient>
+                </defs>
+                <rect width="320" height="154" fill="url(#${paper})"/>
+                <g transform="translate(${variant === 3 || variant === 5 ? 320 : 0} 0) scale(${variant === 3 || variant === 5 ? -1 : 1} 1)">${paths.join('')}</g>
+            </svg>`;
+        }
 
         const slides = students.map((student, index) => {
             const button = document.createElement('button');
             button.type = 'button';
             button.className = 'cover-card';
-            button.style.setProperty('--card-color', colors[index % colors.length]);
-            button.setAttribute('aria-label', `${student.name} 프로젝트 선택`);
-            const number = document.createElement('span');
-            number.className = 'cover-number';
-            number.textContent = `FIRST CLASS / ${String(index + 1).padStart(2, '0')}`;
-            const image = document.createElement('img');
-            image.className = 'cover-image';
-            image.alt = `${student.repo} GitHub 저장소 미리보기`;
-            image.loading = 'lazy';
-            image.decoding = 'async';
-            image.referrerPolicy = 'no-referrer';
-            image.addEventListener('error', () => { image.hidden = true; });
-            const text = document.createElement('span');
+            button.setAttribute('aria-label', `${student.name} 사이트 미리보기`);
+            const artwork = document.createElement('span');
+            artwork.className = 'cover-art';
+            artwork.style.setProperty('--art-base', palettes[index % palettes.length][0]);
+            artwork.innerHTML = coverArt(index);
+            const caption = document.createElement('span');
+            caption.className = 'cover-caption';
             const name = document.createElement('span');
             name.className = 'cover-name';
             name.textContent = student.name;
             const repo = document.createElement('span');
             repo.className = 'cover-repo';
             repo.textContent = student.repo;
-            const hint = document.createElement('span');
-            hint.className = 'cover-hint';
-            hint.textContent = '생각이 웹이 되는 곳 ↗';
-            text.append(name, repo, hint);
-            button.append(number, image, text);
-            button.addEventListener('click', () => {
-                if (suppressClick) {
-                    suppressClick = false;
-                    return;
-                }
-                select(index);
-            });
-            stage.append(button);
+            const arrow = document.createElement('span');
+            arrow.className = 'cover-arrow';
+            arrow.setAttribute('aria-hidden', 'true');
+            arrow.textContent = '↗';
+            caption.append(name, repo, arrow);
+            button.append(artwork, caption);
+            button.addEventListener('click', () => openPreview(index, button));
+            grid.append(button);
             return button;
         });
-
-        function select(index) {
-            current = (index + students.length) % students.length;
-            slides.forEach((slide, position) => {
-                let offset = (position - current + students.length) % students.length;
-                if (offset > students.length / 2) offset -= students.length;
-                const distance = Math.abs(offset);
-                slide.hidden = distance > 3;
-                slide.style.setProperty('--offset', offset);
-                slide.style.setProperty('--scale', 1 - Math.min(distance, 3) * 0.085);
-                slide.style.setProperty('--layer', 10 - distance);
-                slide.tabIndex = position === current ? 0 : -1;
-                slide.setAttribute('aria-current', String(position === current));
-                const image = slide.querySelector('img');
-                if (distance <= 3 && !image.hasAttribute('src')) {
-                    image.src = `https://opengraph.githubassets.com/1/${students[position].repo}`;
-                }
-            });
-            const student = students[current];
-            document.getElementById('slide-status').textContent = `${String(current + 1).padStart(2, '0')} / ${students.length}`;
-            document.getElementById('active-name').textContent = `${student.name}의 프로젝트`;
-            document.getElementById('active-site').href = student.url;
-            document.getElementById('active-github').href = student.github;
-        }
-
         function openPreview(index, opener) {
             const student = students[index];
             trigger = opener;
@@ -921,33 +947,12 @@ dialog::backdrop {
             dialog.showModal();
         }
 
-        document.getElementById('previous-project').addEventListener('click', () => select(current - 1));
-        document.getElementById('next-project').addEventListener('click', () => select(current + 1));
-        stage.addEventListener('keydown', (event) => {
-            const targets = { ArrowLeft: current - 1, ArrowRight: current + 1, Home: 0, End: students.length - 1 };
-            if (!(event.key in targets)) return;
-            event.preventDefault();
-            select(targets[event.key]);
-            slides[current].focus({ preventScroll: true });
-        });
-        stage.addEventListener('pointerdown', (event) => {
-            if (!event.isPrimary || event.button !== 0) return;
-            pointerStart = { x: event.clientX, y: event.clientY, id: event.pointerId };
-            suppressClick = false;
-        });
-        stage.addEventListener('pointerup', (event) => {
-            if (!pointerStart || pointerStart.id !== event.pointerId) return;
-            const x = event.clientX - pointerStart.x;
-            const y = event.clientY - pointerStart.y;
-            pointerStart = null;
-            if (Math.abs(x) > 45 && Math.abs(x) > Math.abs(y)) {
-                suppressClick = true;
-                select(current + (x < 0 ? 1 : -1));
-            }
-        });
-        stage.addEventListener('pointercancel', () => { pointerStart = null; });
-        stage.addEventListener('dragstart', (event) => event.preventDefault());
-        document.getElementById('open-preview').addEventListener('click', (event) => openPreview(current, event.currentTarget));
+        function scrollRow(direction) {
+            const distance = slides[2].offsetTop - slides[0].offsetTop;
+            stage.scrollBy({ top: distance * direction });
+        }
+        document.getElementById('previous-project').addEventListener('click', () => scrollRow(-1));
+        document.getElementById('next-project').addEventListener('click', () => scrollRow(1));
         document.querySelectorAll('[data-student-index]').forEach((button) => {
             button.hidden = false;
             button.addEventListener('click', () => openPreview(Number(button.dataset.studentIndex), button));
@@ -969,7 +974,6 @@ dialog::backdrop {
             document.getElementById('result-count').textContent = query ? `검색 결과 ${matches}명 / 전체 ${students.length}명` : `전체 ${students.length}명 · 이름순`;
             document.getElementById('empty-state').hidden = matches !== 0;
         });
-        select(0);
         document.getElementById('project-showcase').hidden = false;
         document.getElementById('project-search').hidden = false;
     })();

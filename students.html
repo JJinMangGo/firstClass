@@ -4,101 +4,161 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="2026 채용연계 웹 콘텐츠 교육, 26명의 학생 프로젝트와 강사 예시를 한곳에서 만나보세요.">
-    <title>우리의 첫 번째 웹 · 학생 프로젝트</title>
+    <title>학생 프로젝트 · firstClass</title>
     <link rel="stylesheet" href="font/css/pretendardvariable.css">
     <link rel="stylesheet" href="css/default.css">
-    <!-- UI conventions: https://github.com/hslcrb/limsflex
-         Only students.html is changed. The original emblem is embedded without altering its artwork.
-         Student cards below remain the source of truth and work without JavaScript.
-         Visual reference: https://korean.visitkorea.or.kr/main/main.do (layered card carousel).
-         GitHub OG images are repository previews, not deployment screenshots. -->
+    <!-- The static directory is the source for all student names and project links. -->
     <style>
 
 :root {
-    --ink: #172540;
-    --muted: #526079;
-    --blue: #0754d6;
-    --line: #dce3ed;
-    --paper: #f6f8fc;
+    --ink: #142f43;
+    --muted: #4c6674;
+    --blue: #165470;
+    --line: #ccdadf;
+    --paper: #f4f8f9;
 }
-html, body {
-    overflow-x: visible;
+html {
+    scroll-snap-type: y proximity;
+    scroll-padding-top: 12px;
 }
 body {
-    font-family: "Pretendard Variable", system-ui, sans-serif;
     color: var(--ink);
-    background: #fff;
+    background: #f9fbfc;
+    font-family: "Pretendard Variable", system-ui, sans-serif;
 }
-button, a, input {
-    touch-action: manipulation;
-}
-a:hover {
-    text-decoration: underline;
-}
-:focus-visible {
-    outline: 3px solid var(--blue);
-    outline-offset: 5px;
-}
-.wrap {
-    width: min(1280px, calc(100% - 48px));
-    margin-inline: auto;
-}
+[hidden] { display: none !important; }
+a:hover { text-decoration: underline; text-underline-offset: .22em; }
+:focus-visible { outline: 3px solid #00749d; outline-offset: 4px; }
+.wrap { width: min(1360px, calc(100% - 80px)); margin-inline: auto; }
 .skip-link {
-    position: absolute;
-    top: -100px;
-    left: 20px;
-    z-index: 100;
-    padding: 12px;
-    background: #fff;
-}
-.skip-link:focus {
+    position: fixed;
     top: 12px;
+    left: 12px;
+    z-index: 10;
+    padding: 12px 20px;
+    background: white;
+    transform: translateY(-170%);
 }
+.skip-link:focus { transform: none; }
 .site-header {
+    min-height: 76px;
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
-    padding-block: 24px;
-    border-bottom: 1px solid var(--line);
+    gap: 22px;
+    scroll-snap-align: start;
 }
 .brand {
-    font-size: 22px;
-    font-weight: 850;
-    letter-spacing: -1px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #183c4d;
+    font-size: 25px;
+    font-weight: 760;
 }
-.brand span, .eyebrow {
-    color: var(--blue);
-}
-.site-nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 24px;
+.brand:hover, .site-nav a:hover, .directory-link:hover { text-decoration: none; }
+.site-nav { display: flex; gap: 6px; align-items: center; }
+.site-nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 42px;
+    padding-inline: 16px;
+    border-radius: 24px;
     font-size: 14px;
-    font-weight: 650;
+    font-weight: 620;
+    color: #45616d;
 }
-.hero-heading {
-    padding-top: 64px;
-    text-align: center;
+.site-nav a:hover, .site-nav a[aria-current] { color: #154a56; background: #dfecee; }
+.exhibition {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: minmax(0, .94fr) minmax(0, 1.06fr);
+    align-items: center;
+    column-gap: clamp(32px, 6vw, 110px);
+    min-height: calc(100svh - 76px);
+    padding: clamp(44px, 6vw, 92px) max(6vw, calc((100% - 1340px) / 2));
+    border-block: 1px solid #c6d4d9;
+    background-color: #e3e8ec;
 }
-.eyebrow {
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 2px;
+
+/* Transmitted light is shared across the wall. Each pane has its own tint and polished edges. */
+.glass-wall {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    display: flex;
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse at 48% -18%, #fff 4%, transparent 55%),
+        radial-gradient(ellipse at 13% 100%, #9fc9dd 0, transparent 55%),
+        radial-gradient(ellipse at 84% 88%, #b8dcd4 0, transparent 50%),
+        linear-gradient(110deg, #dce2e6, #fafbfc 50%, #cdd5d9);
 }
-h1 {
-    margin-top: 14px;
-    font-size: clamp(32px, 4vw, 56px);
-    font-weight: 800;
-    line-height: 1.15;
-    letter-spacing: -2px;
+.glass-wall > i {
+    flex: var(--width) 1 0;
+    min-width: 0;
+    background-color: rgb(63 91 103 / var(--tint));
+    background-image:
+        linear-gradient(90deg, rgb(255 255 255 / .78), transparent 2px),
+        linear-gradient(270deg, rgb(47 72 86 / .10), transparent var(--bevel, 5px)),
+        linear-gradient(97deg, rgb(255 255 255 / .23), transparent 58%);
+    box-shadow: inset -1px 0 rgb(255 255 255 / .67), inset 2px 0 rgb(255 255 255 / .38);
 }
-.desc {
-    margin-top: 18px;
-    color: var(--muted);
-    line-height: 1.7;
+.glass-wall > i:nth-child(4n + 2) { --bevel: 13px; }
+.glass-wall > i:nth-child(3n) { background-color: rgb(255 255 255 / var(--tint)); }
+.exhibit-intro { max-width: 35rem; }
+.exhibit-course { color: #3f5a66; font-size: 15px; font-weight: 550; }
+.exhibit-intro h1 {
+    margin: 16px 0 20px;
+    color: #172e3a;
+    font: 660 clamp(40px, 4.9vw, 80px)/1.14 "Pretendard Variable", system-ui, sans-serif;
+    letter-spacing: normal;
 }
+.exhibit-description { color: #38505c; font-size: clamp(16px, 1.25vw, 19px); line-height: 1.65; }
+.directory-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+    min-height: 46px;
+    margin-top: 32px;
+    padding: 10px 18px;
+    border: 1px solid #234b55;
+    border-radius: 9px;
+    color: #fff;
+    background-color: #224650;
+    font-size: 14px;
+    font-weight: 600;
+}
+.directory-link:hover { background-color: #153741; }
+.exhibition > .showcase { min-width: 0; }
+@media (max-width: 820px) {
+    html { scroll-snap-type: none; }
+    .exhibition {
+        grid-template-columns: minmax(0, 1fr);
+        align-content: start;
+        gap: 36px;
+        padding: 48px max(22px, 5vw) 32px;
+    }
+    .exhibit-intro h1 { margin-block: 10px 12px; }
+    .directory-link { margin-top: 20px; }
+}
+@media (max-width: 580px) {
+    .site-header { min-height: 60px; gap: 4px; }
+    .brand { font-size: 21px; }
+    .site-header .site-nav { gap: 0; }
+    .site-nav a { font-size: 12px; padding-inline: 8px; }
+    .exhibition { padding: 36px 18px 28px; gap: 26px; }
+    .glass-wall > i:nth-child(3n + 1) { display: none; }
+}
+@media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+}
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-snap-type: none; }
+}
+
 .showcase {
     padding-top: 32px;
 }
@@ -238,10 +298,10 @@ h1 {
     align-items: center;
     gap: 20px;
     padding: 26px 32px;
-    margin-top: 54px;
+    margin: 0 0 60px;
     border: 1px solid #cddcf6;
     border-radius: 20px;
-    background: #eff5ff;
+    background: linear-gradient(115deg, #e4f1f1, #edf5f6);
 }
 .teacher h2 {
     margin-top: 6px;
@@ -251,8 +311,8 @@ h1 {
     margin: 0;
 }
 .directory {
-    margin-block: 64px;
-    scroll-margin-top: 24px;
+    padding-block: clamp(44px, 6vw, 90px) 48px;
+    scroll-snap-align: start;
 }
 .section-heading {
     display: flex;
@@ -264,8 +324,9 @@ h1 {
 }
 h2 {
     font-size: 28px;
-    letter-spacing: -0.7px;
 }
+.directory h2 { font-size: clamp(30px, 3vw, 46px); line-height: 1.15; }
+.eyebrow { color: var(--blue); font-size: 13px; font-weight: 650; }
 .section-heading p {
     margin-top: 8px;
     color: var(--muted);
@@ -291,7 +352,7 @@ h2 {
 }
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 245px), 1fr));
     gap: 16px;
 }
 .card {
@@ -300,13 +361,13 @@ h2 {
     gap: 20px;
     padding: 24px;
     min-width: 0;
-    background: var(--paper);
+    background: #fcfefe;
     border: 1px solid var(--line);
     border-radius: 16px;
 }
 .card:hover {
-    border-color: #8aa9db;
-    background: #f0f5ff;
+    border-color: #85b2bb;
+    background: #f4fbfb;
 }
 .card-top {
     display: flex;
@@ -318,15 +379,15 @@ h2 {
     place-items: center;
     width: 42px;
     height: 42px;
-    border: 1px solid #cfdbec;
+    border: 1px solid #c5dce1;
     border-radius: 12px;
-    color: var(--blue);
-    background: #fff;
+    color: #245562;
+    background: #e8f3f3;
     font-size: 13px;
     font-weight: 750;
 }
 .name {
-    color: var(--blue);
+    color: var(--ink);
     font-size: 20px;
     font-weight: 750;
 }
@@ -364,9 +425,9 @@ h2 {
     justify-content: flex-start;
     flex-wrap: wrap;
     gap: 36px;
-    padding: 48px 24px;
+    padding: 32px max(24px, calc((100% - 1360px) / 2));
     border-top: 1px solid var(--line);
-    background: #f6f8fc;
+    background: #e9f1f3;
 }
 .emblem {
     width: 136px;
@@ -467,19 +528,39 @@ dialog::backdrop {
 <body>
     <a class="skip-link" href="#student-projects">학생 프로젝트 목록 바로가기</a>
     <header class="site-header wrap" id="site-header">
-        <a class="brand" href="index.html">first<span>Class.</span></a>
+        <a class="brand" href="index.html" aria-label="firstClass 홈">
+            firstClass
+        </a>
         <nav class="site-nav" id="page-navigation" aria-label="페이지 탐색">
-            <a href="#student-projects">학생 프로젝트</a>
+            <a href="#exhibition">전시관</a>
+            <a href="#student-projects">학생 목록</a>
             <a href="#teacher-project">강사 예시</a>
-            <a href="#contributor">제작 기여</a>
         </nav>
     </header>
     <main>
-        <div class="hero-heading wrap">
-            <p class="eyebrow">2026 · OUR FIRST WEB</p>
-            <h1>서로 다른 생각,<br>하나씩 펼쳐지는 웹.</h1>
-            <p class="desc">26명의 시작을 만나보세요.<br>우리 반의 프로젝트를 둘러보고, 새로운 영감을 발견하세요.</p>
-        </div>
+        <section class="exhibition" id="exhibition" aria-labelledby="exhibit-title">
+            <div class="glass-wall" aria-hidden="true">
+                <i style="--width: 8; --tint: 10%"></i>
+                <i style="--width: 10; --tint: 3%"></i>
+                <i style="--width: 10; --tint: 40%"></i>
+                <i style="--width: 20; --tint: 16%"></i>
+                <i style="--width: 11; --tint: 9%"></i>
+                <i style="--width: 8; --tint: 55%"></i>
+                <i style="--width: 9; --tint: 2%"></i>
+                <i style="--width: 6; --tint: 6%"></i>
+                <i style="--width: 15; --tint: 65%"></i>
+                <i style="--width: 9; --tint: 4%"></i>
+                <i style="--width: 6; --tint: 12%"></i>
+                <i style="--width: 8; --tint: 22%"></i>
+                <i style="--width: 8; --tint: 10%"></i>
+                <i style="--width: 10; --tint: 20%"></i>
+            </div>
+            <div class="exhibit-intro">
+                <p class="exhibit-course">2026 웹 콘텐츠 과정</p>
+                <h1 id="exhibit-title">학생 프로젝트</h1>
+                <p class="exhibit-description">우리 반 26명이 만든 웹사이트를 둘러보세요.</p>
+                <a class="directory-link" href="#student-projects">학생 목록 보기 <span aria-hidden="true">↓</span></a>
+            </div>
         <section class="showcase" id="project-showcase" aria-label="학생 프로젝트 캐러셀" hidden>
             <div class="coverflow" id="coverflow" aria-roledescription="캐러셀" aria-label="프로젝트 선택: 좌우 방향키로 이동" tabindex="0"></div>
             <div class="carousel-controls">
@@ -497,27 +578,17 @@ dialog::backdrop {
             </div>
             <p class="help-text wrap">카드를 선택하거나 좌우로 밀어보세요. 카드 이미지는 GitHub 저장소 미리보기입니다.</p>
         </section>
+        </section>
         <div class="wrap">
-            <section class="teacher" id="teacher-project" aria-labelledby="teacher-title">
-                <div>
-                    <p class="eyebrow">TEACHER'S PROJECT</p>
-                    <h2 id="teacher-title">강사 예시 · 찐망고</h2>
-                    <p class="repo">JJinMangGo/firstClass</p>
-                </div>
-                <div class="project-actions">
-                    <a class="action-link primary" href="https://jjinmanggo.github.io/firstClass/" target="_blank" rel="noopener noreferrer">배포 페이지 보기 ↗</a>
-                    <a class="action-link" href="https://github.com/JJinMangGo/firstClass" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
-                </div>
-            </section>
             <section class="directory" id="student-projects" aria-labelledby="directory-title">
                 <div class="section-heading">
                     <div>
-                        <h2 id="directory-title">우리 반 프로젝트</h2>
+                        <h2 id="directory-title">학생 프로젝트</h2>
                         <p id="result-count" role="status">전체 26명 · 이름순</p>
                     </div>
                     <div class="search-box" id="project-search" hidden>
                         <label for="student-search">이름 또는 GitHub 아이디 검색</label>
-                        <input type="search" id="student-search" name="student-search" placeholder="찾고 싶은 친구가 있나요?" autocomplete="off">
+                        <input type="search" id="student-search" name="student-search" placeholder="이름 또는 GitHub 아이디" autocomplete="off">
                     </div>
                 </div>
                 <div class="grid" id="student-grid">
@@ -808,15 +879,26 @@ dialog::backdrop {
                         </div>
                     </article>
                 </div>
-                <p class="empty-state" id="empty-state" hidden>검색 결과가 없어요. 이름이나 아이디를 다시 입력해 주세요.</p>
-                <p class="note">※ 학생이 배포 주소나 저장소 이름을 변경하면 이 페이지의 링크도 수정해야 합니다. 외부 링크는 새 창에서 열립니다.</p>
+                <p class="empty-state" id="empty-state" hidden>검색 결과가 없습니다. 다른 이름이나 아이디를 입력해 주세요.</p>
+                <p class="note">학생 이름을 누르면 배포한 사이트가 새 창에서 열립니다.</p>
+            </section>
+            <section class="teacher" id="teacher-project" aria-labelledby="teacher-title">
+                <div>
+                    <p class="eyebrow">강사 프로젝트</p>
+                    <h2 id="teacher-title">찐망고의 예시 프로젝트</h2>
+                    <p class="repo">JJinMangGo/firstClass</p>
+                </div>
+                <div class="project-actions">
+                    <a class="action-link primary" href="https://jjinmanggo.github.io/firstClass/" target="_blank" rel="noopener noreferrer">배포 페이지 보기 ↗</a>
+                    <a class="action-link" href="https://github.com/JJinMangGo/firstClass" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+                </div>
             </section>
         </div>
     </main>
     <footer class="signature" id="contributor">
          <div>
-            <p class="eyebrow">DESIGN &amp; DEVELOPMENT CONTRIBUTION</p>
-            <p class="credit">PRed by <a href="https://github.com/hslcrb" target="_blank" rel="noopener noreferrer">hslcrb</a></p>
+            <p class="eyebrow">디자인 · 개발 기여</p>
+            <p class="credit"><a href="https://github.com/hslcrb" target="_blank" rel="noopener noreferrer">hslcrb</a></p>
             <p class="note">UI 코드 기준 · <a href="https://github.com/hslcrb/limsflex" target="_blank" rel="noopener noreferrer">limsflex</a></p>
         </div>
     </footer>
@@ -829,6 +911,20 @@ dialog::backdrop {
         <a class="github" id="preview-external" target="_blank" rel="noopener noreferrer">사이트 새 창으로 열기 ↗</a>
         <iframe class="preview-frame" id="preview-frame" title="학생 사이트 미리보기" sandbox="allow-scripts" referrerpolicy="no-referrer"></iframe>
     </dialog>
+    <script>
+    (() => {
+        const links = Array.from(document.querySelectorAll('#page-navigation a'));
+        const observer = new IntersectionObserver((entries) => {
+            const visible = entries.find(entry => entry.isIntersecting);
+            if (!visible) return;
+            links.forEach(link => {
+                if (link.hash === '#' + visible.target.id) link.setAttribute('aria-current', 'location');
+                else link.removeAttribute('aria-current');
+            });
+        }, { rootMargin: '-10% 0px -65% 0px' });
+        links.forEach(link => observer.observe(document.querySelector(link.hash)));
+    })();
+    </script>
     <script>
     (() => {
         const cards = Array.from(document.querySelectorAll('#student-grid .card'));

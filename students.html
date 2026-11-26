@@ -100,112 +100,145 @@ h1 {
     line-height: 1.7;
 }
 .showcase {
-    padding-top: 32px;
+    width: min(100%, 760px);
+    min-width: 0;
+    margin-inline: auto;
+    color: #123f51;
 }
-.coverflow {
-    position: relative;
-    display: grid;
-    place-items: center;
-    height: 470px;
-    overflow: clip;
-    isolation: isolate;
-    touch-action: pan-y;
-}
-.cover-card {
-    grid-area: 1 / 1;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: min(340px, 76vw);
-    height: 410px;
-    padding: 26px;
-    overflow: hidden;
-    border: 1px solid rgb(255 255 255 / 50%);
-    border-radius: 24px;
-    background: linear-gradient(150deg, var(--card-color), #14274a);
-    color: #fff;
-    text-align: left;
-    box-shadow: 0 22px 36px -24px rgb(20 39 74 / 70%);
-    transform: translateX(calc(var(--offset) * 185px)) scale(var(--scale));
-    transition: transform 450ms ease, opacity 450ms ease;
-    z-index: var(--layer);
-}
-.cover-card::before {
-    content: "";
-    position: absolute;
-    width: 250px;
-    height: 250px;
-    right: -100px;
-    bottom: -80px;
-    border: 45px solid rgb(255 255 255 / 8%);
-    border-radius: 50%;
-    pointer-events: none;
-}
-.cover-card[aria-current="true"] {
-    box-shadow: 0 28px 44px -20px rgb(20 39 74 / 55%);
-}
-.cover-number {
-    font-size: 12px;
-    font-weight: 650;
-    letter-spacing: 2px;
-}
-.cover-image {
-    width: 100%;
-    aspect-ratio: 2 / 1;
-    object-fit: contain;
-    border-radius: 12px;
-    background: #fff;
-}
-.cover-name {
-    display: block;
-    margin-top: 14px;
-    font-size: 32px;
-    font-weight: 750;
-}
-.cover-repo {
-    display: block;
-    margin-top: 6px;
-    overflow-wrap: anywhere;
-    font-size: 13px;
-}
-.cover-hint {
-    display: block;
-    margin-top: 16px;
-    font-size: 12px;
-}
-.carousel-controls, .project-actions {
+.gallery-bar, .gallery-controls, .project-actions {
     display: flex;
     align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
+}
+.gallery-bar {
+    justify-content: space-between;
     gap: 12px;
+    margin: 0 4px 10px;
+    padding: 5px 7px 5px 17px;
+    border: 1px solid rgb(238 255 255 / 75%);
+    border-radius: 18px;
+    background: rgb(238 252 252 / 92%);
+    color: #174a5c;
+    box-shadow: 0 3px 10px rgb(7 40 61 / 8%);
 }
-.round-button {
-    width: 46px;
-    height: 46px;
-    border: 1px solid #8999af;
+.gallery-bar h2 {
+    margin: 0;
+    font-size: clamp(17px, 1.5vw, 22px);
+    font-weight: 730;
+    letter-spacing: normal;
+    color: inherit;
+}
+.gallery-controls { gap: 5px; }
+.gallery-control {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgb(101 170 183 / 40%);
     border-radius: 50%;
-    font-size: 22px;
-    background: #fff;
+    background: rgb(245 255 255 / 90%);
+    color: #104658;
+    cursor: pointer;
 }
-.round-button:hover {
-    background: #edf3ff;
+.gallery-control:hover { background: #d3f5f4; }
+.gallery-control > span {
+    font: 500 18px/1 system-ui, sans-serif;
 }
-.slide-status {
-    min-width: 95px;
-    text-align: center;
+.gallery-control .pause-icon { font-size: 16px; }
+.gallery-control .play-icon { font-size: 13px; }
+.coverflow {
+    --rail-gap: clamp(10px, 1.25vw, 18px);
+    position: relative;
+    height: clamp(330px, 58svh, 540px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+    overflow-anchor: none;
+    touch-action: pan-y pinch-zoom;
+    border-radius: 16px;
+}
+.coverflow::-webkit-scrollbar { display: none; }
+.gallery-grid {
+    display: grid;
+    gap: var(--rail-gap);
+    padding: 4px 4px 48px;
+}
+.gallery-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: var(--rail-gap);
+}
+.coverflow.is-dragging, .coverflow.is-dragging .cover-card { cursor: grabbing; }
+.gallery-control .play-icon, .gallery-control[aria-pressed="true"] .pause-icon { display: none; }
+.gallery-control[aria-pressed="true"] .play-icon { display: block; }
+.cover-card {
+    --pane-color: rgb(240 249 250 / 79%);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: 1fr auto auto;
+    align-items: start;
+    width: 100%;
+    min-width: 0;
+    height: 132px;
+    padding: 15px 17px 16px;
+    overflow: hidden;
+    border: 1px solid rgb(247 255 255 / 80%);
+    border-radius: 14px;
+    background-color: var(--pane-color);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    color: #173d4a;
+    font-family: inherit;
+    letter-spacing: normal;
+    line-height: 1.3;
+    text-align: start;
+    cursor: pointer;
+    box-shadow: 0 3px 12px rgb(26 64 72 / 8%);
+    touch-action: pan-y pinch-zoom;
+    user-select: none;
+}
+.cover-card[data-tint="1"] { --pane-color: rgb(217 241 235 / 84%); }
+.cover-card[data-tint="2"] { --pane-color: rgb(221 237 248 / 84%); }
+.cover-card[data-tint="3"] { --pane-color: rgb(234 247 244 / 84%); }
+.cover-card:nth-child(even) { transform: translateY(32px); }
+.cover-card:hover { border-color: #9ec4ca; }
+.cover-card:focus-visible {
+    outline: 3px solid #0086ae;
+    outline-offset: 1px;
+}
+.cover-index {
+    grid-area: 1 / 1;
+    color: #496774;
+    font-size: 13px;
+    font-weight: 550;
     font-variant-numeric: tabular-nums;
-    font-weight: 700;
 }
-.active-project {
-    text-align: center;
-    margin-top: 22px;
+.cover-name {
+    grid-area: 2 / 1 / 3 / -1;
+    font-size: clamp(20px, 1.6vw, 22px);
+    font-weight: 640;
 }
-.active-project h2 {
-    font-size: 20px;
+.cover-repo {
+    grid-area: 3 / 1 / 4 / -1;
+    min-width: 0;
+    margin-top: 3px;
+    overflow: hidden;
+    color: #47636c;
+    font-size: 13px;
+    font-weight: 450;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.cover-arrow {
+    grid-area: 1 / 2;
+    color: #365f67;
+    font-size: 19px;
+    line-height: 1;
 }
 .project-actions {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
     margin-top: 14px;
 }
 .action-link, .preview-button {
@@ -429,13 +462,10 @@ dialog::backdrop {
     .hero-heading {
         padding-top: 40px;
     }
-    .coverflow {
-        height: 420px;
-    }
-    .cover-card {
-        height: 370px;
-        transform: translateX(calc(var(--offset) * 125px)) scale(var(--scale));
-    }
+    .showcase { width: min(100%, 620px); }
+    .cover-card { height: 112px; padding: 13px 14px; }
+    .cover-name { font-size: 19px; }
+    .cover-repo { font-size: 12px; }
     .teacher {
         padding: 24px;
     }
@@ -448,10 +478,8 @@ dialog::backdrop {
     .site-nav {
         gap: 16px;
     }
-    .cover-card {
-        padding: 20px;
-        transform: translateX(calc(var(--offset) * 90px)) scale(var(--scale));
-    }
+    .cover-card { border-radius: 11px; }
+    .cover-card:nth-child(even) { transform: translateY(24px); }
     .search-box {
         flex-basis: 100%;
     }
@@ -481,21 +509,24 @@ dialog::backdrop {
             <p class="desc">26명의 시작을 만나보세요.<br>우리 반의 프로젝트를 둘러보고, 새로운 영감을 발견하세요.</p>
         </div>
         <section class="showcase" id="project-showcase" aria-label="학생 프로젝트 캐러셀" hidden>
-            <div class="coverflow" id="coverflow" aria-roledescription="캐러셀" aria-label="프로젝트 선택: 좌우 방향키로 이동" tabindex="0"></div>
-            <div class="carousel-controls">
-                <button type="button" class="round-button" id="previous-project" aria-label="이전 프로젝트">←</button>
-                <p class="slide-status" id="slide-status" aria-live="polite" aria-atomic="true"></p>
-                <button type="button" class="round-button" id="next-project" aria-label="다음 프로젝트">→</button>
-            </div>
-            <div class="active-project wrap">
-                <h2 id="active-name"></h2>
-                <div class="project-actions">
-                    <a id="active-site" class="action-link primary" target="_blank" rel="noopener noreferrer">사이트 방문 ↗</a>
-                    <a id="active-github" class="action-link" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
-                    <button type="button" class="preview-button" id="open-preview">사이트 미리보기</button>
+            <div class="gallery-bar">
+                <h2 id="gallery-title">프로젝트 갤러리</h2>
+                <div class="gallery-controls">
+                    <button type="button" class="gallery-control" id="gallery-playback" aria-label="자동 이동 일시정지" aria-pressed="false" aria-controls="coverflow">
+                        <span class="pause-icon" aria-hidden="true">Ⅱ</span>
+                        <span class="play-icon" aria-hidden="true">▶</span>
+                    </button>
+                    <button type="button" class="gallery-control" id="previous-project" aria-label="이전 프로젝트 행" aria-controls="coverflow">
+                        <span aria-hidden="true">↑</span>
+                    </button>
+                    <button type="button" class="gallery-control" id="next-project" aria-label="다음 프로젝트 행" aria-controls="coverflow">
+                        <span aria-hidden="true">↓</span>
+                    </button>
                 </div>
             </div>
-            <p class="help-text wrap">카드를 선택하거나 좌우로 밀어보세요. 카드 이미지는 GitHub 저장소 미리보기입니다.</p>
+            <div class="coverflow" id="coverflow" role="region" aria-roledescription="캐러셀" aria-labelledby="gallery-title" tabindex="0">
+                <div class="gallery-grid" id="gallery-grid"></div>
+            </div>
         </section>
         <div class="wrap">
             <section class="teacher" id="teacher-project" aria-labelledby="teacher-title">
@@ -838,79 +869,41 @@ dialog::backdrop {
             repo: card.querySelector('.repo').textContent,
             github: card.querySelector('.github').href
         }));
-        const colors = ['#426cd8', '#00877d', '#a14b76', '#ac6529', '#6957b7', '#287ba7'];
         const stage = document.getElementById('coverflow');
         const dialog = document.getElementById('preview-dialog');
         const frame = document.getElementById('preview-frame');
         const search = document.getElementById('student-search');
-        let current = 0;
         let trigger = null;
-        let pointerStart = null;
-        let suppressClick = false;
-
+        const grid = document.getElementById('gallery-grid');
         const slides = students.map((student, index) => {
             const button = document.createElement('button');
             button.type = 'button';
             button.className = 'cover-card';
-            button.style.setProperty('--card-color', colors[index % colors.length]);
-            button.setAttribute('aria-label', `${student.name} 프로젝트 선택`);
+            button.setAttribute('aria-label', `${student.name} 사이트 미리보기`);
+            button.dataset.tint = String(index % 4);
             const number = document.createElement('span');
-            number.className = 'cover-number';
-            number.textContent = `FIRST CLASS / ${String(index + 1).padStart(2, '0')}`;
-            const image = document.createElement('img');
-            image.className = 'cover-image';
-            image.alt = `${student.repo} GitHub 저장소 미리보기`;
-            image.loading = 'lazy';
-            image.decoding = 'async';
-            image.referrerPolicy = 'no-referrer';
-            image.addEventListener('error', () => { image.hidden = true; });
-            const text = document.createElement('span');
+            number.className = 'cover-index';
+            number.textContent = String(index + 1).padStart(2, '0');
             const name = document.createElement('span');
             name.className = 'cover-name';
             name.textContent = student.name;
             const repo = document.createElement('span');
             repo.className = 'cover-repo';
             repo.textContent = student.repo;
-            const hint = document.createElement('span');
-            hint.className = 'cover-hint';
-            hint.textContent = '생각이 웹이 되는 곳 ↗';
-            text.append(name, repo, hint);
-            button.append(number, image, text);
-            button.addEventListener('click', () => {
-                if (suppressClick) {
-                    suppressClick = false;
-                    return;
-                }
-                select(index);
-            });
-            stage.append(button);
+            const arrow = document.createElement('span');
+            arrow.className = 'cover-arrow';
+            arrow.setAttribute('aria-hidden', 'true');
+            arrow.textContent = '↗';
+            button.append(number, arrow, name, repo);
+            button.addEventListener('click', () => openPreview(index, button));
+            if (index % 2 === 0) {
+                const row = document.createElement('div');
+                row.className = 'gallery-row';
+                grid.append(row);
+            }
+            grid.lastElementChild.append(button);
             return button;
         });
-
-        function select(index) {
-            current = (index + students.length) % students.length;
-            slides.forEach((slide, position) => {
-                let offset = (position - current + students.length) % students.length;
-                if (offset > students.length / 2) offset -= students.length;
-                const distance = Math.abs(offset);
-                slide.hidden = distance > 3;
-                slide.style.setProperty('--offset', offset);
-                slide.style.setProperty('--scale', 1 - Math.min(distance, 3) * 0.085);
-                slide.style.setProperty('--layer', 10 - distance);
-                slide.tabIndex = position === current ? 0 : -1;
-                slide.setAttribute('aria-current', String(position === current));
-                const image = slide.querySelector('img');
-                if (distance <= 3 && !image.hasAttribute('src')) {
-                    image.src = `https://opengraph.githubassets.com/1/${students[position].repo}`;
-                }
-            });
-            const student = students[current];
-            document.getElementById('slide-status').textContent = `${String(current + 1).padStart(2, '0')} / ${students.length}`;
-            document.getElementById('active-name').textContent = `${student.name}의 프로젝트`;
-            document.getElementById('active-site').href = student.url;
-            document.getElementById('active-github').href = student.github;
-        }
-
         function openPreview(index, opener) {
             const student = students[index];
             trigger = opener;
@@ -921,33 +914,189 @@ dialog::backdrop {
             dialog.showModal();
         }
 
-        document.getElementById('previous-project').addEventListener('click', () => select(current - 1));
-        document.getElementById('next-project').addEventListener('click', () => select(current + 1));
+        const playback = document.getElementById('gallery-playback');
+        const motion = matchMedia('(prefers-reduced-motion: reduce)');
+        let paused = motion.matches;
+        let visible = false;
+        let hovering = false;
+        let interacting = false;
+        let resumeTimer = 0;
+        let request = 0;
+        let previousTime = 0;
+        let remainder = 0;
+        let drag = null;
+        let dragged = false;
+
+        function rowHeight() {
+            const first = grid.firstElementChild;
+            return first?.nextElementSibling
+                ? first.nextElementSibling.offsetTop - first.offsetTop
+                : 0;
+        }
+
+        // Recycle complete rows beyond the viewport. Each student keeps a single button.
+        function makeRoom() {
+            const height = rowHeight();
+            const max = stage.scrollHeight - stage.clientHeight;
+            if (!height || max <= height * 3) return;
+            if (stage.scrollTop < height) {
+                grid.prepend(grid.lastElementChild);
+                stage.scrollTop += height;
+            } else if (stage.scrollTop > max - height) {
+                grid.append(grid.firstElementChild);
+                stage.scrollTop -= height;
+            }
+        }
+
+        function moveRow(direction) {
+            makeRoom();
+            stage.scrollTop += rowHeight() * direction;
+        }
+
+        function canFlow() {
+            return visible && !paused && !document.hidden && !dialog.open && !hovering &&
+                !interacting && !stage.contains(document.activeElement);
+        }
+
+        function tick(time) {
+            request = 0;
+            if (!canFlow()) {
+                previousTime = 0;
+                return;
+            }
+            if (previousTime) {
+                // Browsers round scrollTop. Carry fractions to keep the speed independent of refresh rate.
+                remainder += Math.min(64, time - previousTime) * 0.018;
+                if (remainder >= 1) {
+                    makeRoom();
+                    const pixels = Math.floor(remainder);
+                    stage.scrollTop += pixels;
+                    remainder -= pixels;
+                }
+            }
+            previousTime = time;
+            request = requestAnimationFrame(tick);
+        }
+
+        function updateFlow() {
+            if (canFlow()) {
+                if (!request) request = requestAnimationFrame(tick);
+            } else {
+                cancelAnimationFrame(request);
+                previousTime = 0;
+                request = 0;
+            }
+        }
+
+        function setPaused(value) {
+            paused = value;
+            playback.setAttribute('aria-pressed', String(paused));
+            playback.title = paused ? '자동 이동 재생' : '자동 이동 일시정지';
+            updateFlow();
+        }
+
+        function waitForGesture() {
+            clearTimeout(resumeTimer);
+            interacting = true;
+            updateFlow();
+        }
+
+        function resumeAfterGesture() {
+            clearTimeout(resumeTimer);
+            resumeTimer = setTimeout(() => {
+                interacting = false;
+                updateFlow();
+            }, 1200);
+        }
+
+        playback.addEventListener('click', () => setPaused(!paused));
+        motion.addEventListener('change', () => setPaused(motion.matches));
+        document.getElementById('previous-project').addEventListener('click', () => moveRow(-1));
+        document.getElementById('next-project').addEventListener('click', () => moveRow(1));
+
         stage.addEventListener('keydown', (event) => {
-            const targets = { ArrowLeft: current - 1, ArrowRight: current + 1, Home: 0, End: students.length - 1 };
-            if (!(event.key in targets)) return;
+            const order = slides.indexOf(document.activeElement);
+            const firstVisible = Array.from(grid.children).find(row =>
+                row.offsetTop + row.offsetHeight > stage.scrollTop + 8);
+            const current = order >= 0 ? order : slides.indexOf(firstVisible?.firstElementChild);
+            const moves = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -2, ArrowDown: 2 };
+            let target;
+            if (event.key === 'Home') target = 0;
+            else if (event.key === 'End') target = slides.length - 1;
+            else if (event.key in moves) target = (current + moves[event.key] + slides.length) % slides.length;
+            else if (event.key === 'Enter' && order < 0 && current >= 0) {
+                event.preventDefault();
+                slides[current].click();
+                return;
+            } else return;
             event.preventDefault();
-            select(targets[event.key]);
-            slides[current].focus({ preventScroll: true });
+            const button = slides[target];
+            const box = button.getBoundingClientRect();
+            const bounds = stage.getBoundingClientRect();
+            if (box.top < bounds.top || box.bottom > bounds.bottom) {
+                stage.scrollTop += box.top - bounds.top - 4;
+            }
+            button.focus({ preventScroll: true });
         });
+
+        // Touch and wheel use native scrolling; dragging with a mouse uses the same scroll position.
         stage.addEventListener('pointerdown', (event) => {
             if (!event.isPrimary || event.button !== 0) return;
-            pointerStart = { x: event.clientX, y: event.clientY, id: event.pointerId };
-            suppressClick = false;
+            waitForGesture();
+            dragged = false;
+            if (event.pointerType !== 'mouse') return;
+            event.preventDefault();
+            drag = { id: event.pointerId, lastY: event.clientY };
         });
-        stage.addEventListener('pointerup', (event) => {
-            if (!pointerStart || pointerStart.id !== event.pointerId) return;
-            const x = event.clientX - pointerStart.x;
-            const y = event.clientY - pointerStart.y;
-            pointerStart = null;
-            if (Math.abs(x) > 45 && Math.abs(x) > Math.abs(y)) {
-                suppressClick = true;
-                select(current + (x < 0 ? 1 : -1));
+        stage.addEventListener('pointermove', (event) => {
+            if (!drag || drag.id !== event.pointerId) return;
+            const delta = drag.lastY - event.clientY;
+            if (!dragged && Math.abs(delta) < 5) return;
+            if (!dragged) {
+                stage.setPointerCapture(event.pointerId);
+                stage.classList.add('is-dragging');
+                dragged = true;
             }
+            makeRoom();
+            stage.scrollTop += delta;
+            drag.lastY = event.clientY;
         });
-        stage.addEventListener('pointercancel', () => { pointerStart = null; });
-        stage.addEventListener('dragstart', (event) => event.preventDefault());
-        document.getElementById('open-preview').addEventListener('click', (event) => openPreview(current, event.currentTarget));
+        function endDrag() {
+            if (!interacting) return;
+            drag = null;
+            stage.classList.remove('is-dragging');
+            resumeAfterGesture();
+        }
+        window.addEventListener('pointerup', endDrag);
+        window.addEventListener('pointercancel', endDrag);
+        stage.addEventListener('click', (event) => {
+            if (dragged && event.detail !== 0) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            dragged = false;
+        }, true);
+        stage.addEventListener('wheel', () => {
+            waitForGesture();
+            resumeAfterGesture();
+        }, { passive: true });
+        stage.addEventListener('pointerenter', (event) => {
+            hovering = event.pointerType === 'mouse';
+            updateFlow();
+        });
+        stage.addEventListener('pointerleave', () => {
+            hovering = false;
+            updateFlow();
+        });
+        stage.addEventListener('focusin', updateFlow);
+        stage.addEventListener('focusout', () => queueMicrotask(updateFlow));
+        document.addEventListener('visibilitychange', updateFlow);
+        dialog.addEventListener('close', updateFlow);
+        new IntersectionObserver(([entry]) => {
+            visible = entry.isIntersecting;
+            updateFlow();
+        }).observe(stage);
+        setPaused(paused);
         document.querySelectorAll('[data-student-index]').forEach((button) => {
             button.hidden = false;
             button.addEventListener('click', () => openPreview(Number(button.dataset.studentIndex), button));
@@ -969,7 +1118,6 @@ dialog::backdrop {
             document.getElementById('result-count').textContent = query ? `검색 결과 ${matches}명 / 전체 ${students.length}명` : `전체 ${students.length}명 · 이름순`;
             document.getElementById('empty-state').hidden = matches !== 0;
         });
-        select(0);
         document.getElementById('project-showcase').hidden = false;
         document.getElementById('project-search').hidden = false;
     })();

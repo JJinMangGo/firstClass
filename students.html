@@ -398,6 +398,7 @@ h2 {
     --glint-y: 0%;
     box-sizing: border-box;
     width: min(1040px, calc(100% - 32px));
+    max-width: none;
     height: min(790px, calc(100dvh - 40px));
     max-height: none;
     margin: auto;
@@ -898,7 +899,7 @@ h2 {
             <p class="note">UI 코드 기준 · <a href="https://github.com/hslcrb/limsflex" target="_blank" rel="noopener noreferrer">limsflex</a></p>
         </div>
     </footer>
-    <dialog id="preview-dialog" aria-labelledby="preview-title" aria-describedby="preview-help">
+    <dialog id="preview-dialog" closedby="any" aria-labelledby="preview-title" aria-describedby="preview-help">
         <div class="dialog-heading">
             <h2 id="preview-title">사이트 미리보기</h2>
             <button type="button" class="preview-dialog-button" id="close-preview" autofocus>닫기 <span aria-hidden="true">×</span></button>
@@ -994,7 +995,7 @@ h2 {
         function openPreview(index, opener) {
             const student = students[index];
             trigger = opener;
-            document.getElementById('preview-title').textContent = `${student.name} · 사이트 미리보기`;
+            document.getElementById('preview-title').textContent = `${student.name}의 프로젝트 미리보기`;
             document.getElementById('preview-external').href = student.url;
             frame.title = `${student.name} 사이트 미리보기`;
             frame.src = student.url;
@@ -1033,9 +1034,20 @@ h2 {
             button.addEventListener('click', () => openPreview(Number(button.dataset.studentIndex), button));
         });
         document.getElementById('close-preview').addEventListener('click', () => dialog.close());
+        const glassPointer = window.matchMedia('(hover: hover) and (prefers-reduced-motion: no-preference)');
+        dialog.addEventListener('pointermove', (event) => {
+            if (!glassPointer.matches || event.pointerType === 'touch') return;
+            const bounds = dialog.getBoundingClientRect();
+            dialog.style.setProperty('--glint-x', `${event.clientX - bounds.left}px`);
+            dialog.style.setProperty('--glint-y', `${event.clientY - bounds.top}px`);
+        });
         dialog.addEventListener('close', () => {
+            if (dialog.open) return;
             frame.removeAttribute('src');
-            if (trigger) trigger.focus();
+            dialog.style.removeProperty('--glint-x');
+            dialog.style.removeProperty('--glint-y');
+            if (trigger?.isConnected) trigger.focus({ preventScroll: true });
+            trigger = null;
         });
         search.addEventListener('input', () => {
             const query = search.value.trim().toLocaleLowerCase();
